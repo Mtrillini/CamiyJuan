@@ -34,10 +34,11 @@
   .card::before {
     content: ''; position: absolute; inset: 0;
     background: var(--bg) url('fondo-web.jpg') center top / cover no-repeat;
-    opacity: 0; transform: scale(1.12); filter: blur(14px) brightness(1.15);
-    transition: opacity 1.6s ease, transform 3.2s cubic-bezier(.2,.7,.2,1), filter 2.4s ease;
+    opacity: 0; transform: scale(1.08) translateZ(0);
+    will-change: opacity, transform; backface-visibility: hidden;
+    transition: opacity 1.8s ease, transform 3.2s cubic-bezier(.2,.7,.2,1);
   }
-  .ready .card::before { opacity: 1; transform: none; filter: none; }
+  .ready .card::before { opacity: 1; transform: scale(1) translateZ(0); }
 
   /* Intro */
   #intro {
@@ -61,7 +62,8 @@
   @keyframes grow { to { width: min(220px, 50vw); } }
 
   /* El contenido espera a que termine la intro */
-  body:not(.ready) .content, body:not(.ready) .content * { animation-play-state: paused; }
+  body:not(.ready) .content * { animation: none !important; }
+  .content > * { will-change: opacity, transform; }
 
   .content {
     position: relative;
