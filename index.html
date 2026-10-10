@@ -58,6 +58,20 @@
     font-size: .75rem; letter-spacing: .5em; padding-left: .5em;
     opacity: 0; animation: fadeUp 1s .9s ease forwards;
   }
+  #intro .loading {
+    position: relative; width: min(220px, 50vw); height: 2px; margin-top: 18px;
+    background: rgba(0,0,0,.15); overflow: hidden;
+  }
+  #intro .loading::after {
+    content: ''; position: absolute; inset: 0; background: var(--ink);
+    transform: scaleX(0); transform-origin: left;
+    animation: load 1.8s .3s ease-in-out forwards;
+  }
+  #intro .loading-txt {
+    font-size: .68rem; letter-spacing: .4em; padding-left: .4em; text-transform: uppercase; color: var(--ink-soft);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes load { to { transform: scaleX(1); } }
   .ready #intro > * { transform: translateY(-12px); transition: transform 1.2s ease; }
   @keyframes grow { to { width: min(220px, 50vw); } }
 
@@ -125,7 +139,7 @@
     min-height: 1.6em;
     transition: opacity .6s ease;
   }
-  .bar { position: relative; width: 100%; height: 1px; background: rgba(0,0,0,.2); margin-top: 12px; overflow: hidden; }
+  .bar { position: relative; width: 100%; height: 2px; background: rgba(0,0,0,.15); margin-top: 12px; overflow: hidden; }
   .bar::after {
     content: ''; position: absolute; top: 0; left: -40%; width: 40%; height: 100%;
     background: var(--ink);
@@ -165,6 +179,8 @@
     <div class="mono">C &amp; J</div>
     <div class="line"></div>
     <small>08 · 12 · 26</small>
+    <div class="loading"></div>
+    <div class="loading-txt">Cargando</div>
   </div>
 
   <main class="card">
