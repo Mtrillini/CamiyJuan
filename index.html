@@ -28,15 +28,45 @@
   .card {
     position: relative;
     min-height: 100vh; min-height: 100svh;
-    background: var(--bg) url('fondo-web.jpg') center top / cover no-repeat;
     text-align: center;
-    animation: fadeIn 1.4s ease;
+    overflow: hidden;
   }
+  .card::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--bg) url('fondo-web.jpg') center top / cover no-repeat;
+    opacity: 0; transform: scale(1.12); filter: blur(14px) brightness(1.15);
+    transition: opacity 1.6s ease, transform 3.2s cubic-bezier(.2,.7,.2,1), filter 2.4s ease;
+  }
+  .ready .card::before { opacity: 1; transform: none; filter: none; }
+
+  /* Intro */
+  #intro {
+    position: fixed; inset: 0; z-index: 10;
+    background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    transition: opacity 1.2s ease, visibility 1.2s;
+  }
+  .ready #intro { opacity: 0; visibility: hidden; }
+  #intro .mono {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(3rem, 10vw, 5.5rem); letter-spacing: .08em;
+    opacity: 0; animation: fadeUp 1.2s .2s ease forwards;
+  }
+  #intro .line { width: 0; height: 1px; background: var(--ink); animation: grow 1.4s .5s ease forwards; }
+  #intro small {
+    font-size: .75rem; letter-spacing: .5em; padding-left: .5em;
+    opacity: 0; animation: fadeUp 1s .9s ease forwards;
+  }
+  .ready #intro > * { transform: translateY(-12px); transition: transform 1.2s ease; }
+  @keyframes grow { to { width: min(220px, 50vw); } }
+
+  /* El contenido espera a que termine la intro */
+  body:not(.ready) .content, body:not(.ready) .content * { animation-play-state: paused; }
 
   .content {
     position: relative;
     /* empieza debajo de los nombres de la imagen */
-    padding: max(59vh, 33.5vw) 16px 40px;
+    padding: max(65vh, 37vw) 16px 28px;
     display: flex; flex-direction: column; align-items: center;
   }
 
@@ -47,16 +77,16 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(1rem, 1.8vw, 1.5rem);
     letter-spacing: .45em; padding-left: .45em;
-    opacity: 0; animation: fadeUp 1.2s .6s ease forwards;
+    opacity: 0; animation: fadeUp 1.2s 1.4s ease forwards;
   }
 
   .date {
     display: flex; align-items: center; justify-content: center; gap: clamp(16px, 3vw, 44px);
     margin-top: 10px;
     font-weight: 400;
-    font-size: clamp(2.6rem, min(5vw, 8vh), 4.6rem);
+    font-size: clamp(2.2rem, min(5vw, 7vh), 4.2rem);
     line-height: 1.15;
-    opacity: 0; animation: fadeUp 1.2s 1s ease forwards;
+    opacity: 0; animation: fadeUp 1.2s 1.8s ease forwards;
   }
   .date .sep { width: 2px; height: .8em; background: var(--ink); }
 
@@ -64,14 +94,14 @@
     margin-top: 6px;
     font-size: clamp(.8rem, 1.2vw, 1.05rem);
     letter-spacing: .04em;
-    opacity: 0; animation: fadeUp 1.2s 1.4s ease forwards;
+    opacity: 0; animation: fadeUp 1.2s 2.2s ease forwards;
   }
 
   /* Cuenta regresiva */
   .countdown {
     display: flex; flex-wrap: wrap; justify-content: center;
-    gap: clamp(10px, 3vw, 28px); margin-top: 22px;
-    opacity: 0; animation: fadeUp 1.2s 1.8s ease forwards;
+    gap: clamp(10px, 3vw, 28px); margin-top: 14px;
+    opacity: 0; animation: fadeUp 1.2s 2.6s ease forwards;
   }
   .unit { min-width: 60px; }
   .unit b {
@@ -83,9 +113,9 @@
 
   /* En progreso */
   .progress {
-    margin-top: 22px; width: min(380px, 85%);
+    margin-top: 12px; width: min(380px, 85%);
     display: flex; flex-direction: column; align-items: center;
-    opacity: 0; animation: fadeUp 1.2s 2.2s ease forwards;
+    opacity: 0; animation: fadeUp 1.2s 3s ease forwards;
   }
   .progress p {
     font-family: 'Cormorant Garamond', serif; font-style: italic;
@@ -109,7 +139,7 @@
 
   /* Mobile / pantallas verticales */
   @media (orientation: portrait) {
-    .card { background-image: url('fondo-mobile.jpg'); }
+    .card::before { background-image: url('fondo-mobile.jpg'); }
     .content { padding-top: max(37vh, 64vw); }
     .std { width: 88%; letter-spacing: .3em; padding-left: .3em; font-size: clamp(1rem, 4.4vw, 1.4rem); }
     .date { font-size: clamp(2.6rem, 13vw, 4.6rem); }
@@ -129,6 +159,12 @@
 </style>
 </head>
 <body>
+  <div id="intro" aria-hidden="true">
+    <div class="mono">C &amp; J</div>
+    <div class="line"></div>
+    <small>08 · 12 · 26</small>
+  </div>
+
   <main class="card">
     <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Camila &amp; Juan</h1>
 
@@ -155,6 +191,17 @@
   </main>
 
 <script>
+  // Intro: espera a que cargue el fondo (mínimo 1.8 s, máximo 5 s)
+  (function () {
+    const src = matchMedia('(orientation: portrait)').matches ? 'fondo-mobile.jpg' : 'fondo-web.jpg';
+    const img = new Image();
+    const cargada = new Promise(r => { img.onload = img.onerror = r; img.src = src; });
+    const minimo = new Promise(r => setTimeout(r, 1800));
+    const listo = () => document.body.classList.add('ready');
+    Promise.all([cargada, minimo]).then(listo);
+    setTimeout(listo, 5000);
+  })();
+
   // Fecha del evento (ajustar la hora cuando se confirme)
   const evento = new Date('2026-12-08T20:00:00-03:00');
   const pad = n => String(n).padStart(2, '0');
