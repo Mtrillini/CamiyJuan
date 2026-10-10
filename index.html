@@ -40,6 +40,27 @@
   }
   .ready .card::before { opacity: 1; transform: scale(1) translateZ(0); }
 
+  /* Intro */
+  #intro {
+    position: fixed; inset: 0; z-index: 10;
+    background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    transition: opacity 1.2s ease, visibility 1.2s;
+  }
+  .ready #intro { opacity: 0; visibility: hidden; }
+  #intro .mono {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(3rem, 10vw, 5.5rem); letter-spacing: .08em;
+    opacity: 0; animation: fadeUp 1.2s .2s ease forwards;
+  }
+  #intro .line { width: 0; height: 1px; background: var(--ink); animation: grow 1.4s .5s ease forwards; }
+  #intro small {
+    font-size: .75rem; letter-spacing: .5em; padding-left: .5em;
+    opacity: 0; animation: fadeUp 1s .9s ease forwards;
+  }
+  .ready #intro > * { transform: translateY(-12px); transition: transform 1.2s ease; }
+  @keyframes grow { to { width: min(220px, 50vw); } }
+
   /* El contenido espera a que termine la intro */
   body:not(.ready) .content * { animation: none !important; }
   .content > * { will-change: opacity, transform; }
@@ -140,6 +161,12 @@
 </style>
 </head>
 <body>
+  <div id="intro" aria-hidden="true">
+    <div class="mono">C &amp; J</div>
+    <div class="line"></div>
+    <small>08 · 12 · 26</small>
+  </div>
+
   <main class="card">
     <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Camila &amp; Juan</h1>
 
@@ -165,17 +192,18 @@
   </main>
 
 <script>
-  // Arranca cuando el fondo y las fuentes están listos (máximo 3 s)
+  // Intro: espera al fondo y a las fuentes (mínimo 1.8 s, máximo 5 s)
   (function () {
     const src = matchMedia('(orientation: portrait)').matches ? 'fondo-mobile.jpg' : 'fondo-web.jpg';
     const img = new Image();
     const cargada = new Promise(r => { img.onload = img.onerror = r; img.src = src; })
       .then(() => img.decode ? img.decode().catch(() => {}) : null);
     const fuentes = document.fonts ? document.fonts.ready : Promise.resolve();
+    const minimo = new Promise(r => setTimeout(r, 1800));
     let hecho = false;
     const listo = () => { if (hecho) return; hecho = true; requestAnimationFrame(() => document.body.classList.add('ready')); };
-    Promise.all([cargada, fuentes]).then(listo);
-    setTimeout(listo, 3000);
+    Promise.all([cargada, fuentes, minimo]).then(listo);
+    setTimeout(listo, 5000);
   })();
 
   // Fecha del evento (ajustar la hora cuando se confirme)
