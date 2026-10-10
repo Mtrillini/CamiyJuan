@@ -155,8 +155,11 @@
   @keyframes slide { to { left: 100%; } }
   @keyframes pulse { 50% { opacity: .45; } }
 
+  /* Con 'Reducir movimiento' activado (iPhone): solo fundidos suaves, sin desplazamientos */
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: .01s !important; animation-iteration-count: 1 !important; }
+    .content > *, #intro > * { animation-name: fadeIn !important; }
+    .card::before { transform: none !important; }
+    .ready #intro > * { transform: none; }
   }
 </style>
 </head>
