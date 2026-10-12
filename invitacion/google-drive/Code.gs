@@ -11,7 +11,8 @@ const ALLOWED = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/h
 function doPost(e) {
   try {
     const body = JSON.parse(e.postData.contents);
-    if (body.secret !== SECRET) return reply({ ok: false, error: 'no autorizado' });
+    // El repo es público: si la clave no se cambió, no aceptamos nada.
+    if (SECRET.startsWith('CAMBIAR') || body.secret !== SECRET) return reply({ ok: false, error: 'no autorizado' });
     if (!ALLOWED.includes(body.mimeType)) return reply({ ok: false, error: 'tipo no permitido' });
     const name = String(body.name).replace(/[^\w.\-]/g, '_').slice(0, 100);
     const blob = Utilities.newBlob(Utilities.base64Decode(body.data), body.mimeType, name);
@@ -25,4 +26,10 @@ function doPost(e) {
 
 function reply(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+// Para probar: elegí "probar" arriba y tocá Ejecutar. Tiene que aparecer
+// un archivo "prueba-invitacion.txt" en la carpeta Camiyjuan (después lo podés borrar).
+function probar() {
+  DriveApp.getFolderById(FOLDER_ID).createFile('prueba-invitacion.txt', 'Funciona 🎉');
 }
