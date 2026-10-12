@@ -39,5 +39,6 @@ CREATE TABLE IF NOT EXISTS fotos (
   archivo VARCHAR(64) NOT NULL,
   original VARCHAR(200) NOT NULL DEFAULT '',
   bytes INT UNSIGNED NOT NULL,
+  drive_id VARCHAR(100) NULL, -- id del archivo en Google Drive (NULL si no se pudo subir)
   creado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

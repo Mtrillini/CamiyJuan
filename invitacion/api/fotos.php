@@ -3,35 +3,67 @@ declare(strict_types=1);
 require __DIR__ . '/db.php';
 guard();
 
-const MAX_FILES = 20;
+// Recibe UNA foto por envío, la guarda en uploads/ (copia de respaldo)
+// y la manda a la carpeta de Google Drive a través del Apps Script.
 const MAX_BYTES = 10 * 1024 * 1024;
-const TYPES = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+const TYPES = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/heic' => 'heic', 'image/heif' => 'heif'];
 
 $nombre = text('nombre', 100, true);
-$files = $_FILES['fotos'] ?? null;
-if (!$files || !is_array($files['name'])) respond(422, ['ok' => false, 'error' => 'Elegí al menos una foto.']);
-$count = count($files['name']);
-if ($count < 1 || $count > MAX_FILES) respond(422, ['ok' => false, 'error' => 'Podés subir hasta ' . MAX_FILES . ' fotos por vez.']);
-
-$dir = rtrim(config()['uploads_dir'], '/');
-if (!is_dir($dir) && !mkdir($dir, 0755, true)) respond(500, ['ok' => false, 'error' => 'No pudimos guardar las fotos.']);
-
-$finfo = new finfo(FILEINFO_MIME_TYPE);
-$insert = db()->prepare('INSERT INTO fotos (nombre, archivo, original, bytes) VALUES (?, ?, ?, ?)');
-$saved = 0;
-
-for ($i = 0; $i < $count; $i++) {
-    if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
-    $tmp = $files['tmp_name'][$i];
-    $size = (int)$files['size'][$i];
-    $mime = $finfo->file($tmp);
-    // Validamos el contenido real del archivo, no la extensión que manda el navegador.
-    if ($size > MAX_BYTES || !isset(TYPES[$mime]) || @getimagesize($tmp) === false) continue;
-    $name = bin2hex(random_bytes(16)) . '.' . TYPES[$mime];
-    if (!move_uploaded_file($tmp, "$dir/$name")) continue;
-    $insert->execute([$nombre, $name, mb_substr(basename((string)$files['name'][$i]), 0, 200), $size]);
-    $saved++;
+$file = $_FILES['foto'] ?? null;
+if (!$file || is_array($file['name']) || $file['error'] !== UPLOAD_ERR_OK) {
+    respond(422, ['ok' => false, 'error' => 'No llegó la foto. Probá de nuevo.']);
 }
 
-if ($saved === 0) respond(422, ['ok' => false, 'error' => 'No se pudo subir ninguna foto. Usá JPG, PNG o WebP de hasta 10 MB.']);
-respond(200, ['ok' => true, 'guardadas' => $saved]);
+$tmp = $file['tmp_name'];
+$size = (int)$file['size'];
+$mime = (new finfo(FILEINFO_MIME_TYPE))->file($tmp);
+// Validamos el contenido real del archivo, no la extensión que manda el navegador.
+// HEIC/HEIF (iPhone) no lo lee getimagesize, así que alcanza con el tipo detectado.
+$isImage = isset(TYPES[$mime]) && (str_starts_with($mime, 'image/hei') || @getimagesize($tmp) !== false);
+if ($size > MAX_BYTES || !$isImage) {
+    respond(422, ['ok' => false, 'error' => 'La foto tiene que ser una imagen de hasta 10 MB.']);
+}
+
+$dir = rtrim(config()['uploads_dir'], '/');
+if (!is_dir($dir) && !mkdir($dir, 0755, true)) respond(500, ['ok' => false, 'error' => 'No pudimos guardar la foto.']);
+$name = date('Ymd-His') . '-' . bin2hex(random_bytes(6)) . '.' . TYPES[$mime];
+if (!move_uploaded_file($tmp, "$dir/$name")) respond(500, ['ok' => false, 'error' => 'No pudimos guardar la foto.']);
+
+$driveId = sendToDrive("$dir/$name", $name, $mime, $nombre);
+
+db()->prepare('INSERT INTO fotos (nombre, archivo, original, bytes, drive_id) VALUES (?, ?, ?, ?, ?)')
+    ->execute([$nombre, $name, mb_substr(basename((string)$file['name']), 0, 200), $size, $driveId]);
+
+respond(200, ['ok' => true]);
+
+// Devuelve el id del archivo en Drive, o null si Drive no está configurado o falló.
+// Si falla, la foto igual queda guardada en uploads/ y se puede reenviar después.
+function sendToDrive(string $path, string $name, string $mime, string $autor): ?string {
+    $c = config();
+    if (empty($c['drive_script_url']) || empty($c['drive_secret'])) return null;
+    $payload = json_encode([
+        'secret' => $c['drive_secret'],
+        'name' => $name,
+        'mimeType' => $mime,
+        'author' => $autor,
+        'data' => base64_encode((string)file_get_contents($path)),
+    ]);
+    $ch = curl_init($c['drive_script_url']);
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true, // Apps Script responde con una redirección
+        CURLOPT_TIMEOUT => 60,
+    ]);
+    $body = curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    $result = is_string($body) ? json_decode($body, true) : null;
+    if ($status !== 200 || empty($result['ok'])) {
+        error_log("Drive: fallo al subir $name (HTTP $status): " . substr((string)$body, 0, 300));
+        return null;
+    }
+    return (string)$result['id'];
+}
