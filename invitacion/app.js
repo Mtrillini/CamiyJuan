@@ -50,7 +50,10 @@ const forms = {
         <label><input type="radio" name="asistencia" value="si" checked> Sí, ahí estaré</label>
         <label><input type="radio" name="asistencia" value="no"> No puedo asistir</label>
       </fieldset>
-      <label>¿Cuántas personas (con vos)?<input name="personas" type="number" min="1" max="10" value="1" inputmode="numeric" required></label>
+      <div id="companions-block">
+        <label>¿Cuántos acompañantes vienen con vos?<input name="acompanantes" id="companions-count" type="number" min="0" max="9" value="0" inputmode="numeric" required></label>
+        <div id="companions"></div>
+      </div>
       <label>Teléfono (opcional)<input name="telefono" type="tel" autocomplete="tel" maxlength="30"></label>
       <label>Menú especial
         <select name="menu"><option value="">Ninguno</option><option>Vegetariano</option><option>Vegano</option><option>Sin TACC</option><option>Otro (lo aclaro abajo)</option></select></label>
@@ -87,6 +90,35 @@ const forms = {
   }
 };
 
+// Un bloque de nombre + adulto/niño por cada acompañante. Conserva lo ya escrito.
+function setupCompanions() {
+  const count = $('#companions-count');
+  const list = $('#companions');
+  const render = () => {
+    const n = Math.max(0, Math.min(9, parseInt(count.value, 10) || 0));
+    while (list.children.length > n) list.lastElementChild.remove();
+    for (let i = list.children.length; i < n; i++) {
+      const row = document.createElement('fieldset');
+      row.className = 'companion';
+      row.innerHTML = `<legend>Acompañante ${i + 1}</legend>
+        <label>Nombre y apellido<input name="acompanante_nombre[]" maxlength="100" required></label>
+        <div class="segmented" role="radiogroup" aria-label="Edad del acompañante ${i + 1}">
+          <label><input type="radio" name="acompanante_tipo_${i}" value="adulto" checked> Adulto</label>
+          <label><input type="radio" name="acompanante_tipo_${i}" value="nino"> Niño/a</label>
+        </div>`;
+      list.append(row);
+    }
+  };
+  const toggle = () => {
+    const going = $('#guest-form').elements.asistencia.value === 'si';
+    $('#companions-block').hidden = !going;
+    $('#companions-block').querySelectorAll('input').forEach(input => { input.disabled = !going; });
+  };
+  count.addEventListener('input', render);
+  $('#guest-form').querySelectorAll('[name=asistencia]').forEach(r => r.addEventListener('change', toggle));
+  render(); toggle();
+}
+
 function showError(text) { $('#form-error').textContent = text; $('#form-error').hidden = !text; }
 
 document.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => {
@@ -100,6 +132,7 @@ document.querySelectorAll('[data-action]').forEach(button => button.addEventList
   showError('');
   try { const nombre = localStorage.getItem('boda-cj-nombre'); if (nombre) $('#guest-form').elements.nombre.value = nombre; } catch {}
   if (currentAction === 'photos') $('#photo-input').addEventListener('change', previewPhotos);
+  if (currentAction === 'rsvp') setupCompanions();
   dialog.showModal();
 }));
 

@@ -3,11 +3,19 @@ CREATE TABLE IF NOT EXISTS confirmaciones (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL,
   asistencia ENUM('si','no') NOT NULL,
-  personas TINYINT UNSIGNED NOT NULL DEFAULT 1,
+  personas TINYINT UNSIGNED NOT NULL DEFAULT 1, -- total: invitado + acompañantes (0 si no va)
   telefono VARCHAR(30) NOT NULL DEFAULT '',
   menu VARCHAR(50) NOT NULL DEFAULT '',
   comentarios TEXT,
   creado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS acompanantes (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  confirmacion_id INT UNSIGNED NOT NULL,
+  nombre VARCHAR(100) NOT NULL,
+  tipo ENUM('adulto','nino') NOT NULL,
+  FOREIGN KEY (confirmacion_id) REFERENCES confirmaciones(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS canciones (
