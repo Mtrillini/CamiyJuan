@@ -1,0 +1,4 @@
+# config.php y db.php no se pueden pedir desde el navegador.
+<FilesMatch "^(config|config\.example|db)\.php$">
+  Require all denied
+</FilesMatch>

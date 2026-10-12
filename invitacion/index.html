@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f2e9dd">
   <title>Camila & Juan · Nos casamos</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap">
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
@@ -45,8 +47,8 @@
   </section>
   <section class="paper dress-code" aria-labelledby="dress-title">
     <h2 class="pill" id="dress-title">Dress code</h2>
-    <p class="script gala">Gala</p>
-    <p>El blanco, el celeste y los tonos similares<br class="desktop-break"> no están permitidos.</p>
+    <div class="gala-row"><span></span><p class="script gala">Gala</p><span></span></div>
+    <p>Reservamos el blanco, el celeste y tonos similares<br class="desktop-break"> para los novios.</p>
   </section>
   <section class="paper attendance" aria-labelledby="attendance-title">
     <h2 id="attendance-title">Confirmá tu asistencia</h2>
@@ -57,7 +59,7 @@
       <div class="mini-card"><svg class="large-icon"><use href="#music"/></svg><div><p>Sugerí una canción</p><button class="button compact" data-action="song">Sugerir</button></div></div>
       <div class="mini-card"><svg class="large-icon"><use href="#message"/></svg><div><p>Dejanos un mensaje</p><button class="button compact" data-action="message">Escribir</button></div></div>
     </div>
-    <div class="mini-card photos-card"><svg class="large-icon"><use href="#camera"/></svg><div><p>Compartí tus fotos</p><p>#BodaDeCamiYJuan</p></div><button class="button compact" data-action="photos">Subir fotos</button></div>
+    <div class="mini-card photos-card"><svg class="large-icon"><use href="#camera"/></svg><div><p>Compartí tus fotos</p><p>#BodaDeCamiYJuan</p></div><button class="button compact" data-action="photos">Subir fotos</button><div class="qr-box" id="qr-box" aria-label="Código QR del álbum">QR</div></div>
   </section>
   <section class="paper gifts" aria-labelledby="gifts-title">
     <div class="gift-circle"><svg class="large-icon"><use href="#gift"/></svg></div>
@@ -68,9 +70,13 @@
 <dialog id="form-dialog" aria-labelledby="dialog-title">
   <button class="close-dialog" aria-label="Cerrar">×</button>
   <h2 id="dialog-title"></h2>
-  <p class="demo-note">Vista de prueba: lo que completes se guarda solo en este dispositivo. Todavía no se envía a los novios.</p>
-  <form id="guest-form"><div id="form-fields"></div><button class="button" type="submit">Guardar borrador</button></form>
-  <div id="photo-panel" hidden><p class="small">Seleccioná imágenes para ver una vista previa. Todavía no se suben.</p><label class="file-label">Elegir fotos<input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp" multiple></label><div id="photo-preview"></div></div>
+  <p id="dialog-intro" class="dialog-intro"></p>
+  <form id="guest-form" novalidate>
+    <div id="form-fields"></div>
+    <label class="hp" aria-hidden="true">No completar<input name="website" tabindex="-1" autocomplete="off"></label>
+    <p id="form-error" class="form-error" role="alert" hidden></p>
+    <button class="button button-brown" type="submit" id="form-submit">Enviar</button>
+  </form>
 </dialog>
 <div id="toast" role="status" class="toast" hidden></div>
 </body>

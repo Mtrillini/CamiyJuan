@@ -1,0 +1,7 @@
+# Las fotos subidas nunca se ejecutan ni se listan.
+Options -Indexes -ExecCGI
+php_flag engine off
+RemoveHandler .php .phtml .php5 .php7 .phar
+<FilesMatch "\.(?!(jpe?g|png|webp)$)[^.]+$">
+  Require all denied
+</FilesMatch>

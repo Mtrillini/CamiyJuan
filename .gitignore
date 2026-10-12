@@ -1,0 +1,4 @@
+invitacion/api/config.php
+invitacion/uploads/*
+!invitacion/uploads/.htaccess
+!invitacion/uploads/.gitkeep
