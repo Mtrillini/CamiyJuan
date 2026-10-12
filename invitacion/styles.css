@@ -11,3 +11,4 @@ body{background:#f3e9dc}body:before{content:'';position:fixed;inset:0;z-index:-1
 .names img{display:block;width:100%;max-width:440px;height:auto;margin:6px auto 4px}
 footer .names img{max-width:260px}
 .names img{width:min(72vw,320px);max-width:none;margin:4px auto 2px}@media (min-width:768px){.names img{width:300px}}footer .names img{width:min(48vw,200px)}
+.subtitle{font-size:17px}
