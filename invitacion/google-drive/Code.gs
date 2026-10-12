@@ -2,9 +2,9 @@
 // Instrucciones en google-drive/LEEME.md.
 
 // 1) ID de la carpeta de Drive: es lo que sigue a /folders/ en la URL de la carpeta.
-const FOLDER_ID = 'PEGAR_ACA_EL_ID_DE_LA_CARPETA';
+const FOLDER_ID = '1UFIXWS8BP8uT1RmC0wbQW-q6f3qxisXl'; // carpeta Camiyjuan
 // 2) Una clave inventada, larga. La misma va en api/config.php como drive_secret.
-const SECRET = 'PEGAR_ACA_UNA_CLAVE_LARGA';
+const SECRET = 'CAMBIAR_POR_TU_CLAVE'; // inventá una clave larga y anotala
 
 const ALLOWED = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
 
