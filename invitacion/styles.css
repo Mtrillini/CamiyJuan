@@ -53,3 +53,9 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);border-col
 .photos-card .qr-box{flex-shrink:0;width:52px;height:52px;margin-left:4px}
 @media(max-width:390px){.photos-card .compact{padding:7px 10px}}
 .photos-card>.qr-box{flex:0 0 52px}
+/* Azul petróleo y marfil */
+:root{--blue:#527987;--blue-deep:#406672}
+.button,.pill{background:var(--blue);color:#fbf5ec}
+.button:hover{background:var(--blue-deep)}
+.button-brown{background:var(--brown)}
+.button-brown:hover{background:#513725}
