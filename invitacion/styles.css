@@ -73,3 +73,4 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);border-col
 .photo-pick input{position:absolute;width:1px;height:1px;opacity:0}
 .photo-pick:focus-within{outline:3px solid var(--blue);outline-offset:2px}
 .photo-pick{position:relative}
+.qr-box{padding:3px;background:#fffbf5;object-fit:contain}

@@ -3,7 +3,6 @@
 const CONFIG = {
   ceremony: '2026-12-08T13:00:00-03:00',
   alias: 'BODACAMILAYJUAN',
-  albumUrl: null // cuando tengamos el link del álbum, se muestra el QR
 };
 const $ = (selector) => document.querySelector(selector);
 function countdown(now = Date.now()) {
@@ -217,3 +216,6 @@ dialog.addEventListener('close', () => {
   photoUrls.forEach(url => URL.revokeObjectURL(url)); photoUrls = [];
   $('#form-fields').replaceChildren();
 });
+
+// El QR de las mesas apunta a .../invitacion/#fotos: abre directo la ventana de fotos.
+if (location.hash === '#fotos') document.querySelector('[data-action=photos]').click();
