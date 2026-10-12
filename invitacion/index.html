@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2e9dd">
+  <title>Camila & Juan · Nos casamos</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+<svg class="svg-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+  <symbol id="pin" viewBox="0 0 24 24"><path d="M12 22s8-8 8-14a8 8 0 0 0-16 0c0 6 8 14 8 14Z"/><circle cx="12" cy="8" r="3"/></symbol>
+  <symbol id="calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6m10-6v6M3 11h18M7 15h2m4 0h2m-8 3h2m4 0h2"/></symbol>
+  <symbol id="music" viewBox="0 0 24 24"><path d="M9 18V5l12-3v13M9 9l12-3"/><ellipse cx="6" cy="19" rx="3" ry="2"/><ellipse cx="18" cy="16" rx="3" ry="2"/></symbol>
+  <symbol id="message" viewBox="0 0 24 24"><path d="M21 11a9 9 0 0 1-9 9 10 10 0 0 1-4-1l-6 3 2-6a9 9 0 1 1 17-5Z"/></symbol>
+  <symbol id="camera" viewBox="0 0 24 24"><path d="M8 5l2-3h4l2 3h4a2 2 0 0 1 2 2v13H2V7a2 2 0 0 1 2-2Z"/><circle cx="12" cy="12" r="5"/></symbol>
+  <symbol id="gift" viewBox="0 0 24 24"><path d="M3 10h18v12H3zM2 6h20v4H2zM12 6v16"/><path d="M12 6C3 8 4-3 9 2l3 4Zm0 0c9 2 8-9 3-4l-3 4Z"/></symbol>
+</defs></svg>
+<main class="invitation">
+  <header class="hero">
+    <span class="edition">02 · Carta contemporánea</span>
+    <p class="eyebrow">Nos casamos</p>
+    <h1 class="names">Camila <span>&</span> Juan</h1>
+    <p class="subtitle">Una historia, un gran <em>sí.</em></p>
+    <div class="couple-photo image-slot" data-image="assets/pareja.jpg" role="img" aria-label="Espacio para la foto de Camila y Juan"><span>Foto</span></div>
+    <p class="date"><time datetime="2026-12-08">08.12.2026</time></p>
+    <div class="ornament" aria-hidden="true">❖</div>
+    <div class="countdown" aria-label="Tiempo hasta la ceremonia">
+      <div><strong id="days">--</strong><span>Días</span></div>
+      <div><strong id="hours">--</strong><span>Horas</span></div>
+      <div><strong id="minutes">--</strong><span>Min.</span></div>
+    </div>
+    <p id="event-status" class="visually-hidden" role="status"></p>
+  </header>
+  <section class="venue" aria-labelledby="venue-title">
+    <div class="palace image-slot" data-image="assets/palacio.png" role="img" aria-label="Espacio para la imagen del Palacio Sans Souci"><span>Palacio Sans Souci</span></div>
+    <div class="paper venue-card">
+      <h2 id="venue-title">Palacio Sans Souci</h2>
+      <p>Paz 705 · Victoria, San Fernando</p>
+      <div class="ornament" aria-hidden="true">❖</div>
+      <p>Ceremonia religiosa · 13 h<br>Celebración · 13 a 22 h</p>
+      <a class="button" href="https://www.google.com/maps/search/?api=1&query=Palacio+Sans+Souci+Paz+705+Victoria+San+Fernando" target="_blank" rel="noopener noreferrer"><svg><use href="#pin"/></svg>Ver ubicación</a>
+      <p class="small">Sin traslado · Estacionamiento limitado</p>
+    </div>
+  </section>
+  <section class="paper dress-code" aria-labelledby="dress-title">
+    <h2 class="pill" id="dress-title">Dress code</h2>
+    <p class="script gala">Gala</p>
+    <p>El blanco, el celeste y los tonos similares<br class="desktop-break"> no están permitidos.</p>
+  </section>
+  <section class="paper attendance" aria-labelledby="attendance-title">
+    <h2 id="attendance-title">Confirmá tu asistencia</h2>
+    <p class="small">Confirmá antes del 24 de noviembre</p>
+    <button class="button button-brown" data-action="rsvp"><svg><use href="#calendar"/></svg>Confirmar asistencia</button>
+    <p class="small">Contanos si necesitás un menú especial.</p>
+    <div class="action-grid">
+      <div class="mini-card"><svg class="large-icon"><use href="#music"/></svg><div><p>Sugerí una canción</p><button class="button compact" data-action="song">Sugerir</button></div></div>
+      <div class="mini-card"><svg class="large-icon"><use href="#message"/></svg><div><p>Dejanos un mensaje</p><button class="button compact" data-action="message">Escribir</button></div></div>
+    </div>
+    <div class="mini-card photos-card"><svg class="large-icon"><use href="#camera"/></svg><div><p>Compartí tus fotos</p><p>#BodaDeCamiYJuan</p></div><button class="button compact" data-action="photos">Subir fotos</button></div>
+  </section>
+  <section class="paper gifts" aria-labelledby="gifts-title">
+    <div class="gift-circle"><svg class="large-icon"><use href="#gift"/></svg></div>
+    <div><h2 id="gifts-title">Regalos</h2><p class="eyebrow alias-label">Alias</p><button class="alias" id="copy-alias" aria-label="Copiar alias BODACAMILAYJUAN">BODACAMILAYJUAN</button><p class="small">También habrá una urna en la fiesta.</p></div>
+  </section>
+  <footer><div class="ornament" aria-hidden="true">❖</div><p class="names">Camila <span>&</span> Juan</p></footer>
+</main>
+<dialog id="form-dialog" aria-labelledby="dialog-title">
+  <button class="close-dialog" aria-label="Cerrar">×</button>
+  <h2 id="dialog-title"></h2>
+  <p class="demo-note">Vista de prueba: lo que completes se guarda solo en este dispositivo. Todavía no se envía a los novios.</p>
+  <form id="guest-form"><div id="form-fields"></div><button class="button" type="submit">Guardar borrador</button></form>
+  <div id="photo-panel" hidden><p class="small">Seleccioná imágenes para ver una vista previa. Todavía no se suben.</p><label class="file-label">Elegir fotos<input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp" multiple></label><div id="photo-preview"></div></div>
+</dialog>
+<div id="toast" role="status" class="toast" hidden></div>
+</body>
+</html>
