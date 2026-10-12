@@ -13,3 +13,4 @@ footer .names img{max-width:260px}
 .names img{width:min(72vw,320px);max-width:none;margin:4px auto 2px}@media (min-width:768px){.names img{width:300px}}footer .names img{width:min(48vw,200px)}
 .subtitle{font-size:17px}
 .divider{max-width:260px;margin:6px auto 10px}.divider img{display:block;width:100%;height:auto}
+.palace-img{display:block;width:calc(100% + 20px);max-width:520px;height:auto;margin:10px auto -6px;position:relative;left:50%;transform:translateX(-50%)}
