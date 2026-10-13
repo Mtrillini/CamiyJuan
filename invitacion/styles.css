@@ -146,3 +146,25 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
   .palace-img{width:108%;max-width:none}
 }
 @media (min-width:1024px){.invitation>.gifts{width:calc(100% - 16px);justify-self:auto}}
+/* ===== Animaciones de carga ===== */
+.invitation{animation:none}
+/* Encabezado: cada elemento entra en cascada */
+.anim .hero>*{opacity:0;animation:subir .9s cubic-bezier(.2,.7,.2,1) forwards}
+.anim .hero>*:nth-child(1){animation-delay:.25s}
+.anim .hero>*:nth-child(2){animation:nombres 1.2s cubic-bezier(.2,.7,.2,1) .4s forwards}
+.anim .hero>*:nth-child(3){animation-delay:.7s}
+.anim .hero>*:nth-child(4){animation:foto 1.3s cubic-bezier(.2,.7,.2,1) .85s forwards}
+.anim .hero>*:nth-child(5){animation-delay:1.15s}
+.anim .hero>*:nth-child(6){animation:linea 1s ease 1.3s forwards}
+.anim .hero>*:nth-child(7){animation-delay:1.45s}
+/* Resto: aparece al llegar con el scroll */
+.anim .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.anim .reveal.visible{opacity:1;transform:none}
+.anim .palace-img.reveal{transform:translateX(-50%) translateY(30px) scale(.96)}
+.anim .palace-img.reveal.visible{transform:translateX(-50%)}
+.anim .action-grid>.reveal:nth-child(2),.anim .photos-card.reveal{transition-delay:.12s}
+@keyframes subir{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes nombres{from{opacity:0;transform:scale(.92);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes foto{from{opacity:0;transform:scale(.94) translateY(14px)}to{opacity:1;transform:none}}
+@keyframes linea{from{opacity:0;clip-path:inset(0 50%)}to{opacity:1;clip-path:inset(0)}}
+@media (prefers-reduced-motion:reduce){.anim .hero>*,.anim .reveal{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}}
