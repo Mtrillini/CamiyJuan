@@ -257,18 +257,23 @@ abrirFotosSiCorresponde();
 addEventListener('hashchange', abrirFotosSiCorresponde);
 addEventListener('pageshow', e => { if (e.persisted) abrirFotosSiCorresponde(); });
 
-// Música: La vie en rose desde 0:41. Los navegadores no dejan sonar sin un toque,
+// Música: La vie en rose (el mp3 ya viene recortado). Los navegadores no dejan sonar sin un toque,
 // así que arranca con el primer toque en la página; el botón la pausa o la reanuda.
-const MUSIC_START = 41;
+const MUSIC_START = 0;
 const music = $('#music');
 const musicBtn = $('#music-btn');
-fetch(music.src, { method: 'HEAD' }).then(r => { if (r.ok) iniciarMusica(); }).catch(() => {});
+fetch(music.currentSrc || music.src, { method: 'HEAD' }).then(r => { if (r.ok) iniciarMusica(); }).catch(() => {});
 function iniciarMusica() {
   musicBtn.hidden = false;
   let empezo = false;
   const play = () => {
     if (!empezo) { music.currentTime = MUSIC_START; empezo = true; }
-    music.play().then(() => musicBtn.classList.add('playing')).catch(() => {});
+    // Entra con el volumen subiendo de a poco.
+    music.volume = 0;
+    music.play().then(() => {
+      musicBtn.classList.add('playing');
+      const fade = setInterval(() => { music.volume = Math.min(1, music.volume + 0.05); if (music.volume >= 1) clearInterval(fade); }, 100);
+    }).catch(() => {});
   };
   music.addEventListener('ended', () => { music.currentTime = MUSIC_START; });
   music.addEventListener('loadedmetadata', () => { if (!empezo) music.currentTime = MUSIC_START; }, { once: true });
