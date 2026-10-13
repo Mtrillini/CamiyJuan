@@ -110,3 +110,14 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
 .hero .couple-photo{display:block;width:88%;max-width:400px;height:auto!important;aspect-ratio:auto;object-fit:contain;margin:14px auto 4px;
   border:0;border-radius:0;box-shadow:none;background:none;opacity:.88;
   -webkit-mask-image:linear-gradient(#000 70%,transparent 98%);mask-image:linear-gradient(#000 70%,transparent 98%)}
+/* Ajustes UX */
+.hashtag{white-space:nowrap;color:var(--blue-deep);font-size:12px!important}
+/* En el celular el QR no sirve (no te podés escanear a vos mismo): se ve solo en compu */
+.photos-card .qr-box{display:none}
+@media (min-width:1024px){.photos-card .qr-box{display:block}}
+.photos-card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;text-align:left}
+.photos-card .compact{white-space:nowrap}
+@media (min-width:1024px){.photos-card{grid-template-columns:auto 1fr auto auto}}
+.dress-code p{text-wrap:balance}
+.copy-hint{display:block;font-size:10px;letter-spacing:1px;text-transform:none;color:var(--blue-deep);margin-top:2px}
+.mini-card p{text-wrap:balance}
