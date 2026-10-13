@@ -136,3 +136,13 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
   .invitation{grid-template-areas:"hero venue" "dress attendance" ". attendance" "gifts gifts" "foot foot"}
   .gifts{justify-self:center;width:min(100%,520px);margin-top:10px}
 }
+/* Compu: una sola columna, mismo orden que en el celular */
+@media (min-width:1024px){
+  .invitation{display:block;max-width:620px;padding:40px 30px 30px}
+  .invitation>*{margin-left:auto;margin-right:auto}
+  .venue{margin-top:20px}
+  .dress-code{margin:26px 5px 22px}
+  .gifts{width:auto;margin:22px 8px 10px}
+  .palace-img{width:108%;max-width:none}
+}
+@media (min-width:1024px){.invitation>.gifts{width:calc(100% - 16px);justify-self:auto}}
