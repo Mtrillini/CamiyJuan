@@ -99,7 +99,7 @@
       if (i >= 6) letter.dataset.step = i;
       await wait(PASO);
     }
-    await wait(reduce ? 0 : 200);
+    await wait(reduce ? 0 : 1400);   // la carta queda abierta un momento, con la invitación a la vista
     document.body.classList.add('zoom');
     await wait(reduce ? 700 : 1000);
     location.href = DESTINO;
