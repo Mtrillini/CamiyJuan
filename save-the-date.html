@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camila &amp; Juan · 08.12.26</title>
+<meta name="description" content="Save the date · Camila & Juan · 8 de diciembre de 2026">
+<link rel="preload" as="image" href="fondo-web.jpg" media="(orientation: landscape)">
+<link rel="preload" as="image" href="fondo-mobile.jpg" media="(orientation: portrait)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #e4e3e0;
+    --ink: #111;
+    --ink-soft: #3c3c3c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Fondo con palacio, flores y nombres (ya vienen en la imagen) */
+  .card {
+    position: relative;
+    min-height: 100vh; min-height: 100svh;
+    text-align: center;
+    overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--bg) url('fondo-web.jpg') center top / cover no-repeat;
+    opacity: 0; transform: scale(1.08) translateZ(0);
+    will-change: opacity, transform; backface-visibility: hidden;
+    transition: opacity 1.8s ease, transform 3.2s cubic-bezier(.2,.7,.2,1);
+  }
+  .ready .card::before { opacity: 1; transform: scale(1) translateZ(0); }
+
+  /* Intro */
+  #intro {
+    position: fixed; inset: 0; z-index: 10;
+    background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+    transition: opacity 1.2s ease, visibility 1.2s;
+  }
+  .ready #intro { opacity: 0; visibility: hidden; }
+  #intro .mono {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(3rem, 10vw, 5.5rem); letter-spacing: .08em;
+    opacity: 0; animation: fadeUp 1.2s .2s ease forwards;
+  }
+  #intro .line { width: 0; height: 1px; background: var(--ink); animation: grow 1.4s .5s ease forwards; }
+  #intro small {
+    font-size: .75rem; letter-spacing: .5em; padding-left: .5em;
+    opacity: 0; animation: fadeUp 1s .9s ease forwards;
+  }
+  .ready #intro > * { transform: translateY(-12px); transition: transform 1.2s ease; }
+  @keyframes grow { to { width: min(220px, 50vw); } }
+
+  /* El contenido espera a que termine la intro */
+  body:not(.ready) .content * { animation: none !important; }
+  .content > * { will-change: opacity, transform; }
+
+  .content {
+    position: relative;
+    /* empieza debajo de los nombres de la imagen */
+    padding: max(65vh, 37vw) 16px 28px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .std {
+    width: min(620px, 80%);
+    border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);
+    padding: 8px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 1.8vw, 1.5rem);
+    letter-spacing: .45em; padding-left: .45em;
+    opacity: 0; animation: fadeUp 1.2s 1.4s ease forwards;
+  }
+
+  .date {
+    display: flex; align-items: center; justify-content: center; gap: clamp(16px, 3vw, 44px);
+    margin-top: 10px;
+    font-weight: 400;
+    font-size: clamp(2.2rem, min(5vw, 7vh), 4.2rem);
+    line-height: 1.15;
+    opacity: 0; animation: fadeUp 1.2s 1.8s ease forwards;
+  }
+  .date .sep { width: 2px; height: .8em; background: var(--ink); }
+
+  .place {
+    margin-top: 6px;
+    font-size: clamp(.8rem, 1.2vw, 1.05rem);
+    letter-spacing: .04em;
+    opacity: 0; animation: fadeUp 1.2s 2.2s ease forwards;
+  }
+
+  /* Cuenta regresiva */
+  .countdown {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: clamp(10px, 3vw, 28px); margin-top: 14px;
+    opacity: 0; animation: fadeUp 1.2s 2.6s ease forwards;
+  }
+  .unit { min-width: 60px; }
+  .unit b {
+    display: block;
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+  }
+  .unit span { font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; color: var(--ink-soft); }
+
+  /* En progreso */
+  .progress {
+    margin-top: 12px; width: min(380px, 85%);
+    display: flex; flex-direction: column; align-items: center;
+    opacity: 0; animation: fadeUp 1.2s 3s ease forwards;
+  }
+  .progress p {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--ink-soft);
+    min-height: 1.6em;
+    transition: opacity .6s ease;
+  }
+  .bar { position: relative; width: 100%; height: 2px; background: rgba(0,0,0,.15); margin-top: 12px; overflow: hidden; }
+  .bar::after {
+    content: ''; position: absolute; top: 0; left: -40%; width: 40%; height: 100%;
+    background: var(--ink);
+    animation: slide 2.8s ease-in-out infinite;
+  }
+  .soon {
+    margin-top: 16px; padding: 8px 18px;
+    border: 1px solid var(--ink);
+    font-size: .78rem; letter-spacing: .35em; padding-left: calc(18px + .35em);
+    text-transform: uppercase;
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  /* Mobile / pantallas verticales */
+  @media (orientation: portrait) {
+    .card::before { background-image: url('fondo-mobile.jpg'); }
+    .content { padding-top: max(37vh, 64vw); }
+    .std { width: 88%; letter-spacing: .3em; padding-left: .3em; font-size: clamp(1rem, 4.4vw, 1.4rem); }
+    .date { font-size: clamp(2.6rem, 13vw, 4.6rem); }
+    .place { font-size: clamp(.78rem, 3.4vw, 1rem); }
+    .unit b { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+    .progress p { font-size: clamp(1.05rem, 4.2vw, 1.3rem); }
+  }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes slide { to { left: 100%; } }
+  @keyframes pulse { 50% { opacity: .45; } }
+
+  /* Con 'Reducir movimiento' activado (iPhone): solo fundidos suaves, sin desplazamientos */
+  @media (prefers-reduced-motion: reduce) {
+    .content > *, #intro > * { animation-name: fadeIn !important; }
+    .card::before { transform: none !important; }
+    .ready #intro > * { transform: none; }
+  }
+</style>
+</head>
+<body>
+  <div id="intro" aria-hidden="true">
+    <div class="mono">C y J</div>
+    <div class="line"></div>
+    <small>08 · 12 · 26</small>
+  </div>
+
+  <main class="card">
+    <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Camila &amp; Juan</h1>
+
+    <section class="content">
+      <div class="std">SAVE THE DATE</div>
+      <div class="date">
+        <span>08</span><i class="sep"></i><span>12</span><i class="sep"></i><span>26</span>
+      </div>
+      <p class="place">PAZ 705, VICTORIA, SAN FERNANDO</p>
+
+      <div class="countdown" aria-label="Cuenta regresiva">
+        <div class="unit"><b id="d">--</b><span>Días</span></div>
+        <div class="unit"><b id="h">--</b><span>Horas</span></div>
+        <div class="unit"><b id="m">--</b><span>Min</span></div>
+        <div class="unit"><b id="s">--</b><span>Seg</span></div>
+      </div>
+
+      <div class="progress">
+        <p id="msg">Estamos preparando algo especial…</p>
+        <div class="bar"></div>
+        <div class="soon">Invitación en camino</div>
+      </div>
+    </section>
+  </main>
+
+<script>
+  // Intro: espera al fondo y a las fuentes (mínimo 1.8 s, máximo 5 s)
+  (function () {
+    const src = matchMedia('(orientation: portrait)').matches ? 'fondo-mobile.jpg' : 'fondo-web.jpg';
+    const img = new Image();
+    const cargada = new Promise(r => { img.onload = img.onerror = r; img.src = src; })
+      .then(() => img.decode ? img.decode().catch(() => {}) : null);
+    const fuentes = document.fonts ? document.fonts.ready : Promise.resolve();
+    const minimo = new Promise(r => setTimeout(r, 1800));
+    let hecho = false;
+    const listo = () => { if (hecho) return; hecho = true; requestAnimationFrame(() => document.body.classList.add('ready')); };
+    Promise.all([cargada, fuentes, minimo]).then(listo);
+    setTimeout(listo, 5000);
+  })();
+
+  // Fecha del evento (ajustar la hora cuando se confirme)
+  const evento = new Date('2026-12-08T20:00:00-03:00');
+  const pad = n => String(n).padStart(2, '0');
+
+  function tick() {
+    let diff = Math.max(0, evento - new Date());
+    const d = Math.floor(diff / 864e5); diff %= 864e5;
+    const h = Math.floor(diff / 36e5);  diff %= 36e5;
+    const m = Math.floor(diff / 6e4);   diff %= 6e4;
+    const s = Math.floor(diff / 1e3);
+    document.getElementById('d').textContent = d;
+    document.getElementById('h').textContent = pad(h);
+    document.getElementById('m').textContent = pad(m);
+    document.getElementById('s').textContent = pad(s);
+  }
+  tick(); setInterval(tick, 1000);
+
+  const mensajes = [
+    'Estamos preparando algo especial…',
+    'Eligiendo cada detalle con amor…',
+    'Muy pronto, toda la información…',
+    'Reservá la fecha'
+  ];
+  const msg = document.getElementById('msg');
+  let i = 0;
+  setInterval(() => {
+    msg.style.opacity = 0;
+    setTimeout(() => { i = (i + 1) % mensajes.length; msg.textContent = mensajes[i]; msg.style.opacity = 1; }, 600);
+  }, 3500);
+</script>
+</body>
+</html>
