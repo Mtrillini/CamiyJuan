@@ -9,6 +9,11 @@ guard();
 const MAX_BYTES = 10 * 1024 * 1024;
 const TYPES = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/heic' => 'heic', 'image/heif' => 'heif'];
 
+// Se habilita el día anterior al evento (hora Argentina).
+if (new DateTimeImmutable('now', new DateTimeZone('America/Argentina/Buenos_Aires')) < new DateTimeImmutable('2026-12-07 00:00', new DateTimeZone('America/Argentina/Buenos_Aires'))) {
+    respond(403, ['ok' => false, 'error' => 'Podés subir fotos desde el 7 de diciembre.']);
+}
+
 $nombre = text('nombre', 100, true);
 $file = $_FILES['foto'] ?? null;
 if (!$file || is_array($file['name']) || $file['error'] !== UPLOAD_ERR_OK) {

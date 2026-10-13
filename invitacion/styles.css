@@ -121,3 +121,14 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
 .dress-code p{text-wrap:balance}
 .copy-hint{display:block;font-size:10px;letter-spacing:1px;text-transform:none;color:var(--blue-deep);margin-top:2px}
 .mini-card p{text-wrap:balance}
+.deadline{font-size:15px;margin:2px 0 4px;color:var(--blue-deep)}
+.deadline strong{font-weight:700}
+.button-ghost{background:transparent;color:var(--brown);border:1px solid #b9a28b;box-shadow:none}
+.button-ghost:hover{background:#fffaf3;color:var(--brown)}
+.venue-card .button-ghost{min-width:245px;margin:2px 0 6px}
+.photos-soon{font-size:11px!important;font-style:italic;color:#9a8270}
+.photos-card .compact:disabled{background:#cdbfb1;color:#fbf5ec;cursor:default;opacity:1;transform:none}
+@media (min-width:1024px){
+  .invitation{grid-template-areas:"hero venue" "dress attendance" "gifts attendance" "foot foot"}
+  .photos-card{grid-template-columns:auto 1fr auto}
+}

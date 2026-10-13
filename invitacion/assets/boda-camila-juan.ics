@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//camiyjuan.com//Invitacion//ES
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:boda-camila-juan-20261208@camiyjuan.com
+DTSTAMP:20261013T000000Z
+DTSTART:20261208T160000Z
+DTEND:20261209T010000Z
+SUMMARY:Casamiento de Camila & Juan
+LOCATION:Palacio Sans Souci\, Paz 705\, Victoria\, San Fernando
+DESCRIPTION:Ceremonia 13 h · Celebración 14 a 22 h. Dress code: Gala. https://camiyjuan.com
+URL:https://camiyjuan.com
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:Mañana es el casamiento de Camila & Juan
+END:VALARM
+END:VEVENT
+END:VCALENDAR

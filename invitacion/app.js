@@ -2,6 +2,7 @@
 // Configuración editable.
 const CONFIG = {
   ceremony: '2026-12-08T13:00:00-03:00',
+  photosFrom: '2026-12-07T00:00:00-03:00', // subir fotos se habilita un día antes
   alias: 'BODACAMILAYJUAN',
 };
 const $ = (selector) => document.querySelector(selector);
@@ -221,8 +222,21 @@ dialog.addEventListener('close', () => {
 
 // El QR de las mesas apunta a .../invitacion/#fotos: abre directo la ventana de fotos.
 // También acepta ?fotos por si algún lector de QR pierde el #.
+const fotosHabilitadas = () => Date.now() >= new Date(CONFIG.photosFrom).getTime();
+// Antes de la fecha el botón queda desactivado con el aviso.
+function estadoFotos() {
+  const boton = document.querySelector('[data-action=photos]');
+  const on = fotosHabilitadas();
+  boton.disabled = !on;
+  boton.textContent = on ? 'Subir fotos' : 'Próximamente';
+  $('#photos-soon').hidden = on;
+}
+estadoFotos();
+setInterval(estadoFotos, 60000);
+
 function abrirFotosSiCorresponde() {
   if (location.hash !== '#fotos' && !new URLSearchParams(location.search).has('fotos')) return;
+  if (!fotosHabilitadas()) { document.querySelector('.photos-card').scrollIntoView({ block: 'center' }); toast('Podés subir fotos desde el 7 de diciembre.'); return; }
   const boton = document.querySelector('[data-action=photos]');
   boton.closest('.mini-card').scrollIntoView({ block: 'center' });
   if (!dialog.open) boton.click();
