@@ -132,3 +132,7 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
   .invitation{grid-template-areas:"hero venue" "dress attendance" "gifts attendance" "foot foot"}
   .photos-card{grid-template-columns:auto 1fr auto}
 }
+@media (min-width:1024px){
+  .invitation{grid-template-areas:"hero venue" "dress attendance" ". attendance" "gifts gifts" "foot foot"}
+  .gifts{justify-self:center;width:min(100%,520px);margin-top:10px}
+}
