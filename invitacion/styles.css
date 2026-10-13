@@ -74,3 +74,19 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);border-col
 .photo-pick:focus-within{outline:3px solid var(--blue);outline-offset:2px}
 .photo-pick{position:relative}
 .qr-box{padding:3px;background:#fffbf5;object-fit:contain}
+/* Compu: dos columnas */
+@media (min-width:1024px){
+  .invitation{max-width:1120px;padding:40px 48px 30px;display:grid;grid-template-columns:1fr 1fr;column-gap:56px;row-gap:26px;align-items:start;
+    grid-template-areas:"hero venue" "dress attendance" "gifts attendance" "foot foot"}
+  .hero{grid-area:hero;align-self:center}
+  .venue{grid-area:venue;align-self:center}
+  .dress-code{grid-area:dress;margin:14px 0 0}
+  .attendance{grid-area:attendance}
+  .gifts{grid-area:gifts;margin:0}
+  .invitation>footer{grid-area:foot}
+  .palace-img{width:115%;max-width:640px;margin-top:0;opacity:.85}
+  .couple-photo{height:190px}
+  .names img{width:360px}
+  .subtitle{font-size:19px}
+  .date{font-size:42px}
+}
