@@ -3,6 +3,8 @@ declare(strict_types=1);
 require __DIR__ . '/db.php';
 guard();
 
+const MENUS = ['Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];
+
 $nombre = text('nombre', 100, true);
 
 switch ($_POST['tipo'] ?? '') {
@@ -18,7 +20,10 @@ switch ($_POST['tipo'] ?? '') {
                 $n = preg_replace('/\s+/u', ' ', trim((string)$n)) ?? '';
                 if ($n === '' || mb_strlen($n) > 100) respond(422, ['ok' => false, 'error' => 'Completá el nombre y apellido de todos los acompañantes.']);
                 $tipo = ($_POST["acompanante_tipo_$i"] ?? '') === 'nino' ? 'nino' : 'adulto';
-                $acompanantes[] = [$n, $tipo];
+                // Sin restricción se guarda NULL.
+                $menu = trim((string)(($_POST['acompanante_menu'] ?? [])[$i] ?? ''));
+                $menu = in_array($menu, MENUS, true) ? $menu : null;
+                $acompanantes[] = [$n, $tipo, $menu];
             }
         }
         $pdo = db();
@@ -26,8 +31,8 @@ switch ($_POST['tipo'] ?? '') {
         $pdo->prepare('INSERT INTO confirmaciones (nombre, asistencia, personas, telefono, menu, comentarios) VALUES (?, ?, ?, ?, ?, ?)')
             ->execute([$nombre, $asistencia, $asistencia === 'si' ? 1 + count($acompanantes) : 0, text('telefono', 30), text('menu', 50), longText('comentarios', 1000)]);
         $id = (int)$pdo->lastInsertId();
-        $insert = $pdo->prepare('INSERT INTO acompanantes (confirmacion_id, nombre, tipo) VALUES (?, ?, ?)');
-        foreach ($acompanantes as [$n, $tipo]) $insert->execute([$id, $n, $tipo]);
+        $insert = $pdo->prepare('INSERT INTO acompanantes (confirmacion_id, nombre, tipo, restriccion) VALUES (?, ?, ?, ?)');
+        foreach ($acompanantes as [$n, $tipo, $menu]) $insert->execute([$id, $n, $tipo, $menu]);
         $pdo->commit();
         break;
     case 'song':

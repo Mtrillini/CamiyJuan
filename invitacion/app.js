@@ -107,7 +107,9 @@ function setupCompanions() {
         <div class="segmented" role="radiogroup" aria-label="Edad del acompañante ${i + 1}">
           <label><input type="radio" name="acompanante_tipo_${i}" value="adulto" checked> Adulto</label>
           <label><input type="radio" name="acompanante_tipo_${i}" value="nino"> Niño/a</label>
-        </div>`;
+        </div>
+        <label>Restricción alimentaria
+          <select name="acompanante_menu[]"><option value="">Ninguna</option><option>Vegetariano</option><option>Vegano</option><option>Sin TACC</option><option>Otra</option></select></label>`;
       list.append(row);
     }
   };

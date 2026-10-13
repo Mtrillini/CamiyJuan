@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS acompanantes (
   confirmacion_id INT UNSIGNED NOT NULL,
   nombre VARCHAR(100) NOT NULL,
   tipo ENUM('adulto','nino') NOT NULL,
+  restriccion VARCHAR(30) NULL, -- NULL = sin restricción
   FOREIGN KEY (confirmacion_id) REFERENCES confirmaciones(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
