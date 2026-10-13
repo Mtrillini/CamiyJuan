@@ -96,3 +96,8 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
 @keyframes acercarse{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:none}}
 @keyframes desvelar{from{opacity:1}to{opacity:0}}
 @media(prefers-reduced-motion:reduce){.invitation,body:after{animation:none}body:after{display:none}}
+/* Foto de los novios: bordes en degradé que se funden con el papel */
+.couple-photo{display:block;width:100%;height:auto;aspect-ratio:1/0.92;object-fit:cover;object-position:50% 40%;border:0;border-radius:0;box-shadow:none;background:none;margin:18px 0 8px;opacity:.95;
+  -webkit-mask-image:radial-gradient(ellipse 58% 56% at 50% 47%,#000 52%,transparent 100%);mask-image:radial-gradient(ellipse 58% 56% at 50% 47%,#000 52%,transparent 100%)}
+@media (min-width:1024px){.couple-photo{height:auto;max-width:440px;margin-inline:auto}}
+.couple-photo{-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 48%,#000 50%,rgba(0,0,0,.6) 72%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 48%,#000 50%,rgba(0,0,0,.6) 72%,transparent 100%)}
