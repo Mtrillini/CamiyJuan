@@ -169,3 +169,4 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
 @keyframes linea{from{opacity:0;clip-path:inset(0 50%)}to{opacity:1;clip-path:inset(0)}}
 @media (prefers-reduced-motion:reduce){.anim .hero>*,.anim .reveal{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}}
 .close-dialog:focus,.close-dialog:focus-visible{outline:none;box-shadow:none}
+.hero .couple-photo{opacity:.85}
