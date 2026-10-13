@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<title>Tarjeta QR · Invitación</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap">
+<style>
+  @page{size:105mm 148mm;margin:0}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{width:105mm;height:148mm;font-family:Georgia,'Times New Roman',serif;color:#644732;
+    background:url('assets/fondo-mobile.jpg') center/cover no-repeat;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12mm 14mm;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .names{width:62mm;display:block}
+  .eyebrow{text-transform:uppercase;letter-spacing:3.5px;font-size:8.5pt;margin:0 0 2mm}
+  h1{font-family:'Pinyon Script',cursive;font-weight:400;font-size:30pt;margin:3mm 0 1mm;line-height:1.1}
+  p{margin:0;font-size:10pt;line-height:1.35}
+  .qr{width:44mm;height:44mm;margin:5mm 0 4mm;padding:2.5mm;background:#fffbf5;border:.3mm solid #c9b29b;border-radius:3mm}
+  .tag{color:#527987;letter-spacing:1px;font-size:10.5pt;margin-top:1.5mm}
+  .line{width:52mm;margin:4mm 0 0}
+</style>
+</head>
+<body>
+  <img class="names" src="assets/nombres.png" alt="Camila & Juan">
+  <h1>Nuestra invitación</h1>
+  <p>Escaneá el código para ver la invitación<br>y confirmar tu asistencia.</p>
+  <img class="qr" src="assets/qr-invitacion.svg" alt="QR de la invitación">
+  <p class="eyebrow">08 · 12 · 2026</p>
+  <p class="tag">camiyjuan.com</p>
+  <img class="line" src="assets/linea.png" alt="">
+</body>
+</html>
