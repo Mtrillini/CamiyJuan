@@ -8,81 +8,108 @@
 <meta name="description" content="Camila & Juan · Nos casamos el 8 de diciembre de 2026. Abrí tu invitación.">
 <link rel="preload" as="image" href="entrada/cuadro-0.webp">
 <link rel="prefetch" href="invitacion/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap">
 <style>
-  :root{--ivory:#efe6d8;--brown:#644732}
+  :root{--ivory:#efe6d8;--brown:#644732;--petroleum:#527987}
   *{box-sizing:border-box;margin:0}
   html,body{height:100%}
   body{background:var(--ivory) url('invitacion/assets/fondo-mobile.jpg') center/cover fixed;overflow:hidden;font-family:Georgia,serif;color:var(--brown)}
   @media (min-aspect-ratio:1/1){body{background-image:url('invitacion/assets/fondo-web.jpg')}}
 
-  /* Escenario con la proporción de los cuadros (1024x1536), lo más grande posible */
-  .stage{position:fixed;inset:0;display:grid;place-items:center}
-  .scene{position:relative;height:min(100vh,150vw);height:min(100svh,150vw);aspect-ratio:2/3;border:0;padding:0;background:none;cursor:pointer;
+  /* Nombres arriba + escena con la proporción de los cuadros (1024x1536) */
+  .stage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2vh 0}
+  .title{width:min(68vw,330px);height:auto;margin-bottom:-1vh;position:relative;z-index:2;animation:llega 1.4s cubic-bezier(.22,.61,.36,1) both;transition:opacity .5s,transform .5s}
+  .scene{--h:min(calc(100svh - 18vh),150vw);position:relative;height:var(--h);aspect-ratio:2/3;border:0;padding:0;background:none;color:inherit;font:inherit;cursor:pointer;
     -webkit-mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 72%,transparent 100%);mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 72%,transparent 100%);
-    animation:llega 1.4s cubic-bezier(.22,.61,.36,1) both}
-  .scene:focus-visible{outline:none}
-  .scene:focus-visible .hint{opacity:1}
-  .frames{position:absolute;inset:0;transform-origin:50% 48%;transition:transform 4.6s cubic-bezier(.45,0,.55,1)}
-  .frames img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .95s cubic-bezier(.45,0,.55,1)}
-  .frames img.on{opacity:1}
-  .frames img:first-child{opacity:1}
-  .hint{position:fixed;left:0;right:0;bottom:max(4vh,18px);text-align:center;font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--brown);animation:respira 2.6s ease-in-out infinite;transition:opacity .5s}
+    animation:llega 1.4s .15s cubic-bezier(.22,.61,.36,1) both}
+  .scene:focus-visible{outline:none;filter:drop-shadow(0 0 6px #52798799)}
+  .frames{position:absolute;inset:0;transform-origin:50.6% 49.4%;transition:transform 3.4s cubic-bezier(.45,0,.55,1)}
+  .frames>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s cubic-bezier(.45,0,.55,1)}
+  .frames>img:first-child{opacity:1}
+  .frames>img.on{opacity:1}
+
+  /* La invitación dentro de la carta: ocupa el panel interior del último cuadro
+     y se va descubriendo a medida que se abren las puertas. */
+  .letter{position:absolute;left:20.7%;right:19.3%;top:8.6%;bottom:9.8%;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;opacity:0;clip-path:inset(0 50% 0 50%);transition:clip-path .6s cubic-bezier(.45,0,.55,1),opacity .6s}
+  .letter[data-step="6"]{opacity:1;clip-path:inset(0 31% 0 34%)}
+  .letter[data-step="7"]{opacity:1;clip-path:inset(0 18% 0 17%)}
+  .letter[data-step="8"]{opacity:1;clip-path:inset(0)}
+  .letter .eyebrow{font-size:3.4cqw;letter-spacing:1.4cqw;text-transform:uppercase}
+  .letter img{width:84%;margin:3cqh 0 2cqh}
+  .letter .line{width:62%;margin:1cqh 0 3cqh}
+  .letter .date{font-size:8cqw;letter-spacing:1.6cqw}
+  .letter .place{font-size:4.4cqw;margin-top:2.5cqh;font-style:italic}
 
   .playing .scene{cursor:default}
-  .playing .hint{opacity:0;animation:none}
-  .playing .frames{transform:scale(1.035)}
-  /* Final: la cámara entra por la abertura y se funde a marfil */
-  .leaving .frames{transform:scale(2.3);transition:transform 1.6s cubic-bezier(.55,0,.35,1)}
-  .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity 1.1s ease .4s}
-  .leaving .veil{opacity:1}
+  .playing .title{animation:none;opacity:0;transform:translateY(-10px)}
+  .playing .frames{transform:scale(1.03)}
+  /* Al abrirse del todo: zoom a la invitación y fundido */
+  .zoom .frames{transform:scale(1.85);transition:transform 1.4s cubic-bezier(.55,0,.25,1)}
+  .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity .7s ease .75s}
+  .zoom .veil{opacity:1}
 
-  @keyframes llega{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:none}}
-  @keyframes respira{50%{opacity:.35}}
-  @media (prefers-reduced-motion:reduce){.scene,.hint{animation:none}.frames,.leaving .frames{transition:none;transform:none!important}}
+  @keyframes llega{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.scene,.title{animation:none}.frames,.zoom .frames{transition:none;transform:none!important}}
 </style>
 </head>
 <body>
 <main class="stage">
+  <img class="title" src="invitacion/assets/nombres.png" alt="Camila & Juan" width="1400" height="411">
   <button class="scene" id="scene" aria-label="Abrir la invitación de Camila y Juan">
     <span class="frames" id="frames" aria-hidden="true">
       <img src="entrada/cuadro-0.webp" alt="" fetchpriority="high">
-      <img src="entrada/cuadro-1.webp" alt="" loading="eager">
-      <img src="entrada/cuadro-2.webp" alt="" loading="eager">
-      <img src="entrada/cuadro-3.webp" alt="" loading="eager">
-      <img src="entrada/cuadro-4.webp" alt="" loading="eager">
-      <img src="entrada/cuadro-5.webp" alt="" loading="eager">
-      <img src="entrada/cuadro-6.webp" alt="" loading="eager">
+      <img src="entrada/cuadro-1.webp" alt="">
+      <img src="entrada/cuadro-2.webp" alt="">
+      <img src="entrada/cuadro-3.webp" alt="">
+      <img src="entrada/cuadro-4.webp" alt="">
+      <img src="entrada/cuadro-5.webp" alt="">
+      <img src="entrada/cuadro-6.webp" alt="">
+      <img src="entrada/cuadro-7.webp" alt="">
+      <img src="entrada/cuadro-8.webp" alt="">
+      <span class="letter" id="letter">
+        <span class="eyebrow">Nos casamos</span>
+        <img src="invitacion/assets/nombres.png" alt="">
+        <img class="line" src="invitacion/assets/linea.png" alt="">
+        <span class="date">08.12.2026</span>
+        <span class="place">Palacio Sans Souci</span>
+      </span>
     </span>
   </button>
-  <p class="hint" aria-hidden="true">Tocá para abrir</p>
 </main>
 <div class="veil" aria-hidden="true"></div>
 <script>
   const DESTINO = 'invitacion/';
-  const PASO = 720;          // ms entre cuadro y cuadro (el fundido dura .95s, se superponen)
+  const PASO = 430;          // ms entre cuadros (el fundido dura .6s: se superponen)
   const scene = document.getElementById('scene');
-  const frames = [...document.querySelectorAll('#frames img')];
+  const letter = document.getElementById('letter');
+  const frames = [...document.querySelectorAll('#frames > img')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Decodificamos todos los cuadros antes de animar para que no haya saltos.
-  const listos = Promise.all(frames.map(img => img.decode().catch(() => {})));
+  const listos = Promise.all([...document.images].map(img => img.decode().catch(() => {})));
   const wait = ms => new Promise(r => setTimeout(r, ms));
 
   scene.addEventListener('click', async () => {
     if (document.body.classList.contains('playing')) return;
     document.body.classList.add('playing');
     await listos;
-    if (reduce) { frames.at(-1).classList.add('on'); await wait(500); }
-    else for (const img of frames.slice(1)) { img.classList.add('on'); await wait(PASO); }
-    await wait(reduce ? 0 : 450);
-    document.body.classList.add('leaving');
-    await wait(reduce ? 700 : 1500);
+    if (reduce) { frames.at(-1).classList.add('on'); letter.dataset.step = 8; await wait(600); }
+    else for (let i = 1; i < frames.length; i++) {
+      frames[i].classList.add('on');
+      if (i >= 6) letter.dataset.step = i;
+      await wait(PASO);
+    }
+    await wait(reduce ? 0 : 350);
+    document.body.classList.add('zoom');
+    await wait(reduce ? 700 : 1450);
     location.href = DESTINO;
   });
   // Si vuelven con "atrás", la tarjeta aparece cerrada de nuevo.
   addEventListener('pageshow', e => {
     if (!e.persisted) return;
-    document.body.classList.remove('playing', 'leaving');
+    document.body.classList.remove('playing', 'zoom');
     frames.forEach(img => img.classList.remove('on'));
+    delete letter.dataset.step;
   });
 </script>
 </body>
