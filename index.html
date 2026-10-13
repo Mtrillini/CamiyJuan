@@ -29,11 +29,10 @@
 
   /* La invitación dentro de la carta: ocupa el panel interior del último cuadro
      y se va descubriendo a medida que se abren las puertas. */
-  .letter{position:absolute;left:11.9%;right:10.2%;top:3.4%;bottom:2.9%;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  .letter{position:absolute;left:8.5%;right:8.4%;top:4.6%;bottom:4.4%;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;opacity:0;clip-path:inset(0 50% 0 50%);transition:clip-path .2s cubic-bezier(.45,0,.55,1),opacity .2s}
-  .letter[data-step="6"]{opacity:1;clip-path:inset(0 31% 0 34%)}
-  .letter[data-step="7"]{opacity:1;clip-path:inset(0 18% 0 17%)}
-  .letter[data-step="8"]{opacity:1;clip-path:inset(0)}
+  .letter[data-step="6"]{opacity:1;clip-path:inset(0 23% 0 23%)}
+  .letter[data-step="7"]{opacity:1;clip-path:inset(0)}
   .letter .eyebrow{font-size:3.4cqw;letter-spacing:1.4cqw;text-transform:uppercase}
   .letter img{width:84%;margin:3cqh 0 2cqh}
   .letter .line{width:62%;margin:1cqh 0 3cqh}
@@ -63,7 +62,6 @@
       <img src="entrada/cuadro-5.webp" alt="">
       <img src="entrada/cuadro-6.webp" alt="">
       <img src="entrada/cuadro-7.webp" alt="">
-      <img src="entrada/cuadro-8.webp" alt="">
       <span class="letter" id="letter">
         <span class="eyebrow">Nos casamos</span>
         <img src="invitacion/assets/nombres.png" alt="">
@@ -90,7 +88,7 @@
     if (document.body.classList.contains('playing')) return;
     document.body.classList.add('playing');
     await listos;
-    if (reduce) { frames.at(-1).classList.add('on'); letter.dataset.step = 8; await wait(600); }
+    if (reduce) { frames.at(-1).classList.add('on'); letter.dataset.step = frames.length - 1; await wait(600); }
     else for (let i = 1; i < frames.length; i++) {
       frames[i].classList.add('on');
       if (i >= 6) letter.dataset.step = i;
