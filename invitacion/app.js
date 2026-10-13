@@ -220,4 +220,13 @@ dialog.addEventListener('close', () => {
 });
 
 // El QR de las mesas apunta a .../invitacion/#fotos: abre directo la ventana de fotos.
-if (location.hash === '#fotos') document.querySelector('[data-action=photos]').click();
+// También acepta ?fotos por si algún lector de QR pierde el #.
+function abrirFotosSiCorresponde() {
+  if (location.hash !== '#fotos' && !new URLSearchParams(location.search).has('fotos')) return;
+  const boton = document.querySelector('[data-action=photos]');
+  boton.closest('.mini-card').scrollIntoView({ block: 'center' });
+  if (!dialog.open) boton.click();
+}
+abrirFotosSiCorresponde();
+addEventListener('hashchange', abrirFotosSiCorresponde);
+addEventListener('pageshow', e => { if (e.persisted) abrirFotosSiCorresponde(); });
