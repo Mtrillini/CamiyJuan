@@ -176,3 +176,4 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
 .music-btn.playing svg{animation:latido 1.6s ease-in-out infinite}
 @keyframes latido{50%{transform:scale(1.15)}}
 .hero .couple-photo{filter:none;opacity:.72}
+.hero .couple-photo{opacity:.6}
