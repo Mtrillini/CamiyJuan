@@ -15,10 +15,9 @@
   html,body{height:100%}
   body{background:#ece3d3 url('entrada/fondo.jpg') center top/auto 100% repeat-x;overflow:hidden;font-family:Georgia,serif;color:var(--brown)}
 
-  /* Nombres arriba + escena con la proporción de los cuadros (1024x1536) */
+  /* Escena con la proporción de los cuadros (1024x1536) */
   .stage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2vh 0}
-  .title{width:min(68vw,330px);height:auto;margin-bottom:-1vh;position:relative;z-index:2;animation:llega 1.4s cubic-bezier(.22,.61,.36,1) both;transition:opacity .5s,transform .5s}
-  .scene{--h:min(calc(100svh - 18vh),150vw);position:relative;height:var(--h);aspect-ratio:2/3;border:0;padding:0;background:none;color:inherit;font:inherit;cursor:pointer;
+  .scene{--h:min(100svh,150vw);position:relative;height:var(--h);aspect-ratio:2/3;border:0;padding:0;background:none;color:inherit;font:inherit;cursor:pointer;
     -webkit-mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 72%,transparent 100%);mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 72%,transparent 100%);
     animation:llega 1.4s .15s cubic-bezier(.22,.61,.36,1) both}
   .scene:focus-visible{outline:none;filter:drop-shadow(0 0 6px #52798799)}
@@ -41,7 +40,6 @@
   .letter .place{font-size:4.4cqw;margin-top:2.5cqh;font-style:italic}
 
   .playing .scene{cursor:default}
-  .playing .title{animation:none;opacity:0;transform:translateY(-10px)}
   .playing .frames{transform:scale(1.03)}
   /* Al abrirse del todo: zoom a la invitación y fundido */
   .zoom .frames{transform:scale(1.85);transition:transform 1s cubic-bezier(.55,0,.25,1)}
@@ -54,7 +52,6 @@
 </head>
 <body>
 <main class="stage">
-  <img class="title" src="invitacion/assets/nombres.png" alt="Camila & Juan" width="1400" height="411">
   <button class="scene" id="scene" aria-label="Abrir la invitación de Camila y Juan">
     <span class="frames" id="frames" aria-hidden="true">
       <img src="entrada/cuadro-0.webp" alt="" fetchpriority="high">
