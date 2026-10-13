@@ -23,15 +23,15 @@
     -webkit-mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 72%,transparent 100%);mask-image:radial-gradient(ellipse 72% 70% at 50% 50%,#000 72%,transparent 100%);
     animation:llega 1.4s .15s cubic-bezier(.22,.61,.36,1) both}
   .scene:focus-visible{outline:none;filter:drop-shadow(0 0 6px #52798799)}
-  .frames{position:absolute;inset:0;transform-origin:50.6% 49.4%;transition:transform 3.4s cubic-bezier(.45,0,.55,1)}
-  .frames>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s cubic-bezier(.45,0,.55,1)}
+  .frames{position:absolute;inset:0;transform-origin:50.6% 49.4%;transition:transform 2.2s cubic-bezier(.45,0,.55,1)}
+  .frames>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .38s cubic-bezier(.45,0,.55,1)}
   .frames>img:first-child{opacity:1}
   .frames>img.on{opacity:1}
 
   /* La invitación dentro de la carta: ocupa el panel interior del último cuadro
      y se va descubriendo a medida que se abren las puertas. */
   .letter{position:absolute;left:20.7%;right:19.3%;top:8.6%;bottom:9.8%;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;opacity:0;clip-path:inset(0 50% 0 50%);transition:clip-path .6s cubic-bezier(.45,0,.55,1),opacity .6s}
+    text-align:center;opacity:0;clip-path:inset(0 50% 0 50%);transition:clip-path .38s cubic-bezier(.45,0,.55,1),opacity .38s}
   .letter[data-step="6"]{opacity:1;clip-path:inset(0 31% 0 34%)}
   .letter[data-step="7"]{opacity:1;clip-path:inset(0 18% 0 17%)}
   .letter[data-step="8"]{opacity:1;clip-path:inset(0)}
@@ -45,8 +45,8 @@
   .playing .title{animation:none;opacity:0;transform:translateY(-10px)}
   .playing .frames{transform:scale(1.03)}
   /* Al abrirse del todo: zoom a la invitación y fundido */
-  .zoom .frames{transform:scale(1.85);transition:transform 1.4s cubic-bezier(.55,0,.25,1)}
-  .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity .7s ease .75s}
+  .zoom .frames{transform:scale(1.85);transition:transform 1s cubic-bezier(.55,0,.25,1)}
+  .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity .5s ease .5s}
   .zoom .veil{opacity:1}
 
   @keyframes llega{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -80,7 +80,7 @@
 <div class="veil" aria-hidden="true"></div>
 <script>
   const DESTINO = 'invitacion/';
-  const PASO = 430;          // ms entre cuadros (el fundido dura .6s: se superponen)
+  const PASO = 260;          // ms entre cuadros (el fundido dura .38s: se superponen)
   const scene = document.getElementById('scene');
   const letter = document.getElementById('letter');
   const frames = [...document.querySelectorAll('#frames > img')];
@@ -99,9 +99,9 @@
       if (i >= 6) letter.dataset.step = i;
       await wait(PASO);
     }
-    await wait(reduce ? 0 : 350);
+    await wait(reduce ? 0 : 200);
     document.body.classList.add('zoom');
-    await wait(reduce ? 700 : 1450);
+    await wait(reduce ? 700 : 1000);
     location.href = DESTINO;
   });
   // Si vuelven con "atrás", la tarjeta aparece cerrada de nuevo.
