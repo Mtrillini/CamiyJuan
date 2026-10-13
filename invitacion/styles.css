@@ -165,7 +165,7 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
 .anim .action-grid>.reveal:nth-child(2),.anim .photos-card.reveal{transition-delay:.12s}
 @keyframes subir{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes nombres{from{opacity:0;transform:scale(.92);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
-@keyframes foto{from{opacity:0;transform:scale(.94) translateY(14px)}to{opacity:1;transform:none}}
+@keyframes foto{from{opacity:0;transform:scale(.94) translateY(14px)}to{opacity:var(--foto-op,.6);transform:none}}
 @keyframes linea{from{opacity:0;clip-path:inset(0 50%)}to{opacity:1;clip-path:inset(0)}}
 @media (prefers-reduced-motion:reduce){.anim .hero>*,.anim .reveal{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}}
 .close-dialog:focus,.close-dialog:focus-visible{outline:none;box-shadow:none}
