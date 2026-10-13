@@ -178,3 +178,4 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
 .hero .couple-photo{filter:none;opacity:.72}
 .hero .couple-photo{opacity:.6}
 .hero .couple-photo{--foto-op:.72;opacity:.72}
+.photos-soon{white-space:nowrap;font-size:10px!important;letter-spacing:0}
