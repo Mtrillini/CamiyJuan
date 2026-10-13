@@ -102,3 +102,7 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
 @media (min-width:1024px){.couple-photo{height:auto;max-width:440px;margin-inline:auto}}
 .couple-photo{-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 48%,#000 50%,rgba(0,0,0,.6) 72%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 48%,#000 50%,rgba(0,0,0,.6) 72%,transparent 100%)}
 .couple-photo{opacity:1;-webkit-mask-image:radial-gradient(ellipse 52% 52% at 50% 48%,#000 62%,rgba(0,0,0,.75) 80%,transparent 100%);mask-image:radial-gradient(ellipse 52% 52% at 50% 48%,#000 62%,rgba(0,0,0,.75) 80%,transparent 100%)}
+/* Foto recortada (fondo transparente): apenas transparente y la base se esfuma */
+.couple-photo{aspect-ratio:auto;object-fit:contain;opacity:.88;width:88%;margin:14px auto 4px;
+  -webkit-mask-image:linear-gradient(#000 70%,transparent 98%);mask-image:linear-gradient(#000 70%,transparent 98%)}
+@media (min-width:1024px){.couple-photo{max-width:400px}}
