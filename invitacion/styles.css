@@ -179,3 +179,6 @@ body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:n
 .hero .couple-photo{opacity:.6}
 .hero .couple-photo{--foto-op:.72;opacity:.72}
 .photos-soon{white-space:nowrap;font-size:10px!important;letter-spacing:0}
+/* Palacio: siempre visible (sin depender del scroll) con una entrada suave */
+.palace-img{opacity:.85!important;animation:palacio 1.4s cubic-bezier(.2,.7,.2,1) .6s both}
+@keyframes palacio{from{opacity:0;filter:blur(3px)}to{opacity:.85;filter:none}}

@@ -1,7 +1,7 @@
 'use strict';
 // Animaciones de carga: el encabezado entra en cascada y el resto al hacer scroll.
 document.documentElement.classList.add('anim');
-const revealables = document.querySelectorAll('.venue-card, .palace-img, .dress-code, .attendance > *, .gifts, footer');
+const revealables = document.querySelectorAll('.venue-card, .dress-code, .attendance > *, .gifts, footer');
 revealables.forEach(el => el.classList.add('reveal'));
 if ('IntersectionObserver' in window) {
   const io = new IntersectionObserver(entries => entries.forEach(e => {
@@ -9,6 +9,8 @@ if ('IntersectionObserver' in window) {
   }), { rootMargin: '0px 0px -8% 0px' });
   revealables.forEach(el => io.observe(el));
 } else revealables.forEach(el => el.classList.add('visible'));
+// Red de seguridad: si algún navegador no dispara el observer, todo aparece igual.
+setTimeout(() => revealables.forEach(el => el.classList.add('visible')), 4000);
 // Configuración editable.
 const CONFIG = {
   ceremony: '2026-12-08T13:00:00-03:00',
