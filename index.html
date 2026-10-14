@@ -6,8 +6,7 @@
 <meta name="theme-color" content="#efe6d8">
 <title>Camila &amp; Juan · 08.12.2026</title>
 <meta name="description" content="Camila & Juan · Nos casamos el 8 de diciembre de 2026. Abrí tu invitación.">
-<link rel="preload" as="image" href="entrada/cinta-plana.webp?v=1791946009">
-<link rel="preload" as="image" href="entrada/mono-0.webp?v=1791945840">
+<link rel="preload" as="image" href="entrada/mono-0.webp?v=1791946169">
 <link rel="preload" as="image" href="entrada/carta-abierta.webp?v=1791943797">
 <link rel="preload" as="image" href="entrada/solapa-izquierda.webp?v=1791943797">
 <link rel="preload" as="image" href="entrada/solapa-derecha.webp?v=1791943797">
@@ -42,11 +41,6 @@
   .cinta{position:absolute;top:30%;left:-40%;width:180%;aspect-ratio:720/406;z-index:3;padding:0;border:0;background:transparent;cursor:pointer;
     -webkit-tap-highlight-color:transparent;pointer-events:none;transition:opacity .5s ease 2.4s}
   .cinta img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-  /* Antes de tocar: cinta plana (alineada por el lacre con el video); al tocar se funde al moño que se desata */
-  .cinta #mono{opacity:0;transition:opacity .12s linear}
-  .cinta .plana{left:17.85%;top:23.6%;width:62.33%;height:55.46%;transition:opacity .12s linear}
-  .sobre.abierto .cinta #mono{opacity:1}
-  .sobre.abierto .cinta .plana{opacity:0}
   .cinta .hit{position:absolute;left:40%;top:22%;width:20%;height:55%;pointer-events:auto;border-radius:16px}
   .cinta:focus-visible .hit{outline:2px solid var(--petroleum);outline-offset:4px}
   .cinta:not(:disabled){animation:invita 2.6s ease-in-out 1.6s infinite}
@@ -80,8 +74,7 @@
     <img class="solapa izquierda" src="entrada/solapa-izquierda.webp?v=1791943797" alt="">
     <img class="solapa derecha" src="entrada/solapa-derecha.webp?v=1791943797" alt="">
     <button class="cinta" id="abrir" aria-label="Abrir invitación">
-      <img class="plana" src="entrada/cinta-plana.webp?v=1791946009" alt="Abrir carta">
-      <img id="mono" src="entrada/mono-0.webp?v=1791945840" alt="">
+      <img id="mono" src="entrada/mono-0.webp?v=1791946169" alt="">
       <span class="hit"></span>
     </button>
   </div>
@@ -93,10 +86,10 @@
   const sobre = document.getElementById('sobre');
   const abrir = document.getElementById('abrir');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const imgs = ['carta-abierta','solapa-izquierda','solapa-derecha','cinta-plana'].map(n => 'entrada/' + n + '.webp?v=1791943797');
+  const imgs = ['carta-abierta','solapa-izquierda','solapa-derecha'].map(n => 'entrada/' + n + '.webp?v=1791943797');
   const listos = Promise.all(imgs.map(src => { const i = new Image(); i.src = src; return i.decode().catch(() => {}); }));
   // El video del moño (animación con transparencia) se descarga antes y se arranca al tocar.
-  const monoSrc = fetch('entrada/mono.webp?v=1791945840').then(r => r.blob()).then(b => URL.createObjectURL(b)).catch(() => null);
+  const monoSrc = fetch('entrada/mono.webp?v=1791946169').then(r => r.blob()).then(b => URL.createObjectURL(b)).catch(() => null);
   const wait = ms => new Promise(r => setTimeout(r, ms));
 
   const music = document.getElementById('bg-music');
@@ -143,7 +136,7 @@
     if (!e.persisted) return;
     sobre.classList.remove('abierto', 'zoom'); document.body.classList.remove('zoom', 'inside');
     abrir.disabled = false; document.querySelector('.inv-frame')?.remove();
-    document.getElementById('mono').src = 'entrada/mono-0.webp?v=1791945840';
+    document.getElementById('mono').src = 'entrada/mono-0.webp?v=1791946169';
   });
 </script>
 </body>
