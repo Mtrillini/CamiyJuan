@@ -257,30 +257,27 @@ abrirFotosSiCorresponde();
 addEventListener('hashchange', abrirFotosSiCorresponde);
 addEventListener('pageshow', e => { if (e.persisted) abrirFotosSiCorresponde(); });
 
-// Música: La vie en rose (el mp3 ya viene recortado). Los navegadores no dejan sonar sin un toque,
-// así que arranca con el primer toque en la página; el botón la pausa o la reanuda.
-const MUSIC_START = 0;
-const music = $('#music');
+// Música: La vie en rose (el mp3 ya viene recortado).
+// Safari solo deja reproducir dentro de un toque real (touchend/click, no pointerdown),
+// así que intentamos en cada toque hasta que arranque.
+const music = $('#bg-music');
 const musicBtn = $('#music-btn');
-fetch(music.currentSrc || music.src, { method: 'HEAD' }).then(r => { if (r.ok) iniciarMusica(); }).catch(() => {});
-function iniciarMusica() {
-  musicBtn.hidden = false;
-  let empezo = false;
-  const play = () => {
-    if (!empezo) { music.currentTime = MUSIC_START; empezo = true; }
-    // Entra con el volumen subiendo de a poco.
-    music.volume = 0;
-    music.play().then(() => {
-      musicBtn.classList.add('playing');
-      const fade = setInterval(() => { music.volume = Math.min(1, music.volume + 0.05); if (music.volume >= 1) clearInterval(fade); }, 100);
-    }).catch(() => {});
-  };
-  music.addEventListener('ended', () => { music.currentTime = MUSIC_START; });
-  music.addEventListener('loadedmetadata', () => { if (!empezo) music.currentTime = MUSIC_START; }, { once: true });
-  const primerToque = e => { if (e.target.closest('#music-btn')) return; play(); };
-  addEventListener('pointerdown', primerToque, { once: true });
-  musicBtn.addEventListener('click', () => {
-    if (music.paused) play(); else { music.pause(); musicBtn.classList.remove('playing'); }
-    musicBtn.setAttribute('aria-label', music.paused ? 'Reproducir música' : 'Pausar música');
+musicBtn.hidden = false;
+function playMusic() {
+  return music.play().then(() => {
+    musicBtn.classList.add('playing');
+    musicBtn.setAttribute('aria-label', 'Pausar música');
+    quitarIntentos();
   });
 }
+function intento(e) {
+  if (e.target.closest && e.target.closest('#music-btn')) return;
+  playMusic().catch(() => {});
+}
+function quitarIntentos() { ['touchend', 'click', 'keydown'].forEach(t => removeEventListener(t, intento, true)); }
+['touchend', 'click', 'keydown'].forEach(t => addEventListener(t, intento, true));
+musicBtn.addEventListener('click', () => {
+  if (music.paused) playMusic().catch(() => toast('No se pudo reproducir la música.'));
+  else { music.pause(); musicBtn.classList.remove('playing'); musicBtn.setAttribute('aria-label', 'Reproducir música'); }
+});
+music.addEventListener('error', () => { musicBtn.hidden = true; quitarIntentos(); });
