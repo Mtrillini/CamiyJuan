@@ -31,8 +31,8 @@
      y se va descubriendo a medida que se abren las puertas. */
   .letter{position:absolute;left:8.5%;right:8.4%;top:4.6%;bottom:4.4%;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;opacity:0;clip-path:inset(0 50% 0 50%);transition:clip-path .2s cubic-bezier(.45,0,.55,1),opacity .2s}
-  .letter[data-step="6"]{opacity:1;clip-path:inset(0 23% 0 23%)}
-  .letter[data-step="7"]{opacity:1;clip-path:inset(0)}
+  .letter[data-step="2"]{opacity:1;clip-path:inset(0 23% 0 23%)}
+  .letter[data-step="3"]{opacity:1;clip-path:inset(0)}
   .letter .eyebrow{font-size:3.4cqw;letter-spacing:1.4cqw;text-transform:uppercase}
   .letter img{width:84%;margin:3cqh 0 2cqh}
   .letter .couple{width:78%;margin:2.5cqh 0 0;opacity:1;-webkit-mask-image:linear-gradient(#000 68%,transparent 98%);mask-image:linear-gradient(#000 68%,transparent 98%)}
@@ -59,13 +59,9 @@
   <button class="scene" id="scene" aria-label="Abrir la invitación de Camila y Juan">
     <span class="frames" id="frames" aria-hidden="true">
       <img src="entrada/cuadro-0.webp?v=1791936969" alt="" fetchpriority="high">
-      <img src="entrada/cuadro-1.webp?v=1791936969" alt="">
-      <img src="entrada/cuadro-2.webp?v=1791936969" alt="">
-      <img src="entrada/cuadro-3.webp?v=1791936969" alt="">
-      <img src="entrada/cuadro-4.webp?v=1791936969" alt="">
-      <img src="entrada/cuadro-5.webp?v=1791936969" alt="">
-      <img src="entrada/cuadro-6.webp?v=1791936969" alt="">
-      <img src="entrada/cuadro-7.webp?v=1791936969" alt="">
+      <img src="entrada/abre-1.webp?v=1791936969" alt="">
+      <img src="entrada/abre-2.webp?v=1791936969" alt="">
+      <img src="entrada/abre-3.webp?v=1791936969" alt="">
       <span class="letter" id="letter">
         <span class="eyebrow">Nos casamos</span>
         <img class="couple" src="invitacion/assets/pareja-sepia.webp?v=1791936748" alt="">
@@ -80,7 +76,7 @@
 <audio id="bg-music" src="invitacion/assets/musica.mp3" preload="auto" loop playsinline></audio>
 <script>
   const DESTINO = 'invitacion/';
-  const PASO = 130;          // ms entre cuadros (el fundido dura .2s: se superponen)
+  const PASO = 380;          // ms entre cuadros (el fundido dura .2s: se superponen)
   const scene = document.getElementById('scene');
   const letter = document.getElementById('letter');
   const frames = [...document.querySelectorAll('#frames > img')];
@@ -99,7 +95,7 @@
     if (reduce) { frames.at(-1).classList.add('on'); letter.dataset.step = frames.length - 1; await wait(600); }
     else for (let i = 1; i < frames.length; i++) {
       frames[i].classList.add('on');
-      if (i >= 6) letter.dataset.step = i;
+      if (i >= 2) letter.dataset.step = i;
       await wait(PASO);
     }
     await wait(reduce ? 0 : 650);   // la carta queda abierta un momento, con la invitación a la vista
