@@ -260,9 +260,21 @@ function estadoFotos() {
 estadoFotos();
 setInterval(estadoFotos, 60000);
 
+// Antes de la fecha: se abre la misma ventana, pero con el aviso en vez del formulario.
+function mostrarFotosProximamente() {
+  document.querySelector('.photos-card').scrollIntoView({ block: 'center' });
+  $('#dialog-title').textContent = 'Compartí tus fotos';
+  $('#dialog-intro').innerHTML = '¡Gracias por entrar! 📸<br>La subida de fotos se habilita el <strong>7 de diciembre</strong>. Guardá este link y volvé ese día para compartir las fotos de la fiesta.';
+  $('#form-fields').replaceChildren();
+  $('#form-error').hidden = true;
+  $('#guest-form').hidden = true;
+  if (!dialog.open) dialog.showModal();
+}
+dialog.addEventListener('close', () => { $('#guest-form').hidden = false; });
+
 function abrirFotosSiCorresponde() {
   if (location.hash !== '#fotos' && !new URLSearchParams(location.search).has('fotos')) return;
-  if (!fotosHabilitadas()) { document.querySelector('.photos-card').scrollIntoView({ block: 'center' }); toast('Podés subir fotos desde el 7 de diciembre.'); return; }
+  if (!fotosHabilitadas()) { mostrarFotosProximamente(); return; }
   const boton = document.querySelector('[data-action=photos]');
   boton.closest('.mini-card').scrollIntoView({ block: 'center' });
   if (!dialog.open) boton.click();
