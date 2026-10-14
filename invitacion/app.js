@@ -1,6 +1,9 @@
 'use strict';
 // Animaciones de carga: el encabezado entra en cascada y el resto al hacer scroll.
 document.documentElement.classList.add('anim');
+// Cuando termina de descubrirse, sacamos la máscara (así no queda nada tapado al hacer scroll).
+document.querySelector('.invitation').addEventListener('animationend', e => { if (e.animationName === 'descubrir') e.currentTarget.classList.add('revealed'); });
+setTimeout(() => document.querySelector('.invitation').classList.add('revealed'), 3200);
 const revealables = document.querySelectorAll('.palace-img, .venue-card, .dress-code, .attendance > *, .gifts, footer');
 revealables.forEach(el => el.classList.add('reveal'));
 if ('IntersectionObserver' in window) {
