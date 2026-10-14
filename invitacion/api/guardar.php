@@ -3,9 +3,9 @@ declare(strict_types=1);
 require __DIR__ . '/db.php';
 guard();
 
-const MENUS = ['Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];
+const MENUS = ['Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];  // vacío = menú común
 
-$nombre = text('nombre', 100, true);
+$nombre = ($_POST['tipo'] ?? '') === 'rsvp_grupo' ? '' : text('nombre', 100, true);
 
 switch ($_POST['tipo'] ?? '') {
     case 'rsvp':
@@ -33,6 +33,29 @@ switch ($_POST['tipo'] ?? '') {
         $id = (int)$pdo->lastInsertId();
         $insert = $pdo->prepare('INSERT INTO acompanantes (confirmacion_id, nombre, tipo, restriccion) VALUES (?, ?, ?, ?)');
         foreach ($acompanantes as [$n, $tipo, $menu]) $insert->execute([$id, $n, $tipo, $menu]);
+        $pdo->commit();
+        break;
+    case 'rsvp_grupo':
+        // Confirmación desde un link personalizado: una respuesta por persona cargada por los novios.
+        $t = (string)($_POST['token'] ?? '');
+        $g = db()->prepare('SELECT id FROM grupos WHERE token = ?');
+        $g->execute([$t]);
+        $gid = $g->fetchColumn();
+        if (!$gid) respond(404, ['ok' => false, 'error' => 'No encontramos tu invitación.']);
+        $ids = db()->prepare('SELECT id FROM personas WHERE grupo_id = ?');
+        $ids->execute([$gid]);
+        $pdo = db();
+        $pdo->beginTransaction();
+        $upd = $pdo->prepare('UPDATE personas SET asiste = ?, menu = ? WHERE id = ? AND grupo_id = ?');
+        foreach ($ids->fetchAll(PDO::FETCH_COLUMN) as $pid) {
+            $asiste = ($_POST["asiste_$pid"] ?? '') === 'si' ? 'si' : (($_POST["asiste_$pid"] ?? '') === 'no' ? 'no' : null);
+            if ($asiste === null) { $pdo->rollBack(); respond(422, ['ok' => false, 'error' => 'Indicá si asiste cada persona.']); }
+            $menu = trim((string)($_POST["menu_$pid"] ?? ''));
+            $menu = ($asiste === 'si' && in_array($menu, MENUS, true)) ? $menu : null;
+            $upd->execute([$asiste, $menu, $pid, $gid]);
+        }
+        $pdo->prepare('UPDATE grupos SET telefono = ?, comentarios = ?, respondido = CURRENT_TIMESTAMP WHERE id = ?')
+            ->execute([text('telefono', 30), longText('comentarios', 1000), $gid]);
         $pdo->commit();
         break;
     case 'song':

@@ -111,7 +111,7 @@
   // La invitación se abre en esta misma página (sin navegar) para que la música no se corte.
   function abrirInvitacion() {
     const frame = document.createElement('iframe');
-    frame.src = DESTINO;
+    frame.src = DESTINO + location.search;   // conserva el link personalizado (?i=...)
     frame.title = 'Invitación de Camila y Juan';
     frame.className = 'inv-frame';
     frame.addEventListener('load', () => {
@@ -120,7 +120,7 @@
     }, { once: true });
     document.body.append(frame);
     // Si el navegador no carga el iframe, vamos a la página igual.
-    setTimeout(() => { if (!document.body.classList.contains('inside')) location.href = DESTINO; }, 6000);
+    setTimeout(() => { if (!document.body.classList.contains('inside')) location.href = DESTINO + location.search; }, 6000);
   }
   // Si vuelven con "atrás", la tarjeta aparece cerrada de nuevo.
   addEventListener('pageshow', e => {

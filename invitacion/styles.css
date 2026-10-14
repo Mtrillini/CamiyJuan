@@ -230,3 +230,12 @@ body:after{display:none}
 .hero .countdown{margin-bottom:0}
 @media (min-width:1024px){.hero{min-height:0;padding-top:10vh}}
 .palace-img{margin-top:18px!important}
+/* Confirmación por persona (link personalizado) */
+.saludo{font-family:'Pinyon Script',var(--script);font-size:30px;margin-bottom:4px;color:var(--brown)}
+.persona{border:1px solid #d5c4b2;border-radius:14px;padding:12px 12px 6px;margin:0 0 12px;background:#fffbf5aa}
+.persona legend{font-size:16px;padding:0 6px}
+.persona legend small{font-size:12px;color:#8a7060}
+.persona .segmented{margin-bottom:10px}
+.persona.no-asiste{opacity:.7}
+.menu-row{margin-bottom:8px}
+.menu-row[hidden]{display:none}

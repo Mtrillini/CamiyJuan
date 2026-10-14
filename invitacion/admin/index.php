@@ -28,6 +28,49 @@ $ok = !empty($_SESSION['admin']);
 if ($ok) {
     $pdo = new PDO($config['db_dsn'] ?? "mysql:host={$config['db_host']};dbname={$config['db_name']};charset=utf8mb4", $config['db_user'], $config['db_pass'],
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
+    if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(16));
+    $csrf = $_SESSION['csrf'];
+    // Alta / edición / baja de invitaciones (grupo + personas)
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && hash_equals($csrf, (string)($_POST['csrf'] ?? ''))) {
+        $acc = $_POST['accion'];
+        if ($acc === 'borrar') {
+            $pdo->prepare('DELETE FROM grupos WHERE id = ?')->execute([(int)$_POST['id']]);
+        } elseif ($acc === 'guardar') {
+            $nombreG = mb_substr(trim((string)$_POST['nombre']), 0, 120);
+            // Una persona por línea; "(niño)" o "niño" al final la marca como niño/a.
+            $lineas = array_filter(array_map('trim', preg_split('/\R/', (string)$_POST['personas'])));
+            if ($nombreG !== '' && $lineas) {
+                $id = (int)($_POST['id'] ?? 0);
+                $pdo->beginTransaction();
+                if ($id) {
+                    $pdo->prepare('UPDATE grupos SET nombre = ? WHERE id = ?')->execute([$nombreG, $id]);
+                    $prev = $pdo->prepare('SELECT id, nombre FROM personas WHERE grupo_id = ?');$prev->execute([$id]);
+                    $prevMap = [];foreach ($prev as $r) $prevMap[mb_strtolower($r['nombre'])] = $r['id'];
+                } else {
+                    do { $tok = substr(str_replace(['+','/','='], '', base64_encode(random_bytes(12))), 0, 10); } while (strlen($tok) < 10);
+                    $pdo->prepare('INSERT INTO grupos (nombre, token) VALUES (?, ?)')->execute([$nombreG, $tok]);
+                    $id = (int)$pdo->lastInsertId();$prevMap = [];
+                }
+                $quedan = [];
+                foreach ($lineas as $l) {
+                    $tipo = preg_match('/\(?\bni[ñn]o\)?\s*$/iu', $l) ? 'nino' : 'adulto';
+                    $n = mb_substr(trim(preg_replace('/\(?\bni[ñn]o\)?\s*$/iu', '', $l)), 0, 100);
+                    if ($n === '') continue;
+                    $k = mb_strtolower($n);
+                    if (isset($prevMap[$k])) { $pdo->prepare('UPDATE personas SET tipo = ? WHERE id = ?')->execute([$tipo, $prevMap[$k]]); $quedan[] = $prevMap[$k]; }
+                    else { $pdo->prepare('INSERT INTO personas (grupo_id, nombre, tipo) VALUES (?, ?, ?)')->execute([$id, $n, $tipo]); $quedan[] = (int)$pdo->lastInsertId(); }
+                }
+                $del = $pdo->prepare('DELETE FROM personas WHERE grupo_id = ? AND id NOT IN (' . implode(',', array_map('intval', $quedan ?: [0])) . ')');
+                $del->execute([$id]);
+                $pdo->commit();
+            }
+        }
+        header('Location: ./?ver=invitados'); exit;
+    }
+    $grupos = $pdo->query('SELECT * FROM grupos ORDER BY nombre')->fetchAll();
+    $pers = [];
+    foreach ($pdo->query('SELECT * FROM personas ORDER BY id') as $r) $pers[$r['grupo_id']][] = $r;
+    $base = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'camiyjuan.com') . '/?i=';
     $conf = $pdo->query('SELECT * FROM confirmaciones ORDER BY creado DESC')->fetchAll();
     $acomp = [];
     foreach ($pdo->query('SELECT * FROM acompanantes ORDER BY id') as $a) $acomp[$a['confirmacion_id']][] = $a;
@@ -39,6 +82,13 @@ if ($ok) {
     // Totales
     $t = ['si' => 0, 'no' => 0, 'personas' => 0, 'adultos' => 0, 'ninos' => 0];
     $menus = [];
+    $tg = ['pend' => 0];
+    foreach ($pers as $gid => $lista) foreach ($lista as $p) {
+        if ($p['asiste'] === 'si') { $t['personas']++; $p['tipo'] === 'nino' ? $t['ninos']++ : $t['adultos']++; if ($p['menu']) $menus[$p['menu']][] = $p['nombre']; }
+        elseif ($p['asiste'] === 'no') $t['no']++;
+        else $tg['pend']++;
+    }
+    foreach ($grupos as $g) if ($g['respondido']) $t['si']++;
     foreach ($conf as $c) {
         if ($c['asistencia'] !== 'si') { $t['no']++; continue; }
         $t['si']++; $t['personas'] += (int)$c['personas']; $t['adultos']++;
@@ -56,6 +106,8 @@ if ($ok) {
         $out = fopen('php://output', 'w');
         fwrite($out, "\xEF\xBB\xBF");
         fputcsv($out, ['Invitado principal', 'Asiste', 'Nombre', 'Tipo', 'Restricción', 'Teléfono', 'Comentarios', 'Fecha'], ';');
+        foreach ($grupos as $g) foreach ($pers[$g['id']] ?? [] as $p)
+            fputcsv($out, [$g['nombre'], $p['asiste'] ?? 'sin responder', $p['nombre'], $p['tipo'] === 'nino' ? 'niño/a' : 'adulto', $p['asiste'] === 'si' ? ($p['menu'] ?: 'común') : '', $g['telefono'], $g['comentarios'], $g['respondido']], ';');
         foreach ($conf as $c) {
             fputcsv($out, [$c['nombre'], $c['asistencia'], $c['nombre'], 'adulto', $c['menu'], $c['telefono'], $c['comentarios'], $c['creado']], ';');
             foreach ($acomp[$c['id']] ?? [] as $a) fputcsv($out, [$c['nombre'], $c['asistencia'], $a['nombre'], $a['tipo'] === 'nino' ? 'niño/a' : 'adulto', $a['restriccion'] ?? '', '', '', $c['creado']], ';');
@@ -97,6 +149,10 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
   input[type=search],input[type=password]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;margin:6px 0 12px}
   .login{max-width:340px;margin:12vh auto;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:26px}
   .err{color:#9b3b2e;font-size:14px}
+  .acciones{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+  .acciones .link{flex:1 1 100%;margin:0;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+  label{display:block;font-size:14px;margin-bottom:10px}
+  input:not([type=search]):not([type=password]):not(.link),textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;margin-top:4px}
   blockquote{margin:6px 0 0;white-space:pre-wrap}
 </style>
 </head>
@@ -109,7 +165,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
     <?php if ($error): ?><p class="err"><?= e($error) ?></p><?php endif; ?>
     <button class="btn" type="submit">Entrar</button>
   </form>
-<?php else: $tab = $_GET['ver'] ?? 'confirmados'; ?>
+<?php else: $tab = $_GET['ver'] ?? 'invitados'; ?>
 <main>
   <header>
     <h1>Camila &amp; Juan · Panel</h1>
@@ -122,15 +178,53 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
     <div class="stat"><b><?= $t['ninos'] ?></b><span>Niños</span></div>
     <div class="stat"><b><?= $t['si'] ?></b><span>Confirmaciones</span></div>
     <div class="stat"><b><?= $t['no'] ?></b><span>No asisten</span></div>
+    <div class="stat"><b><?= $tg['pend'] ?></b><span>Sin responder</span></div>
   </section>
 
   <nav class="tabs">
-    <?php foreach (['confirmados' => 'Confirmados', 'menus' => 'Menús', 'canciones' => 'Canciones (' . count($canciones) . ')', 'mensajes' => 'Mensajes (' . count($mensajes) . ')'] as $k => $v): ?>
+    <?php foreach (['invitados' => 'Invitados (' . count($grupos) . ')', 'confirmados' => 'Confirmaciones sueltas', 'menus' => 'Menús', 'canciones' => 'Canciones (' . count($canciones) . ')', 'mensajes' => 'Mensajes (' . count($mensajes) . ')'] as $k => $v): ?>
       <a href="?ver=<?= $k ?>" class="<?= $tab === $k ? 'on' : '' ?>"><?= e($v) ?></a>
     <?php endforeach; ?>
   </nav>
 
-  <?php if ($tab === 'confirmados'): ?>
+  <?php if ($tab === 'invitados'): $edit = null; foreach ($grupos as $g) if ((int)($_GET['editar'] ?? 0) === (int)$g['id']) $edit = $g; ?>
+    <h2><?= $edit ? 'Editar invitación' : 'Nueva invitación' ?></h2>
+    <form class="card" method="post">
+      <input type="hidden" name="accion" value="guardar"><input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+      <?php if ($edit): ?><input type="hidden" name="id" value="<?= (int)$edit['id'] ?>"><?php endif; ?>
+      <label>Nombre de la invitación (como lo va a ver el invitado)<input name="nombre" required maxlength="120" placeholder="Ej: Familia Gómez" value="<?= e($edit['nombre'] ?? '') ?>"></label>
+      <label>Personas — una por línea. Para un niño/a agregá "(niño)" al final
+        <textarea name="personas" required rows="5" placeholder="Laura Gómez&#10;Pedro Gómez&#10;Tomi Gómez (niño)"><?php if ($edit) foreach ($pers[$edit['id']] ?? [] as $p) echo e($p['nombre'] . ($p['tipo'] === 'nino' ? ' (niño)' : '')) . "\n"; ?></textarea></label>
+      <button class="btn" type="submit"><?= $edit ? 'Guardar cambios' : 'Agregar invitación' ?></button>
+      <?php if ($edit): ?> <a class="btn ghost" href="?ver=invitados">Cancelar</a><?php endif; ?>
+    </form>
+    <h2>Invitaciones</h2>
+    <input type="search" placeholder="Buscar por nombre…" oninput="filtrar(this.value)">
+    <?php if (!$grupos): ?><p class="muted">Todavía no cargaron invitaciones.</p><?php endif; ?>
+    <?php foreach ($grupos as $g): $link = $base . $g['token']; ?>
+      <div class="card" data-buscar="<?= e(mb_strtolower($g['nombre'] . ' ' . implode(' ', array_column($pers[$g['id']] ?? [], 'nombre')))) ?>">
+        <div class="row"><strong><?= e($g['nombre']) ?>
+          <?= $g['respondido'] ? '<span class="tag">Respondió</span>' : '<span class="tag nino">Sin responder</span>' ?></strong>
+          <span class="muted"><?= $g['respondido'] ? $fecha($g['respondido']) : '' ?></span></div>
+        <ul><?php foreach ($pers[$g['id']] ?? [] as $p): ?>
+          <li><?= e($p['nombre']) ?><?= $p['tipo'] === 'nino' ? ' <span class="tag nino">Niño/a</span>' : '' ?>
+            <?php if ($p['asiste'] === 'si'): ?><span class="tag">Asiste</span><span class="tag"><?= e($p['menu'] ?: 'Menú común') ?></span>
+            <?php elseif ($p['asiste'] === 'no'): ?><span class="tag no">No asiste</span><?php endif; ?></li>
+        <?php endforeach; ?></ul>
+        <?php if ($g['telefono'] || $g['comentarios']): ?><div class="muted"><?= $g['telefono'] ? 'Tel: ' . e($g['telefono']) . ' ' : '' ?><?= $g['comentarios'] ? '· “' . e($g['comentarios']) . '”' : '' ?></div><?php endif; ?>
+        <div class="acciones">
+          <input class="link" readonly value="<?= e($link) ?>" onclick="this.select()">
+          <button class="btn" type="button" onclick="copiar('<?= e($link) ?>', this)">Copiar link</button>
+          <a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/?text=<?= rawurlencode('¡Hola ' . $g['nombre'] . '! 💙 Les compartimos nuestra invitación: ' . $link) ?>">WhatsApp</a>
+          <a class="btn ghost" href="?ver=invitados&editar=<?= (int)$g['id'] ?>">Editar</a>
+          <form method="post" style="display:inline" onsubmit="return confirm('¿Borrar la invitación de <?= e(addslashes($g['nombre'])) ?>?')">
+            <input type="hidden" name="accion" value="borrar"><input type="hidden" name="id" value="<?= (int)$g['id'] ?>"><input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+            <button class="btn ghost" type="submit">Borrar</button></form>
+        </div>
+      </div>
+    <?php endforeach; ?>
+
+  <?php elseif ($tab === 'confirmados'): ?>
     <h2>Confirmados</h2>
     <input type="search" placeholder="Buscar por nombre…" oninput="filtrar(this.value)">
     <?php if (!$conf): ?><p class="muted">Todavía no hay confirmaciones.</p><?php endif; ?>
@@ -179,6 +273,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
   <?php endif; ?>
 </main>
 <script>
+function copiar(t,b){navigator.clipboard.writeText(t).then(()=>{b.textContent='¡Copiado!';setTimeout(()=>b.textContent='Copiar link',1500)})}
 function filtrar(q){q=q.toLowerCase();document.querySelectorAll('[data-buscar]').forEach(c=>c.hidden=!c.dataset.buscar.includes(q));}
 </script>
 <?php endif; ?>

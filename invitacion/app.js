@@ -64,6 +64,45 @@ const API = 'api/';
 let currentAction;
 let photoUrls = [];
 
+// Link personalizado: camiyjuan.com/?i=TOKEN → la confirmación muestra las personas que cargaron los novios.
+const TOKEN = new URLSearchParams(location.search).get('i');
+let invitacion = null;
+if (TOKEN) fetch(API + 'grupo.php?t=' + encodeURIComponent(TOKEN))
+  .then(r => r.ok ? r.json() : null).then(d => {
+    if (!d || !d.ok) return;
+    invitacion = d;
+    const saludo = document.createElement('p');
+    saludo.className = 'saludo';
+    saludo.textContent = '¡Hola, ' + d.grupo.nombre + '!';
+    document.querySelector('#attendance-title').before(saludo);
+  }).catch(() => {});
+
+const MENU_OPC = ['Común', 'Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function camposGrupo() {
+  const filas = invitacion.personas.map(p => `
+    <fieldset class="persona" data-id="${p.id}">
+      <legend>${esc(p.nombre)}${p.tipo === 'nino' ? ' <small>(niño/a)</small>' : ''}</legend>
+      <div class="segmented">
+        <label><input type="radio" name="asiste_${p.id}" value="si" ${p.asiste !== 'no' ? 'checked' : ''}> Asiste</label>
+        <label><input type="radio" name="asiste_${p.id}" value="no" ${p.asiste === 'no' ? 'checked' : ''}> No asiste</label>
+      </div>
+      <label class="menu-row">Menú
+        <select name="menu_${p.id}">${MENU_OPC.map(m => `<option value="${m === 'Común' ? '' : m}" ${(p.menu || '') === (m === 'Común' ? '' : m) ? 'selected' : ''}>${m}</option>`).join('')}</select>
+      </label>
+    </fieldset>`).join('');
+  return filas + `
+    <label>Teléfono (opcional)<input name="telefono" type="tel" maxlength="30" value="${esc(invitacion.grupo.telefono || '')}"></label>
+    <label>Alergias o comentarios<textarea name="comentarios" maxlength="1000">${esc(invitacion.grupo.comentarios || '')}</textarea></label>
+    <input type="hidden" name="token" value="${esc(TOKEN)}">`;
+}
+function activarGrupo() {
+  document.querySelectorAll('.persona').forEach(f => {
+    const upd = () => { const si = f.querySelector('input[value=si]').checked; f.querySelector('.menu-row').hidden = !si; f.classList.toggle('no-asiste', !si); };
+    f.querySelectorAll('input[type=radio]').forEach(r => r.addEventListener('change', upd)); upd();
+  });
+}
+
 const forms = {
   rsvp: {
     title: 'Confirmá tu asistencia',
@@ -94,6 +133,13 @@ const forms = {
       <label>Tu nombre<input name="nombre" autocomplete="name" maxlength="100" required></label>
       <label>Canción<input name="cancion" maxlength="150" required></label>
       <label>Artista<input name="artista" maxlength="150"></label>`
+  },
+  rsvp_grupo: {
+    title: 'Confirmá tu asistencia',
+    intro: 'Marcá quiénes asisten y su menú. Confirmá antes del 24 de noviembre.',
+    submit: 'Confirmar',
+    done: '¡Gracias! Recibimos tu confirmación.',
+    get fields() { return camposGrupo(); }
   },
   message: {
     title: 'Dejanos un mensaje',
@@ -154,6 +200,7 @@ function showError(text) { $('#form-error').textContent = text; $('#form-error')
 
 document.querySelectorAll('[data-action]').forEach(button => button.addEventListener('click', () => {
   currentAction = button.dataset.action;
+  if (currentAction === 'rsvp' && invitacion) currentAction = 'rsvp_grupo';
   const form = forms[currentAction];
   $('#dialog-title').textContent = form.title;
   $('#dialog-intro').textContent = form.intro;
@@ -168,6 +215,7 @@ document.querySelectorAll('[data-action]').forEach(button => button.addEventList
     $('#gallery-input').addEventListener('change', addPhotos);
   }
   if (currentAction === 'rsvp') setupCompanions();
+  if (currentAction === 'rsvp_grupo') activarGrupo();
   dialog.showModal();
 }));
 
