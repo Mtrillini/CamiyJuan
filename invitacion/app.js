@@ -8,14 +8,23 @@ document.querySelector('.invitation').addEventListener('animationend', e => { if
 setTimeout(() => document.querySelector('.invitation').classList.add('revealed'), 3200);
 const revealables = document.querySelectorAll('.palace-img, .venue-card, .dress-code, .attendance > *, .gifts, footer');
 revealables.forEach(el => el.classList.add('reveal'));
-if ('IntersectionObserver' in window) {
+// Lo que está más abajo espera a que termine de entrar el encabezado;
+// si ya está a la vista, entra después, de a uno.
+const ESPERA_ENCABEZADO = 1900;
+setTimeout(() => {
+  if (!('IntersectionObserver' in window)) { revealables.forEach(el => el.classList.add('visible')); return; }
+  let cola = 0;
   const io = new IntersectionObserver(entries => entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    if (!e.isIntersecting) return;
+    io.unobserve(e.target);
+    const el = e.target;
+    setTimeout(() => el.classList.add('visible'), cola++ * 180);
+    setTimeout(() => { cola = Math.max(0, cola - 1); }, 400);
   }), { rootMargin: '0px 0px -5% 0px', threshold: 0.01 });
   revealables.forEach(el => io.observe(el));
-} else revealables.forEach(el => el.classList.add('visible'));
+}, ESPERA_ENCABEZADO);
 // Red de seguridad: si algún navegador no dispara el observer, todo aparece igual.
-setTimeout(() => revealables.forEach(el => el.classList.add('visible')), 4000);
+setTimeout(() => revealables.forEach(el => el.classList.add('visible')), 7000);
 // Configuración editable.
 const CONFIG = {
   ceremony: '2026-12-08T13:00:00-03:00',
