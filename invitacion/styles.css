@@ -191,3 +191,13 @@ body:after{display:none}
 @keyframes descubrir{from{--reveal:0%}to{--reveal:118%}}
 .anim .invitation.revealed{-webkit-mask-image:none;mask-image:none;animation:none}
 @media (prefers-reduced-motion:reduce){.anim .invitation{-webkit-mask-image:none;mask-image:none;animation:none}}
+/* Desde la carta: sin telón, la foto aparece primero y los textos bajan en cascada */
+.from-card .invitation{-webkit-mask-image:none!important;mask-image:none!important;animation:none!important}
+.from-card .hero .couple-photo{animation:quedarse 1s cubic-bezier(.2,.7,.2,1) 0s both!important}
+@keyframes quedarse{from{opacity:0;transform:scale(1.12)}to{opacity:var(--foto-op,.72);transform:none}}
+.from-card .hero>*:nth-child(1){animation-delay:.55s!important}
+.from-card .hero>*:nth-child(2){animation-delay:.75s!important}
+.from-card .hero>*:nth-child(3){animation-delay:.95s!important}
+.from-card .hero>*:nth-child(5){animation-delay:1.15s!important}
+.from-card .hero>*:nth-child(6){animation-delay:1.3s!important}
+.from-card .hero>*:nth-child(7){animation-delay:1.45s!important}

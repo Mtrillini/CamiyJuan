@@ -35,7 +35,7 @@
   .letter[data-step="7"]{opacity:1;clip-path:inset(0)}
   .letter .eyebrow{font-size:3.4cqw;letter-spacing:1.4cqw;text-transform:uppercase}
   .letter img{width:84%;margin:3cqh 0 2cqh}
-  .letter .couple{width:78%;margin:2.5cqh 0 0;opacity:.85;-webkit-mask-image:linear-gradient(#000 68%,transparent 98%);mask-image:linear-gradient(#000 68%,transparent 98%)}
+  .letter .couple{width:78%;margin:2.5cqh 0 0;opacity:1;-webkit-mask-image:linear-gradient(#000 68%,transparent 98%);mask-image:linear-gradient(#000 68%,transparent 98%)}
   .letter .line{width:62%;margin:1cqh 0 3cqh}
   .letter .date{font-size:8cqw;letter-spacing:1.6cqw}
   .letter .place{font-size:4.4cqw;margin-top:2.5cqh;font-style:italic}
@@ -43,7 +43,7 @@
   .playing .scene{cursor:default}
   .playing .frames{transform:scale(1.03)}
   /* Al abrirse del todo: zoom a la invitación y fundido */
-  .zoom .frames{transform:scale(1.85);transition:transform .6s cubic-bezier(.55,0,.25,1)}
+  .zoom .frames{transform-origin:50% 40%;transform:scale(1.5);transition:transform .6s cubic-bezier(.55,0,.25,1)}
   .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity .35s ease .25s}
   .zoom .veil{opacity:1}
 

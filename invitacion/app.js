@@ -1,6 +1,8 @@
 'use strict';
 // Animaciones de carga: el encabezado entra en cascada y el resto al hacer scroll.
 document.documentElement.classList.add('anim');
+// Viniendo de la carta: la foto ya está (continúa el zoom) y los textos aparecen alrededor.
+try { if (window.parent !== window && window.parent.document.getElementById('bg-music')) document.documentElement.classList.add('from-card'); } catch (e) {}
 // Cuando termina de descubrirse, sacamos la máscara (así no queda nada tapado al hacer scroll).
 document.querySelector('.invitation').addEventListener('animationend', e => { if (e.animationName === 'descubrir') e.currentTarget.classList.add('revealed'); });
 setTimeout(() => document.querySelector('.invitation').classList.add('revealed'), 3200);
