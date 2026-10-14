@@ -2,7 +2,7 @@
 // Animaciones de carga: el encabezado entra en cascada y el resto al hacer scroll.
 document.documentElement.classList.add('anim');
 // Viniendo de la carta: la foto ya está (continúa el zoom) y los textos aparecen alrededor.
-try { if (window.parent !== window && window.parent.document.getElementById('bg-music')) document.documentElement.classList.add('from-card'); } catch (e) {}
+try { if (window.parent !== window && window.parent.document.getElementById('sobre')) document.documentElement.classList.add('from-card'); } catch (e) {}
 // Cuando termina de descubrirse, sacamos la máscara (así no queda nada tapado al hacer scroll).
 document.querySelector('.invitation').addEventListener('animationend', e => { if (e.animationName === 'descubrir') e.currentTarget.classList.add('revealed'); });
 setTimeout(() => document.querySelector('.invitation').classList.add('revealed'), 3200);
@@ -282,45 +282,3 @@ function abrirFotosSiCorresponde() {
 abrirFotosSiCorresponde();
 addEventListener('hashchange', abrirFotosSiCorresponde);
 addEventListener('pageshow', e => { if (e.persisted) abrirFotosSiCorresponde(); });
-
-// Música: La vie en rose (el mp3 ya viene recortado).
-// Safari solo deja reproducir dentro de un toque real (touchend/click, no pointerdown),
-// así que intentamos en cada toque hasta que arranque.
-// Si la invitación se abrió desde la carta, la música ya suena en la página de afuera: usamos esa.
-let music = $('#bg-music');
-try {
-  const externa = window.parent !== window && window.parent.document.getElementById('bg-music');
-  if (externa) { music.remove(); music = externa; }
-} catch (e) { /* otra página: usamos la propia */ }
-const musicBtn = $('#music-btn');
-musicBtn.hidden = false;
-if (!music.paused) { musicBtn.classList.add('playing'); musicBtn.setAttribute('aria-label', 'Pausar música'); }
-function playMusic() {
-  return music.play().then(() => {
-    musicBtn.classList.add('playing');
-    musicBtn.setAttribute('aria-label', 'Pausar música');
-    quitarIntentos();
-  });
-}
-function intento(e) {
-  if (e.target.closest && e.target.closest('#music-btn')) return;
-  playMusic().catch(() => {});
-}
-function quitarIntentos() { ['touchend', 'click', 'keydown'].forEach(t => removeEventListener(t, intento, true)); }
-if (music.paused) ['touchend', 'click', 'keydown'].forEach(t => addEventListener(t, intento, true));
-musicBtn.addEventListener('click', () => {
-  if (music.paused) playMusic().catch(() => toast('No se pudo reproducir la música.'));
-  else { music.pause(); musicBtn.classList.remove('playing'); musicBtn.setAttribute('aria-label', 'Reproducir música'); }
-});
-music.addEventListener('error', () => { musicBtn.hidden = true; quitarIntentos(); });
-
-// Solo cuando la invitación tiene su propia música (si vino de la carta, la pausa la maneja la carta).
-if (music.id === 'bg-music' && music.ownerDocument === document) {
-// Si el invitado sale del navegador o cambia de app, la música se pausa; al volver, sigue.
-let pausadaPorSalirInv = false;
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { if (!music.paused) { music.pause(); pausadaPorSalirInv = true; } }
-  else if (pausadaPorSalirInv) { pausadaPorSalirInv = false; music.play().catch(() => {}); }
-});
-addEventListener('pagehide', () => music.pause());
-}

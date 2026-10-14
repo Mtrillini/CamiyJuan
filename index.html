@@ -80,7 +80,6 @@
   </div>
 </main>
 <div class="veil" aria-hidden="true"></div>
-<audio id="bg-music" src="invitacion/assets/musica.mp3" preload="auto" loop playsinline></audio>
 <script>
   const DESTINO = 'invitacion/';
   const sobre = document.getElementById('sobre');
@@ -92,19 +91,11 @@
   const monoSrc = fetch('entrada/mono.webp?v=1791947375').then(r => r.blob()).then(b => URL.createObjectURL(b)).catch(() => null);
   const wait = ms => new Promise(r => setTimeout(r, ms));
 
-  const music = document.getElementById('bg-music');
-  // Si el invitado sale del navegador o cambia de app, la música se pausa; al volver, sigue.
-  let pausadaPorSalir = false;
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { if (!music.paused) { music.pause(); pausadaPorSalir = true; } }
-    else if (pausadaPorSalir) { pausadaPorSalir = false; music.play().catch(() => {}); }
-  });
-  addEventListener('pagehide', () => music.pause());
+
   
   abrir.addEventListener('click', async () => {
     if (abrir.disabled) return;
     abrir.disabled = true;
-    music.play().catch(() => {});        // tiene que arrancar dentro del toque
     await listos;
     sobre.classList.add('abierto');       // corre el moño; después las solapas abren por CSS
     if (!reduce) {
