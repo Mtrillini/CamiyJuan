@@ -157,6 +157,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
   .fila .menor input{width:auto;margin:0}
   .quitar{border:0;background:none;font-size:22px;color:var(--soft);cursor:pointer;padding:0 4px}
   form.card>.btn.ghost{margin:2px 0 12px}
+  @media (max-width:480px){.stats{grid-template-columns:repeat(3,1fr);gap:6px}.stat{padding:10px 4px}.stat b{font-size:22px}.stat span{font-size:9px;letter-spacing:.5px}header h1{font-size:22px}}
   .acciones{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
   .acciones .link{flex:1 1 100%;margin:0;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff}
   label{display:block;font-size:14px;margin-bottom:10px}

@@ -239,3 +239,11 @@ body:after{display:none}
 .persona.no-asiste{opacity:.7}
 .menu-row{margin-bottom:8px}
 .menu-row[hidden]{display:none}
+/* Celulares chicos: la tarjeta de fotos apila el botón abajo y el hashtag entra completo */
+@media (max-width:400px){
+  .photos-card{grid-template-columns:auto 1fr}
+  .photos-card .compact{grid-column:1/-1;width:100%;margin-top:4px}
+  .photos-soon{white-space:normal}
+  .saludo{font-size:26px}
+}
+@media (max-width:340px){.hashtag{font-size:11px!important}.action-grid{grid-template-columns:1fr}}
