@@ -215,7 +215,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
         <div class="acciones">
           <input class="link" readonly value="<?= e($link) ?>" onclick="this.select()">
           <button class="btn" type="button" onclick="copiar('<?= e($link) ?>', this)">Copiar link</button>
-          <a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/?text=<?= rawurlencode('¡Hola ' . $g['nombre'] . '! 💙 Les compartimos nuestra invitación: ' . $link) ?>">WhatsApp</a>
+          <a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/?text=<?= rawurlencode('¡Hola ' . $g['nombre'] . '! Les compartimos nuestra invitación: ' . $link) ?>">WhatsApp</a>
           <a class="btn ghost" href="?ver=invitados&editar=<?= (int)$g['id'] ?>">Editar</a>
           <form method="post" style="display:inline" onsubmit="return confirm('¿Borrar la invitación de <?= e(addslashes($g['nombre'])) ?>?')">
             <input type="hidden" name="accion" value="borrar"><input type="hidden" name="id" value="<?= (int)$g['id'] ?>"><input type="hidden" name="csrf" value="<?= e($csrf) ?>">
