@@ -313,3 +313,14 @@ musicBtn.addEventListener('click', () => {
   else { music.pause(); musicBtn.classList.remove('playing'); musicBtn.setAttribute('aria-label', 'Reproducir música'); }
 });
 music.addEventListener('error', () => { musicBtn.hidden = true; quitarIntentos(); });
+
+// Solo cuando la invitación tiene su propia música (si vino de la carta, la pausa la maneja la carta).
+if (music.id === 'bg-music' && music.ownerDocument === document) {
+// Si el invitado sale del navegador o cambia de app, la música se pausa; al volver, sigue.
+let pausadaPorSalirInv = false;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { if (!music.paused) { music.pause(); pausadaPorSalirInv = true; } }
+  else if (pausadaPorSalirInv) { pausadaPorSalirInv = false; music.play().catch(() => {}); }
+});
+addEventListener('pagehide', () => music.pause());
+}

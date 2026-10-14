@@ -89,6 +89,14 @@
   const wait = ms => new Promise(r => setTimeout(r, ms));
 
   const music = document.getElementById('bg-music');
+  // Si el invitado sale del navegador o cambia de app, la música se pausa; al volver, sigue.
+  let pausadaPorSalir = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { if (!music.paused) { music.pause(); pausadaPorSalir = true; } }
+    else if (pausadaPorSalir) { pausadaPorSalir = false; music.play().catch(() => {}); }
+  });
+  addEventListener('pagehide', () => music.pause());
+  
   scene.addEventListener('click', async () => {
     if (document.body.classList.contains('playing')) return;
     // La música arranca con este toque (tiene que ser acá, dentro del toque).
