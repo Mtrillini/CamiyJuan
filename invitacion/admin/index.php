@@ -33,6 +33,8 @@ if ($ok) {
     foreach ($pdo->query('SELECT * FROM acompanantes ORDER BY id') as $a) $acomp[$a['confirmacion_id']][] = $a;
     $canciones = $pdo->query('SELECT * FROM canciones ORDER BY creado DESC')->fetchAll();
     $mensajes = $pdo->query('SELECT * FROM mensajes ORDER BY creado DESC')->fetchAll();
+    $nFotos = (int)$pdo->query('SELECT COUNT(*) FROM fotos')->fetchColumn();
+    $drive = $config['drive_folder_url'] ?? 'https://drive.google.com/drive/folders/1UFIXWS8BP8uT1RmC0wbQW-q6f3qxisXl';
 
     // Totales
     $t = ['si' => 0, 'no' => 0, 'personas' => 0, 'adultos' => 0, 'ninos' => 0];
@@ -111,7 +113,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
 <main>
   <header>
     <h1>Camila &amp; Juan · Panel</h1>
-    <div><a class="btn ghost" href="?csv=1">Descargar Excel</a> <a class="btn ghost" href="?salir=1">Salir</a></div>
+    <div><a class="btn" href="<?= e($drive) ?>" target="_blank" rel="noopener">📸 Ver fotos (<?= $nFotos ?>)</a> <a class="btn ghost" href="?csv=1">Descargar Excel</a> <a class="btn ghost" href="?salir=1">Salir</a></div>
   </header>
 
   <section class="stats">
