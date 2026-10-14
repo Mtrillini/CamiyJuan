@@ -11,4 +11,6 @@ return [
     // Google Drive (ver google-drive/LEEME.md). Si queda vacío, las fotos se guardan solo en uploads/.
     'drive_script_url' => '', // URL de la implementación del Apps Script (termina en /exec)
     'drive_secret' => '',     // la misma clave que pusiste en el Apps Script
+    // Contraseña del panel de los novios (invitacion/admin)
+    'admin_password' => '',
 ];
