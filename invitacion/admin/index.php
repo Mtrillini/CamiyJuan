@@ -198,6 +198,12 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
       <button class="btn" type="submit"><?= $edit ? 'Guardar cambios' : 'Agregar invitación' ?></button>
       <?php if ($edit): ?> <a class="btn ghost" href="?ver=invitados">Cancelar</a><?php endif; ?>
     </form>
+    <h2>Mensaje para WhatsApp</h2>
+    <div class="card">
+      <label>Escriban su mensaje. <b>{nombre}</b> se reemplaza por el nombre de la invitación y <b>{link}</b> por su link.
+        <textarea id="wa-msg" rows="4"></textarea></label>
+      <span class="muted" id="wa-ok"></span>
+    </div>
     <h2>Invitaciones</h2>
     <input type="search" placeholder="Buscar por nombre…" oninput="filtrar(this.value)">
     <?php if (!$grupos): ?><p class="muted">Todavía no cargaron invitaciones.</p><?php endif; ?>
@@ -215,7 +221,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
         <div class="acciones">
           <input class="link" readonly value="<?= e($link) ?>" onclick="this.select()">
           <button class="btn" type="button" onclick="copiar('<?= e($link) ?>', this)">Copiar link</button>
-          <a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/?text=<?= rawurlencode('¡Hola ' . $g['nombre'] . '! Les compartimos nuestra invitación: ' . $link) ?>">WhatsApp</a>
+          <a class="btn ghost wa" target="_blank" rel="noopener" data-nombre="<?= e($g['nombre']) ?>" data-link="<?= e($link) ?>" href="#">WhatsApp</a>
           <a class="btn ghost" href="?ver=invitados&editar=<?= (int)$g['id'] ?>">Editar</a>
           <form method="post" style="display:inline" onsubmit="return confirm('¿Borrar la invitación de <?= e(addslashes($g['nombre'])) ?>?')">
             <input type="hidden" name="accion" value="borrar"><input type="hidden" name="id" value="<?= (int)$g['id'] ?>"><input type="hidden" name="csrf" value="<?= e($csrf) ?>">
@@ -273,6 +279,13 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
   <?php endif; ?>
 </main>
 <script>
+const WA_DEF='¡Hola {nombre}! Les compartimos nuestra invitación: {link}';
+const waMsg=document.getElementById('wa-msg');
+if(waMsg){try{waMsg.value=localStorage.getItem('cj-wa')||WA_DEF}catch(e){waMsg.value=WA_DEF}
+  waMsg.addEventListener('input',()=>{try{localStorage.setItem('cj-wa',waMsg.value);document.getElementById('wa-ok').textContent='Guardado en este dispositivo'}catch(e){}});}
+document.addEventListener('click',ev=>{const a=ev.target.closest('a.wa');if(!a)return;
+  let m=(waMsg&&waMsg.value.trim())||WA_DEF;if(!m.includes('{link}'))m+=' {link}';
+  a.href='https://wa.me/?text='+encodeURIComponent(m.replaceAll('{nombre}',a.dataset.nombre).replaceAll('{link}',a.dataset.link));});
 function copiar(t,b){navigator.clipboard.writeText(t).then(()=>{b.textContent='¡Copiado!';setTimeout(()=>b.textContent='Copiar link',1500)})}
 function filtrar(q){q=q.toLowerCase();document.querySelectorAll('[data-buscar]').forEach(c=>c.hidden=!c.dataset.buscar.includes(q));}
 </script>
