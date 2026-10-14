@@ -158,6 +158,9 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
   .quitar{border:0;background:none;font-size:22px;color:var(--soft);cursor:pointer;padding:0 4px}
   form.card>.btn.ghost{margin:2px 0 12px}
   @media (max-width:480px){.stats{grid-template-columns:repeat(3,1fr);gap:6px}.stat{padding:10px 4px}.stat b{font-size:22px}.stat span{font-size:9px;letter-spacing:.5px}header h1{font-size:22px}}
+  .fila .menor{display:inline-flex!important;align-items:center;gap:6px;flex:0 0 auto;margin:0!important;font-size:14px;white-space:nowrap}
+  .fila .menor input[type=checkbox]{width:18px!important;height:18px;margin:0!important;padding:0;flex:0 0 auto;accent-color:#527987}
+  .fila .quitar{flex:0 0 auto}
   .acciones{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
   .acciones .link{flex:1 1 100%;margin:0;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff}
   label{display:block;font-size:14px;margin-bottom:10px}
