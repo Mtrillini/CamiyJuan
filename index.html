@@ -46,6 +46,9 @@
   .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity .35s ease .25s}
   .zoom .veil{opacity:1}
 
+  .inv-frame{position:fixed;inset:0;width:100%;height:100%;border:0;background:var(--ivory);opacity:0;transition:opacity .3s}
+  .inside .inv-frame{opacity:1}
+  .inside .stage{visibility:hidden}
   @keyframes llega{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   @media (prefers-reduced-motion:reduce){.scene,.title{animation:none}.frames,.zoom .frames{transition:none;transform:none!important}}
 </style>
@@ -73,6 +76,7 @@
   </button>
 </main>
 <div class="veil" aria-hidden="true"></div>
+<audio id="bg-music" src="invitacion/assets/musica.mp3" preload="auto" loop playsinline></audio>
 <script>
   const DESTINO = 'invitacion/';
   const PASO = 130;          // ms entre cuadros (el fundido dura .2s: se superponen)
@@ -84,8 +88,11 @@
   const listos = Promise.all([...document.images].map(img => img.decode().catch(() => {})));
   const wait = ms => new Promise(r => setTimeout(r, ms));
 
+  const music = document.getElementById('bg-music');
   scene.addEventListener('click', async () => {
     if (document.body.classList.contains('playing')) return;
+    // La música arranca con este toque (tiene que ser acá, dentro del toque).
+    music.play().catch(() => {});
     document.body.classList.add('playing');
     await listos;
     if (reduce) { frames.at(-1).classList.add('on'); letter.dataset.step = frames.length - 1; await wait(600); }
@@ -97,8 +104,23 @@
     await wait(reduce ? 0 : 650);   // la carta queda abierta un momento, con la invitación a la vista
     document.body.classList.add('zoom');
     await wait(reduce ? 700 : 600);
-    location.href = DESTINO;
+    abrirInvitacion();
   });
+
+  // La invitación se abre en esta misma página (sin navegar) para que la música no se corte.
+  function abrirInvitacion() {
+    const frame = document.createElement('iframe');
+    frame.src = DESTINO;
+    frame.title = 'Invitación de Camila y Juan';
+    frame.className = 'inv-frame';
+    frame.addEventListener('load', () => {
+      document.body.classList.add('inside');
+      try { frame.contentWindow.document.title && (document.title = frame.contentWindow.document.title); } catch (e) {}
+    }, { once: true });
+    document.body.append(frame);
+    // Si el navegador no carga el iframe, vamos a la página igual.
+    setTimeout(() => { if (!document.body.classList.contains('inside')) location.href = DESTINO; }, 6000);
+  }
   // Si vuelven con "atrás", la tarjeta aparece cerrada de nuevo.
   addEventListener('pageshow', e => {
     if (!e.persisted) return;

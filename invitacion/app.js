@@ -260,9 +260,15 @@ addEventListener('pageshow', e => { if (e.persisted) abrirFotosSiCorresponde(); 
 // Música: La vie en rose (el mp3 ya viene recortado).
 // Safari solo deja reproducir dentro de un toque real (touchend/click, no pointerdown),
 // así que intentamos en cada toque hasta que arranque.
-const music = $('#bg-music');
+// Si la invitación se abrió desde la carta, la música ya suena en la página de afuera: usamos esa.
+let music = $('#bg-music');
+try {
+  const externa = window.parent !== window && window.parent.document.getElementById('bg-music');
+  if (externa) { music.remove(); music = externa; }
+} catch (e) { /* otra página: usamos la propia */ }
 const musicBtn = $('#music-btn');
 musicBtn.hidden = false;
+if (!music.paused) { musicBtn.classList.add('playing'); musicBtn.setAttribute('aria-label', 'Pausar música'); }
 function playMusic() {
   return music.play().then(() => {
     musicBtn.classList.add('playing');
@@ -275,7 +281,7 @@ function intento(e) {
   playMusic().catch(() => {});
 }
 function quitarIntentos() { ['touchend', 'click', 'keydown'].forEach(t => removeEventListener(t, intento, true)); }
-['touchend', 'click', 'keydown'].forEach(t => addEventListener(t, intento, true));
+if (music.paused) ['touchend', 'click', 'keydown'].forEach(t => addEventListener(t, intento, true));
 musicBtn.addEventListener('click', () => {
   if (music.paused) playMusic().catch(() => toast('No se pudo reproducir la música.'));
   else { music.pause(); musicBtn.classList.remove('playing'); musicBtn.setAttribute('aria-label', 'Reproducir música'); }
