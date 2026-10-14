@@ -82,7 +82,7 @@ const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;'
 function camposGrupo() {
   const filas = invitacion.personas.map(p => `
     <fieldset class="persona" data-id="${p.id}">
-      <legend>${esc(p.nombre)}${p.tipo === 'nino' ? ' <small>(niño/a)</small>' : ''}</legend>
+      <legend>${esc(p.nombre)}${p.tipo === 'nino' ? ' <small>(menor)</small>' : ''}</legend>
       <div class="segmented">
         <label><input type="radio" name="asiste_${p.id}" value="si" ${p.asiste !== 'no' ? 'checked' : ''}> Asiste</label>
         <label><input type="radio" name="asiste_${p.id}" value="no" ${p.asiste === 'no' ? 'checked' : ''}> No asiste</label>
@@ -179,7 +179,7 @@ function setupCompanions() {
         <label>Nombre y apellido<input name="acompanante_nombre[]" maxlength="100" required></label>
         <div class="segmented" role="radiogroup" aria-label="Edad del acompañante ${i + 1}">
           <label><input type="radio" name="acompanante_tipo_${i}" value="adulto" checked> Adulto</label>
-          <label><input type="radio" name="acompanante_tipo_${i}" value="nino"> Niño/a</label>
+          <label><input type="radio" name="acompanante_tipo_${i}" value="nino"> Menor</label>
         </div>
         <label>Restricción alimentaria
           <select name="acompanante_menu[]"><option value="">Ninguna</option><option>Vegetariano</option><option>Vegano</option><option>Sin TACC</option><option>Otra</option></select></label>`;
