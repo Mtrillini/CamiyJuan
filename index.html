@@ -6,7 +6,9 @@
 <meta name="theme-color" content="#efe6d8">
 <title>Camila &amp; Juan · 08.12.2026</title>
 <meta name="description" content="Camila & Juan · Nos casamos el 8 de diciembre de 2026. Abrí tu invitación.">
-<link rel="preload" as="image" href="entrada/cuadro-0.webp?v=1791937381">
+<link rel="preload" as="image" href="entrada/puerta-izq.webp?v=3791937381">
+<link rel="preload" as="image" href="entrada/puerta-der.webp?v=3791937381">
+<link rel="preload" as="image" href="entrada/cinta.webp?v=3791937381">
 <link rel="prefetch" href="invitacion/">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap">
 <style>
@@ -22,56 +24,62 @@
     
     animation:llega 1.4s .15s cubic-bezier(.22,.61,.36,1) both}
   .scene:focus-visible{outline:none;filter:none}
-  .frames{position:absolute;inset:0;transform-origin:50.8% 50.3%;transition:transform 1.5s cubic-bezier(.45,0,.55,1)}
-  .frames>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .2s cubic-bezier(.45,0,.55,1)}
-  .frames>img:first-child{opacity:1}
-  .frames>img.on{opacity:1}
+  /* Carta: fondo abierto + dos puertas que giran en 3D + cinta que cae */
+  .card{position:absolute;inset:0;perspective:1600px;transform-origin:50% 48%;transition:transform 1s cubic-bezier(.55,0,.25,1)}
+  .card>img,.door{position:absolute;top:0;height:100%}
+  .base{left:0;width:100%;opacity:0;transition:opacity .5s ease}
+  .door{width:50%;background-size:cover;backface-visibility:hidden;transform-style:preserve-3d;will-change:transform;
+    transition:transform 1.7s cubic-bezier(.65,0,.25,1),filter 1.7s ease}
+  .door.izq{left:0;background-image:url('entrada/puerta-izq.webp?v=3791937381');transform-origin:4% 50%}
+  .door.der{right:0;background-image:url('entrada/puerta-der.webp?v=3791937381');transform-origin:96% 50%}
+  .cinta{left:0;width:100%;top:44.78%!important;height:49.25%!important;will-change:transform,opacity;transform-origin:50% 22%}
 
-  /* La invitación dentro de la carta: ocupa el panel interior del último cuadro
-     y se va descubriendo a medida que se abren las puertas. */
   .letter{position:absolute;left:8.5%;right:8.4%;top:4.6%;bottom:4.4%;container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    text-align:center;opacity:0;clip-path:inset(0 50% 0 50%);transition:clip-path .2s cubic-bezier(.45,0,.55,1),opacity .2s}
-  .letter[data-step="5"]{opacity:1;clip-path:inset(0 23% 0 23%)}
-  .letter[data-step="6"]{opacity:1;clip-path:inset(0)}
-  .letter .eyebrow{font-size:3.4cqw;letter-spacing:1.4cqw;text-transform:uppercase}
-  .letter img{width:84%;margin:3cqh 0 2cqh}
-  .letter .couple{width:78%;margin:2.5cqh 0 0;opacity:1;-webkit-mask-image:linear-gradient(#000 68%,transparent 98%);mask-image:linear-gradient(#000 68%,transparent 98%)}
-  .letter .line{width:62%;margin:1cqh 0 3cqh}
+    text-align:center;opacity:0;transition:opacity 1.2s ease .5s}
+  .letter .eyebrow{font-size:3.6cqw;letter-spacing:1.5cqw;text-transform:uppercase}
+  .letter .names{width:88%;margin:3cqh 0 1.5cqh}
+  .letter .line{width:60%;margin:1cqh 0 3cqh}
   .letter .date{font-size:8cqw;letter-spacing:1.6cqw}
   .letter .place{font-size:4.4cqw;margin-top:2.5cqh;font-style:italic}
 
   .playing .scene{cursor:default}
-  .playing .frames{transform:scale(1.03)}
-  /* Al abrirse del todo: zoom a la invitación y fundido */
-  .zoom .frames{transform-origin:50% 40%;transform:scale(1.5);transition:transform .6s cubic-bezier(.55,0,.25,1)}
-  .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity .35s ease .25s}
+  /* 1) la cinta se suelta: sube apenas, gira y cae con gravedad */
+  .playing .cinta{animation:cae 1.25s cubic-bezier(.45,.05,.75,.6) forwards}
+  @keyframes cae{0%{transform:none;opacity:1}
+    15%{transform:translateY(-1.5%) rotate(-1.5deg)}
+    100%{transform:translateY(95%) translateX(4%) rotate(14deg);opacity:0}}
+  /* 2) las puertas se abren */
+  .abrir .base{opacity:1}
+  .abrir .door.izq{transform:rotateY(-112deg);filter:brightness(.82)}
+  .abrir .door.der{transform:rotateY(112deg);filter:brightness(.82)}
+  .abrir .letter{opacity:1}
+  /* 3) zoom a los nombres y fundido */
+  .zoom .card{transform:scale(1.55)}
+  .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity .45s ease .45s}
   .zoom .veil{opacity:1}
 
   .inv-frame{position:fixed;inset:0;width:100%;height:100%;border:0;background:var(--ivory);opacity:0;transition:opacity .3s}
   .inside .inv-frame{opacity:1}
   .inside .stage{visibility:hidden}
   @keyframes llega{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-  @media (prefers-reduced-motion:reduce){.scene,.title{animation:none}.frames,.zoom .frames{transition:none;transform:none!important}}
+  @media (prefers-reduced-motion:reduce){.scene{animation:none}.door,.card,.letter{transition:none!important}.playing .cinta{animation:none;opacity:0}}
 </style>
 </head>
 <body>
 <main class="stage">
   <button class="scene" id="scene" aria-label="Abrir la invitación de Camila y Juan">
-    <span class="frames" id="frames" aria-hidden="true">
-      <img src="entrada/cuadro-0.webp?v=1791937381" alt="" fetchpriority="high">
-      <img src="entrada/cuadro-1.webp?v=1791937381" alt="">
-      <img src="entrada/cuadro-2.webp?v=1791937381" alt="">
-      <img src="entrada/cuadro-3.webp?v=1791937381" alt="">
-      <img src="entrada/abre-1.webp?v=1791937381" alt="">
-      <img src="entrada/abre-2.webp?v=1791937381" alt="">
-      <img src="entrada/abre-3.webp?v=1791937381" alt="">
-      <span class="letter" id="letter">
+    <span class="card" id="card" aria-hidden="true">
+      <img class="base" src="entrada/abre-3.webp?v=3791937381" alt="">
+      <span class="letter">
         <span class="eyebrow">Nos casamos</span>
-        <img class="couple" src="invitacion/assets/pareja-sepia.webp?v=1791936748" alt="">
+        <img class="names" src="invitacion/assets/nombres.png" alt="">
         <img class="line" src="invitacion/assets/linea.png" alt="">
         <span class="date">08.12.2026</span>
         <span class="place">Palacio Sans Souci</span>
       </span>
+      <span class="door izq"></span>
+      <span class="door der"></span>
+      <img class="cinta" src="entrada/cinta.webp?v=3791937381" alt="" fetchpriority="high">
     </span>
   </button>
 </main>
@@ -79,13 +87,10 @@
 <audio id="bg-music" src="invitacion/assets/musica.mp3" preload="auto" loop playsinline></audio>
 <script>
   const DESTINO = 'invitacion/';
-  const PASO = 200;          // ms entre cuadros (el fundido dura .2s: se superponen)
   const scene = document.getElementById('scene');
-  const letter = document.getElementById('letter');
-  const frames = [...document.querySelectorAll('#frames > img')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Decodificamos todos los cuadros antes de animar para que no haya saltos.
-  const listos = Promise.all([...document.images].map(img => img.decode().catch(() => {})));
+  const imgs = ['entrada/puerta-izq.webp?v=3791937381','entrada/puerta-der.webp?v=3791937381','entrada/abre-3.webp?v=3791937381','entrada/cinta.webp?v=3791937381'];
+  const listos = Promise.all(imgs.map(src => { const i = new Image(); i.src = src; return i.decode().catch(() => {}); }));
   const wait = ms => new Promise(r => setTimeout(r, ms));
 
   const music = document.getElementById('bg-music');
@@ -103,15 +108,11 @@
     music.play().catch(() => {});
     document.body.classList.add('playing');
     await listos;
-    if (reduce) { frames.at(-1).classList.add('on'); letter.dataset.step = frames.length - 1; await wait(600); }
-    else for (let i = 1; i < frames.length; i++) {
-      frames[i].classList.add('on');
-      if (i >= 5) letter.dataset.step = i;
-      await wait(PASO);
-    }
-    await wait(reduce ? 0 : 650);   // la carta queda abierta un momento, con la invitación a la vista
+    await wait(reduce ? 0 : 650);          // la cinta empieza a caer
+    document.body.classList.add('abrir');  // se abren las puertas
+    await wait(reduce ? 400 : 2300);       // carta abierta, se ven los nombres
     document.body.classList.add('zoom');
-    await wait(reduce ? 700 : 600);
+    await wait(reduce ? 500 : 950);
     abrirInvitacion();
   });
 
@@ -132,9 +133,8 @@
   // Si vuelven con "atrás", la tarjeta aparece cerrada de nuevo.
   addEventListener('pageshow', e => {
     if (!e.persisted) return;
-    document.body.classList.remove('playing', 'zoom');
-    frames.forEach(img => img.classList.remove('on'));
-    delete letter.dataset.step;
+    document.body.classList.remove('playing', 'abrir', 'zoom', 'inside');
+    document.querySelector('.inv-frame')?.remove();
   });
 </script>
 </body>
