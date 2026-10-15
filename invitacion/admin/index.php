@@ -33,6 +33,31 @@ if ($ok) {
     // Alta / edición / baja de invitaciones (grupo + personas)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && hash_equals($csrf, (string)($_POST['csrf'] ?? ''))) {
         $acc = $_POST['accion'];
+        if ($acc === 'vista') {
+            // Foto para la vista previa del link en WhatsApp
+            $f = $_FILES['foto'] ?? null;
+            if ($f && $f['error'] === UPLOAD_ERR_OK && $f['size'] < 12 * 1024 * 1024) {
+                $info = @getimagesize($f['tmp_name']);
+                $dir = rtrim($config['uploads_dir'] ?? __DIR__ . '/../uploads', '/');
+                if ($info && in_array($info[2], [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_WEBP], true)) {
+                    if (!is_dir($dir)) mkdir($dir, 0755, true);
+                    if (function_exists('imagecreatefromstring')) {
+                        // recorta a 1200x630 (formato de WhatsApp) y guarda en JPG
+                        $src = imagecreatefromstring(file_get_contents($f['tmp_name']));
+                        [$w, $h] = [imagesx($src), imagesy($src)];
+                        $r = 1200 / 630; $cw = $w; $ch = (int)round($w / $r);
+                        if ($ch > $h) { $ch = $h; $cw = (int)round($h * $r); }
+                        $dst = imagecreatetruecolor(1200, 630);
+                        imagecopyresampled($dst, $src, 0, 0, (int)(($w - $cw) / 2), (int)(($h - $ch) / 2), 1200, 630, $cw, $ch);
+                        imagejpeg($dst, "$dir/vista-previa.jpg", 85);
+                    } elseif ($info[2] === IMAGETYPE_JPEG) {
+                        move_uploaded_file($f['tmp_name'], "$dir/vista-previa.jpg");
+                    }
+                }
+            }
+            header('Location: ./?ver=invitados'); exit;
+        }
+        if ($acc === 'vista_borrar') { @unlink(rtrim($config['uploads_dir'] ?? __DIR__ . '/../uploads', '/') . '/vista-previa.jpg'); header('Location: ./?ver=invitados'); exit; }
         if ($acc === 'borrar') {
             $pdo->prepare('DELETE FROM grupos WHERE id = ?')->execute([(int)$_POST['id']]);
         } elseif ($acc === 'guardar') {
@@ -217,6 +242,17 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
       <button class="btn" type="submit"><?= $edit ? 'Guardar cambios' : 'Agregar invitación' ?></button>
       <?php if ($edit): ?> <a class="btn ghost" href="?ver=invitados">Cancelar</a><?php endif; ?>
     </form>
+    <h2>Imagen al compartir el link</h2>
+    <div class="card">
+      <p class="muted">Es la foto que aparece en WhatsApp cuando mandan el link. Se recorta a formato horizontal.</p>
+      <img src="../share/imagen.php?t=<?= time() ?>" alt="" style="width:100%;max-width:420px;border-radius:10px;display:block;margin:8px 0">
+      <form method="post" enctype="multipart/form-data" class="acciones">
+        <input type="hidden" name="accion" value="vista"><input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+        <input type="file" name="foto" accept="image/jpeg,image/png,image/webp" required style="flex:1 1 100%">
+        <button class="btn" type="submit">Usar esta foto</button>
+      </form>
+      <form method="post" style="margin-top:6px"><input type="hidden" name="accion" value="vista_borrar"><input type="hidden" name="csrf" value="<?= e($csrf) ?>"><button class="btn ghost" type="submit">Volver a la imagen de la carta</button></form>
+    </div>
     <h2>Mensaje para WhatsApp</h2>
     <div class="card">
       <label>Escriban su mensaje. <b>{nombre}</b> se reemplaza por el nombre de la invitación y <b>{link}</b> por su link.
