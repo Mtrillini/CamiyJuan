@@ -31,7 +31,7 @@
   .stage{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden;padding:3vh 16px}
 
   /* Sobre: proporción de la carta (3/5), lo más grande que entre en pantalla */
-  .sobre{position:relative;width:min(92vw,500px,calc(92svh * 3 / 5));aspect-ratio:3/5;perspective:1400px;isolation:isolate;
+  .sobre{position:relative;width:min(92vw,500px,calc(92svh * 3 / 5));aspect-ratio:3/5;perspective:900px;perspective-origin:50% 50%;isolation:isolate;
     filter:drop-shadow(0 18px 28px #5b402a2e);transform-origin:50% 45%;animation:llega 1.2s cubic-bezier(.22,.61,.36,1) both;
     transition:transform 1s cubic-bezier(.55,0,.25,1)}
   .invitacion{position:absolute;inset:0;background:url('entrada/carta-abierta.webp?v=1791943797') center/100% 100%;
@@ -43,8 +43,8 @@
   .invitacion .date{font-size:7.6cqw;letter-spacing:1.6cqw}
   .invitacion .place{font-size:4.2cqw;margin-top:2.5cqh;font-style:italic}
 
-  .solapa{position:absolute;top:0;width:50%;height:100%;z-index:2;backface-visibility:hidden;will-change:transform;
-    transition:transform 3.4s cubic-bezier(.45,.05,.25,1) .1s,filter 3.4s ease .1s}
+  .solapa{position:absolute;top:0;width:50%;height:100%;z-index:2;will-change:transform;
+    transition:transform 3.4s cubic-bezier(.6,0,.35,1) .1s,filter 3.4s ease .1s}
   .izquierda{left:0;transform-origin:left center}
   .derecha{right:0;transform-origin:right center}
 
@@ -59,8 +59,8 @@
   .sello:not(:disabled){animation:invitaSello 2.6s ease-in-out 1.6s infinite}
   @keyframes invitaSello{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-50%) scale(1.04)}}
   .sobre.abierto .sello{animation:none;opacity:0}
-  .sobre.abierto .izquierda{transform:rotateY(-165deg);filter:brightness(.85)}
-  .sobre.abierto .derecha{transform:rotateY(165deg);filter:brightness(.85)}
+  .sobre.abierto .izquierda{transform:rotateY(-118deg);filter:brightness(.92)}
+  .sobre.abierto .derecha{transform:rotateY(118deg);filter:brightness(.92)}
   .sobre.abierto .invitacion>*{opacity:1;transition-delay:1.8s}
   .sobre.zoom{transform:scale(1.5)}
   .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity .45s ease .45s;z-index:5}
