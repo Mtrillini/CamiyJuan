@@ -71,10 +71,6 @@ if (TOKEN) fetch(API + 'grupo.php?t=' + encodeURIComponent(TOKEN))
   .then(r => r.ok ? r.json() : null).then(d => {
     if (!d || !d.ok) return;
     invitacion = d;
-    const saludo = document.createElement('p');
-    saludo.className = 'saludo';
-    saludo.textContent = '¡Hola, ' + d.grupo.nombre + '!';
-    document.querySelector('#attendance-title').before(saludo);
   }).catch(() => {});
 
 const MENU_OPC = ['Común', 'Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];
