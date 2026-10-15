@@ -262,7 +262,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
     <h2>Invitaciones</h2>
     <input type="search" placeholder="Buscar por nombre…" oninput="filtrar(this.value)">
     <?php if (!$grupos): ?><p class="muted">Todavía no cargaron invitaciones.</p><?php endif; ?>
-    <?php foreach ($grupos as $g): $link = $base . $g['token']; ?>
+    <?php foreach ($grupos as $g): $link = $base . $g['token'] . '&v=2';   // v= cambia la URL: WhatsApp vuelve a leer la vista previa ?>
       <div class="card" data-buscar="<?= e(mb_strtolower($g['nombre'] . ' ' . implode(' ', array_column($pers[$g['id']] ?? [], 'nombre')))) ?>">
         <div class="row"><strong><?= e($g['nombre']) ?>
           <?= $g['respondido'] ? '<span class="tag">Respondió</span>' : '<span class="tag nino">Sin responder</span>' ?></strong>
