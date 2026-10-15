@@ -1,0 +1,6 @@
+# Si los novios subieron su foto desde el panel, la vista previa de WhatsApp usa esa.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{DOCUMENT_ROOT}/invitacion/uploads/vista-previa.jpg -f
+RewriteRule ^vista-previa\.jpg$ /invitacion/uploads/vista-previa.jpg [L]
+</IfModule>
