@@ -254,3 +254,4 @@ body:after{display:none}
 .fuente-prueba footer .names{font-size:34px}
 .fuente-prueba .gala,.fuente-prueba .script{font-family:var(--fuente)!important;font-style:normal;text-transform:lowercase;font-weight:300;letter-spacing:2px}
 .fuente-prueba h2,.fuente-prueba .date,.fuente-prueba .countdown strong{font-weight:400}
+.fuente-prueba .names{font-weight:300}

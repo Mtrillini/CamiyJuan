@@ -2,10 +2,10 @@
 // Vista de prueba de tipografía: ?fuente=quicksand | nunito | comfortaa (no cambia nada si no se pasa)
 (() => {
   const f = new URLSearchParams(location.search).get('fuente');
-  const fam = { quicksand: 'Quicksand', nunito: 'Nunito', comfortaa: 'Comfortaa' }[f];
+  const fam = { quicksand: 'Quicksand', nunito: 'Nunito', comfortaa: 'Comfortaa', josefin: 'Josefin Sans', raleway: 'Raleway', jost: 'Jost', poppins: 'Poppins', montserrat: 'Montserrat', lexend: 'Lexend' }[f];
   if (!fam) return;
   const l = document.createElement('link'); l.rel = 'stylesheet';
-  l.href = 'https://fonts.googleapis.com/css2?family=' + fam + ':wght@300;400;500;600&display=swap';
+  l.href = 'https://fonts.googleapis.com/css2?family=' + fam.replace(/ /g, '+') + ':wght@200;300;400;500&display=swap';
   document.head.append(l);
   document.documentElement.classList.add('fuente-prueba');
   document.documentElement.style.setProperty('--fuente', "'" + fam + "', sans-serif");
