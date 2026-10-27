@@ -1,7 +1,7 @@
 'use strict';
 // Vista de prueba de tipografía: ?fuente=quicksand | nunito | comfortaa (no cambia nada si no se pasa)
 (() => {
-  const f = new URLSearchParams(location.search).get('fuente');
+  const f = new URLSearchParams(location.search).get('fuente') || 'josefin';
   const fam = { quicksand: 'Quicksand', nunito: 'Nunito', comfortaa: 'Comfortaa', josefin: 'Josefin Sans', raleway: 'Raleway', jost: 'Jost', poppins: 'Poppins', montserrat: 'Montserrat', lexend: 'Lexend' }[f];
   if (!fam) return;
   const l = document.createElement('link'); l.rel = 'stylesheet';
