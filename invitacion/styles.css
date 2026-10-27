@@ -249,9 +249,6 @@ body:after{display:none}
 @media (max-width:340px){.hashtag{font-size:11px!important}.action-grid{grid-template-columns:1fr}}
 /* Prueba de tipografía redondeada (solo con ?fuente=...) */
 .fuente-prueba body,.fuente-prueba button,.fuente-prueba input,.fuente-prueba select,.fuente-prueba textarea{font-family:var(--fuente)}
-.fuente-prueba .names{font-family:var(--fuente)!important;font-style:normal;font-weight:400;letter-spacing:1px;text-transform:lowercase;font-size:clamp(40px,12vw,58px);line-height:1.15;white-space:nowrap}
-.fuente-prueba .names span{color:var(--petroleum);font-family:inherit!important;font-style:normal}
-.fuente-prueba footer .names{font-size:34px}
 .fuente-prueba .gala,.fuente-prueba .script{font-family:var(--fuente)!important;font-style:normal;text-transform:lowercase;font-weight:300;letter-spacing:2px}
 .fuente-prueba h2,.fuente-prueba .date,.fuente-prueba .countdown strong{font-weight:400}
-.fuente-prueba .names{font-weight:300}
+.fuente-prueba .names img{height:auto}

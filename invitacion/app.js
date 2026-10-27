@@ -9,8 +9,8 @@
   document.head.append(l);
   document.documentElement.classList.add('fuente-prueba');
   document.documentElement.style.setProperty('--fuente', "'" + fam + "', sans-serif");
-  document.addEventListener('DOMContentLoaded', () => document.querySelectorAll('.names').forEach(n => {
-    n.innerHTML = 'camila <span>&amp;</span> juan';
+  document.addEventListener('DOMContentLoaded', () => document.querySelectorAll('.names img').forEach(i => {
+    i.src = 'assets/nombres-' + f + '.png?v=2'; i.removeAttribute('height');
   }));
 })();
 // Animaciones de carga: el encabezado entra en cascada y el resto al hacer scroll.
