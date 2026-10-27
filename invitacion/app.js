@@ -349,3 +349,13 @@ function abrirFotosSiCorresponde() {
 abrirFotosSiCorresponde();
 addEventListener('hashchange', abrirFotosSiCorresponde);
 addEventListener('pageshow', e => { if (e.persisted) abrirFotosSiCorresponde(); });
+// Foto de la pareja: aparece desde difuminada cuando llega al deslizar.
+(() => {
+  const p = document.querySelector('.pareja');
+  if (!p || !('IntersectionObserver' in window)) return;
+  p.classList.add('oculta');
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { p.classList.remove('oculta'); io.disconnect(); }
+  }), { threshold: .25 });
+  io.observe(p);
+})();
