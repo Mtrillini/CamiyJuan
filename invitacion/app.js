@@ -1,4 +1,18 @@
 'use strict';
+// Vista de prueba de tipografía: ?fuente=quicksand | nunito | comfortaa (no cambia nada si no se pasa)
+(() => {
+  const f = new URLSearchParams(location.search).get('fuente');
+  const fam = { quicksand: 'Quicksand', nunito: 'Nunito', comfortaa: 'Comfortaa' }[f];
+  if (!fam) return;
+  const l = document.createElement('link'); l.rel = 'stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?family=' + fam + ':wght@300;400;500;600&display=swap';
+  document.head.append(l);
+  document.documentElement.classList.add('fuente-prueba');
+  document.documentElement.style.setProperty('--fuente', "'" + fam + "', sans-serif");
+  document.addEventListener('DOMContentLoaded', () => document.querySelectorAll('.names').forEach(n => {
+    n.innerHTML = 'camila <span>&amp;</span> juan';
+  }));
+})();
 // Animaciones de carga: el encabezado entra en cascada y el resto al hacer scroll.
 document.documentElement.classList.add('anim');
 // Viniendo de la carta: la foto ya está (continúa el zoom) y los textos aparecen alrededor.
