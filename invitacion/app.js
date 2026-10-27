@@ -13,6 +13,15 @@
     i.src = 'assets/nombres-' + f + '.png?v=4'; i.removeAttribute('height');
   }));
 })();
+// Música si entran directo a la invitación (sin el sobre): arranca con el primer toque y se corta al salir.
+(() => {
+  try { if (window.parent !== window && window.parent.document.getElementById('sobre')) return; } catch (e) {}
+  const m = new Audio('assets/musica.mp3?v=1'); m.loop = true; let on = false;
+  const go = () => { on = true; m.play().catch(() => {}); };
+  ['pointerdown', 'keydown', 'touchstart'].forEach(ev => addEventListener(ev, go, { once: true, passive: true }));
+  document.addEventListener('visibilitychange', () => { if (document.hidden) m.pause(); else if (on) m.play().catch(() => {}); });
+  addEventListener('pagehide', () => m.pause());
+})();
 // Animaciones de carga: el encabezado entra en cascada y el resto al hacer scroll.
 document.documentElement.classList.add('anim');
 // Viniendo de la carta: la foto ya está (continúa el zoom) y los textos aparecen alrededor.

@@ -109,6 +109,7 @@
   abrir.addEventListener('click', async () => {
     if (abrir.disabled) return;
     abrir.disabled = true;
+    musica.play().catch(() => {});        // arranca con el toque (los navegadores exigen un gesto)
     await listos;
     sobre.classList.add('abierto');       // corre el moño; después las solapas abren por CSS
     await wait(reduce ? 500 : 4000);      // ~3 s con el zoom: solapas abiertas, se ven los nombres
@@ -131,11 +132,17 @@
     // Si el navegador no carga el iframe, vamos a la página igual.
     setTimeout(() => { if (!document.body.classList.contains('inside')) location.href = DESTINO + location.search; }, 6000);
   }
+  // Música: suena desde que se abre la carta y se corta al salir de la página.
+  const musica = new Audio('invitacion/assets/musica.mp3?v=1'); musica.loop = true; musica.preload = 'auto';
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) musica.pause(); else if (abrir.disabled) musica.play().catch(() => {});
+  });
+  addEventListener('pagehide', () => musica.pause());
   // Si vuelven con "atrás", la tarjeta aparece cerrada de nuevo.
   addEventListener('pageshow', e => {
     if (!e.persisted) return;
     sobre.classList.remove('abierto', 'zoom'); document.body.classList.remove('zoom', 'inside');
-    abrir.disabled = false; document.querySelector('.inv-frame')?.remove();
+    abrir.disabled = false; document.querySelector('.inv-frame')?.remove(); musica.pause(); musica.currentTime = 0;
   });
 </script>
 </body>
