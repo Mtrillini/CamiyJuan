@@ -252,3 +252,5 @@ body:after{display:none}
 .fuente-prueba .gala,.fuente-prueba .script{font-family:var(--fuente)!important;font-style:normal;text-transform:lowercase;font-weight:300;letter-spacing:2px}
 .fuente-prueba h2,.fuente-prueba .date,.fuente-prueba .countdown strong{font-weight:400}
 .fuente-prueba .names img{height:auto}
+.pareja{display:flex;justify-content:center;margin:30px auto -10px;padding:0 16px}
+.pareja img{width:min(78vw,380px);height:auto;opacity:.78;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
