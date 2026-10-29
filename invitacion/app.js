@@ -29,7 +29,7 @@ try { if (window.parent !== window && window.parent.document.getElementById('sob
 // Cuando termina de descubrirse, sacamos la máscara (así no queda nada tapado al hacer scroll).
 document.querySelector('.invitation').addEventListener('animationend', e => { if (e.animationName === 'descubrir') e.currentTarget.classList.add('revealed'); });
 setTimeout(() => document.querySelector('.invitation').classList.add('revealed'), 3200);
-const revealables = document.querySelectorAll('.palace-img, .venue-card, .dress-code, .attendance > *, .gifts, footer');
+const revealables = document.querySelectorAll('.palace-img, .venue-card, .dress-code, .attendance > *, .gifts');
 revealables.forEach(el => el.classList.add('reveal'));
 // Lo que está más abajo espera a que termine de entrar el encabezado;
 // si ya está a la vista, entra después, de a uno.
@@ -349,13 +349,3 @@ function abrirFotosSiCorresponde() {
 abrirFotosSiCorresponde();
 addEventListener('hashchange', abrirFotosSiCorresponde);
 addEventListener('pageshow', e => { if (e.persisted) abrirFotosSiCorresponde(); });
-// Foto de la pareja: aparece desde difuminada cuando llega al deslizar.
-(() => {
-  const p = document.querySelector('.pareja');
-  if (!p || !('IntersectionObserver' in window)) return;
-  p.classList.add('oculta');
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { p.classList.remove('oculta'); io.disconnect(); }
-  }), { threshold: .25 });
-  io.observe(p);
-})();
