@@ -127,6 +127,19 @@ if ($ok) {
     }
 
     // Exportar a Excel (CSV)
+    $csv = function (string $archivo, array $cabecera, array $filas): never {
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $archivo . '"');
+        $out = fopen('php://output', 'w');
+        fwrite($out, "\xEF\xBB\xBF");
+        fputcsv($out, $cabecera, ';');
+        foreach ($filas as $f) fputcsv($out, $f, ';');
+        exit;
+    };
+    if (($_GET['csv'] ?? '') === 'canciones')
+        $csv('canciones-camila-juan.csv', ['Canción', 'Artista', 'Sugerida por', 'Fecha'], array_map(fn($c) => [$c['cancion'], $c['artista'], $c['nombre'], $c['creado']], $canciones));
+    if (($_GET['csv'] ?? '') === 'mensajes')
+        $csv('mensajes-camila-juan.csv', ['Nombre', 'Mensaje', 'Fecha'], array_map(fn($m) => [$m['nombre'], $m['mensaje'], $m['creado']], $mensajes));
     if (isset($_GET['csv'])) {
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="invitados-camila-juan.csv"');
@@ -152,6 +165,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
 <meta name="robots" content="noindex">
 <title>Panel · Camila & Juan</title>
 <style>
+  ul.lista{margin:0;padding-left:18px;line-height:1.7} h2 .btn{font-size:13px;margin-left:8px;vertical-align:middle}
   :root{--ivory:#f7f1e6;--paper:#fffaf3;--brown:#644732;--soft:#8a7060;--pet:#527987;--line:#e2d5c4}
   *{box-sizing:border-box}
   body{margin:0;background:var(--ivory);color:var(--brown);font-family:Georgia,'Times New Roman',serif;line-height:1.4}
@@ -220,7 +234,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
   </section>
 
   <nav class="tabs">
-    <?php foreach (['invitados' => 'Invitados (' . count($grupos) . ')', 'confirmados' => 'Confirmaciones sueltas', 'menus' => 'Menús', 'canciones' => 'Canciones (' . count($canciones) . ')', 'mensajes' => 'Mensajes (' . count($mensajes) . ')'] as $k => $v): ?>
+    <?php foreach (['invitados' => 'Invitados (' . count($grupos) . ')', 'lista' => 'Lista de asistencia', 'confirmados' => 'Confirmaciones sueltas', 'menus' => 'Menús', 'canciones' => 'Canciones (' . count($canciones) . ')', 'mensajes' => 'Mensajes (' . count($mensajes) . ')'] as $k => $v): ?>
       <a href="?ver=<?= $k ?>" class="<?= $tab === $k ? 'on' : '' ?>"><?= e($v) ?></a>
     <?php endforeach; ?>
   </nav>
@@ -319,8 +333,35 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
         <ul><?php foreach ($quienes as $q): ?><li><?= e($q) ?></li><?php endforeach; ?></ul></div>
     <?php endforeach; ?>
 
+  <?php elseif ($tab === 'lista'):
+    $si = $no = $pend = [];
+    foreach ($grupos as $g) {
+        $ps = $pers[$g['id']] ?? [];
+        $van = array_filter($ps, fn($p) => $p['asiste'] === 'si');
+        if (!$g['respondido']) $pend[] = [$g['nombre'], $ps, []];
+        elseif ($van) $si[] = [$g['nombre'], $van, array_filter($ps, fn($p) => $p['asiste'] === 'no')];
+        else $no[] = [$g['nombre'], $ps, []];
+    }
+    foreach ($conf as $c) {
+        $ps = array_merge([['nombre' => $c['nombre'], 'tipo' => 'adulto']], $acomp[$c['id']] ?? []);
+        if ($c['asistencia'] === 'si') $si[] = [$c['nombre'] . ' (confirmación suelta)', $ps, []]; else $no[] = [$c['nombre'] . ' (confirmación suelta)', $ps, []];
+    }
+    $cant = fn($l) => array_sum(array_map(fn($x) => count($x[1]), $l));
+    $bloque = function (string $titulo, array $lista, string $vacio) use ($cant) { ?>
+      <h2><?= e($titulo) ?> <span class="tag"><?= count($lista) ?> invitaciones · <?= $cant($lista) ?> personas</span></h2>
+      <?php if (!$lista): ?><p class="muted"><?= e($vacio) ?></p><?php return; endif; ?>
+      <div class="card"><ul class="lista"><?php foreach ($lista as [$n, $ps, $nov]): ?>
+        <li><strong><?= e($n) ?></strong>: <?= implode(', ', array_map(fn($p) => e($p['nombre']) . (($p['tipo'] ?? '') === 'nino' ? ' <span class="tag nino">Menor</span>' : ''), $ps)) ?>
+          <?php if ($nov): ?><span class="muted"> · no van: <?= e(implode(', ', array_column($nov, 'nombre'))) ?></span><?php endif; ?></li>
+      <?php endforeach; ?></ul></div>
+    <?php };
+    $bloque('Confirmaron', $si, 'Todavía nadie confirmó.');
+    $bloque('Sin responder', $pend, 'Todos respondieron.');
+    $bloque('No asisten', $no, 'Nadie avisó que no va.');
+  ?>
+
   <?php elseif ($tab === 'canciones'): ?>
-    <h2>Canciones sugeridas</h2>
+    <h2>Canciones sugeridas <a class="btn ghost" href="?csv=canciones">Descargar Excel</a></h2>
     <?php if (!$canciones): ?><p class="muted">Todavía no hay canciones.</p><?php endif; ?>
     <?php foreach ($canciones as $s): ?>
       <div class="card row"><div><strong><?= e($s['cancion']) ?></strong><?= $s['artista'] ? ' — ' . e($s['artista']) : '' ?>
@@ -329,7 +370,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
     <?php endforeach; ?>
 
   <?php else: ?>
-    <h2>Mensajes</h2>
+    <h2>Mensajes <a class="btn ghost" href="?csv=mensajes">Descargar Excel</a></h2>
     <?php if (!$mensajes): ?><p class="muted">Todavía no hay mensajes.</p><?php endif; ?>
     <?php foreach ($mensajes as $m): ?>
       <div class="card"><div class="row"><strong><?= e($m['nombre']) ?></strong><span class="muted"><?= $fecha($m['creado']) ?></span></div>
