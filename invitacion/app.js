@@ -96,7 +96,7 @@ if (TOKEN) fetch(API + 'grupo.php?t=' + encodeURIComponent(TOKEN))
     invitacion = d;
   }).catch(() => {});
 
-const MENU_OPC = ['Común', 'Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];
+const MENU_OPC = ['Ninguno', 'Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];
 const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 function camposGrupo() {
   const filas = invitacion.personas.map(p => `
@@ -107,7 +107,10 @@ function camposGrupo() {
         <label><input type="radio" name="asiste_${p.id}" value="no" ${p.asiste === 'no' ? 'checked' : ''}> No asiste</label>
       </div>
       <label class="menu-row">Menú
-        <select name="menu_${p.id}">${MENU_OPC.map(m => `<option value="${m === 'Común' ? '' : m}" ${(p.menu || '') === (m === 'Común' ? '' : m) ? 'selected' : ''}>${m}</option>`).join('')}</select>
+        <select name="menu_tipo_${p.id}"><option value="adulto">Menú adulto</option><option value="infantil" ${(p.menu_tipo || (p.tipo === 'nino' ? 'infantil' : 'adulto')) === 'infantil' ? 'selected' : ''}>Menú infantil</option></select>
+      </label>
+      <label class="menu-row">Menú especial
+        <select name="menu_${p.id}">${MENU_OPC.map(m => `<option value="${m === 'Ninguno' ? '' : m}" ${(p.menu || '') === (m === 'Ninguno' ? '' : m) ? 'selected' : ''}>${m}</option>`).join('')}</select>
       </label>
     </fieldset>`).join('');
   return filas + `
@@ -117,7 +120,7 @@ function camposGrupo() {
 }
 function activarGrupo() {
   document.querySelectorAll('.persona').forEach(f => {
-    const upd = () => { const si = f.querySelector('input[value=si]').checked; f.querySelector('.menu-row').hidden = !si; f.classList.toggle('no-asiste', !si); };
+    const upd = () => { const si = f.querySelector('input[value=si]').checked; f.querySelectorAll('.menu-row').forEach(r => r.hidden = !si); f.classList.toggle('no-asiste', !si); };
     f.querySelectorAll('input[type=radio]').forEach(r => r.addEventListener('change', upd)); upd();
   });
 }

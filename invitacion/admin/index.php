@@ -30,6 +30,7 @@ if ($ok) {
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
     if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(16));
     $csrf = $_SESSION['csrf'];
+    try { $pdo->query('SELECT menu_tipo FROM personas LIMIT 1'); } catch (PDOException $e) { $pdo->exec('ALTER TABLE personas ADD COLUMN menu_tipo VARCHAR(10) NULL'); }
     // Alta / edición / baja de invitaciones (grupo + personas)
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accion']) && hash_equals($csrf, (string)($_POST['csrf'] ?? ''))) {
         $acc = $_POST['accion'];
@@ -107,10 +108,10 @@ if ($ok) {
 
     // Totales
     $t = ['si' => 0, 'no' => 0, 'personas' => 0, 'adultos' => 0, 'ninos' => 0];
-    $menus = [];
+    $menus = []; $infantil = [];
     $tg = ['pend' => 0];
     foreach ($pers as $gid => $lista) foreach ($lista as $p) {
-        if ($p['asiste'] === 'si') { $t['personas']++; $p['tipo'] === 'nino' ? $t['ninos']++ : $t['adultos']++; if ($p['menu']) $menus[$p['menu']][] = $p['nombre']; }
+        if ($p['asiste'] === 'si') { $t['personas']++; $p['tipo'] === 'nino' ? $t['ninos']++ : $t['adultos']++; if ($p['menu']) $menus[$p['menu']][] = $p['nombre']; if (($p['menu_tipo'] ?? '') === 'infantil') $infantil[] = $p['nombre']; }
         elseif ($p['asiste'] === 'no') $t['no']++;
         else $tg['pend']++;
     }
@@ -131,12 +132,12 @@ if ($ok) {
         header('Content-Disposition: attachment; filename="invitados-camila-juan.csv"');
         $out = fopen('php://output', 'w');
         fwrite($out, "\xEF\xBB\xBF");
-        fputcsv($out, ['Invitado principal', 'Asiste', 'Nombre', 'Tipo', 'Restricción', 'Teléfono', 'Comentarios', 'Fecha'], ';');
+        fputcsv($out, ['Invitado principal', 'Asiste', 'Nombre', 'Tipo', 'Menú', 'Menú especial', 'Teléfono', 'Comentarios', 'Fecha'], ';');
         foreach ($grupos as $g) foreach ($pers[$g['id']] ?? [] as $p)
-            fputcsv($out, [$g['nombre'], $p['asiste'] ?? 'sin responder', $p['nombre'], $p['tipo'] === 'nino' ? 'menor' : 'adulto', $p['asiste'] === 'si' ? ($p['menu'] ?: 'común') : '', $g['telefono'], $g['comentarios'], $g['respondido']], ';');
+            fputcsv($out, [$g['nombre'], $p['asiste'] ?? 'sin responder', $p['nombre'], $p['tipo'] === 'nino' ? 'menor' : 'adulto', $p['asiste'] === 'si' ? ($p['menu_tipo'] ?? 'adulto') : '', $p['asiste'] === 'si' ? ($p['menu'] ?: '') : '', $g['telefono'], $g['comentarios'], $g['respondido']], ';');
         foreach ($conf as $c) {
-            fputcsv($out, [$c['nombre'], $c['asistencia'], $c['nombre'], 'adulto', $c['menu'], $c['telefono'], $c['comentarios'], $c['creado']], ';');
-            foreach ($acomp[$c['id']] ?? [] as $a) fputcsv($out, [$c['nombre'], $c['asistencia'], $a['nombre'], $a['tipo'] === 'nino' ? 'menor' : 'adulto', $a['restriccion'] ?? '', '', '', $c['creado']], ';');
+            fputcsv($out, [$c['nombre'], $c['asistencia'], $c['nombre'], 'adulto', '', $c['menu'], $c['telefono'], $c['comentarios'], $c['creado']], ';');
+            foreach ($acomp[$c['id']] ?? [] as $a) fputcsv($out, [$c['nombre'], $c['asistencia'], $a['nombre'], $a['tipo'] === 'nino' ? 'menor' : 'adulto', '', $a['restriccion'] ?? '', '', '', $c['creado']], ';');
         }
         exit;
     }
@@ -269,7 +270,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
           <span class="muted"><?= $g['respondido'] ? $fecha($g['respondido']) : '' ?></span></div>
         <ul><?php foreach ($pers[$g['id']] ?? [] as $p): ?>
           <li><?= e($p['nombre']) ?><?= $p['tipo'] === 'nino' ? ' <span class="tag nino">Menor</span>' : '' ?>
-            <?php if ($p['asiste'] === 'si'): ?><span class="tag">Asiste</span><span class="tag"><?= e($p['menu'] ?: 'Menú común') ?></span>
+            <?php if ($p['asiste'] === 'si'): ?><span class="tag">Asiste</span><span class="tag">Menú <?= ($p['menu_tipo'] ?? '') === 'infantil' ? 'infantil' : 'adulto' ?></span><?php if ($p['menu']): ?><span class="tag"><?= e($p['menu']) ?></span><?php endif; ?>
             <?php elseif ($p['asiste'] === 'no'): ?><span class="tag no">No asiste</span><?php endif; ?></li>
         <?php endforeach; ?></ul>
         <?php if ($g['telefono'] || $g['comentarios']): ?><div class="muted"><?= $g['telefono'] ? 'Tel: ' . e($g['telefono']) . ' ' : '' ?><?= $g['comentarios'] ? '· “' . e($g['comentarios']) . '”' : '' ?></div><?php endif; ?>
@@ -308,6 +309,9 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
     <?php endforeach; ?>
 
   <?php elseif ($tab === 'menus'): ?>
+    <h2>Menú infantil</h2>
+    <div class="card"><div class="row"><strong>Menú infantil</strong><span class="tag"><?= count($infantil) ?></span></div>
+      <?php if ($infantil): ?><ul><?php foreach ($infantil as $q): ?><li><?= e($q) ?></li><?php endforeach; ?></ul><?php else: ?><p class="muted">Nadie lo pidió por ahora.</p><?php endif; ?></div>
     <h2>Menús especiales</h2>
     <?php if (!$menus): ?><p class="muted">Nadie pidió menú especial por ahora.</p><?php endif; ?>
     <?php foreach ($menus as $m => $quienes): ?>

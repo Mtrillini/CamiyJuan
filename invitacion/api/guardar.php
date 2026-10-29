@@ -27,6 +27,7 @@ switch ($_POST['tipo'] ?? '') {
             }
         }
         $pdo = db();
+        asegurarMenuTipo($pdo);
         $pdo->beginTransaction();
         $pdo->prepare('INSERT INTO confirmaciones (nombre, asistencia, personas, telefono, menu, comentarios) VALUES (?, ?, ?, ?, ?, ?)')
             ->execute([$nombre, $asistencia, $asistencia === 'si' ? 1 + count($acompanantes) : 0, text('telefono', 30), text('menu', 50), longText('comentarios', 1000)]);
@@ -46,13 +47,14 @@ switch ($_POST['tipo'] ?? '') {
         $ids->execute([$gid]);
         $pdo = db();
         $pdo->beginTransaction();
-        $upd = $pdo->prepare('UPDATE personas SET asiste = ?, menu = ? WHERE id = ? AND grupo_id = ?');
+        $upd = $pdo->prepare('UPDATE personas SET asiste = ?, menu = ?, menu_tipo = ? WHERE id = ? AND grupo_id = ?');
         foreach ($ids->fetchAll(PDO::FETCH_COLUMN) as $pid) {
             $asiste = ($_POST["asiste_$pid"] ?? '') === 'si' ? 'si' : (($_POST["asiste_$pid"] ?? '') === 'no' ? 'no' : null);
             if ($asiste === null) { $pdo->rollBack(); respond(422, ['ok' => false, 'error' => 'Indicá si asiste cada persona.']); }
             $menu = trim((string)($_POST["menu_$pid"] ?? ''));
             $menu = ($asiste === 'si' && in_array($menu, MENUS, true)) ? $menu : null;
-            $upd->execute([$asiste, $menu, $pid, $gid]);
+            $mt = ($_POST["menu_tipo_$pid"] ?? '') === 'infantil' ? 'infantil' : 'adulto';
+            $upd->execute([$asiste, $menu, $asiste === 'si' ? $mt : null, $pid, $gid]);
         }
         $pdo->prepare('UPDATE grupos SET telefono = ?, comentarios = ?, respondido = CURRENT_TIMESTAMP WHERE id = ?')
             ->execute([text('telefono', 30), longText('comentarios', 1000), $gid]);

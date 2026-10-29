@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS personas (
   nombre VARCHAR(100) NOT NULL,
   tipo ENUM('adulto','nino') NOT NULL DEFAULT 'adulto',
   asiste ENUM('si','no') NULL,              -- NULL = todavía no respondió
-  menu VARCHAR(30) NULL,                    -- NULL = menú común
+  menu VARCHAR(30) NULL,                    -- NULL = sin menú especial
+  menu_tipo VARCHAR(10) NULL,               -- adulto / infantil
   FOREIGN KEY (grupo_id) REFERENCES grupos(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

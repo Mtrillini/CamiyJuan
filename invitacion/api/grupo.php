@@ -8,7 +8,8 @@ $g = db()->prepare('SELECT id, nombre, telefono, comentarios, respondido FROM gr
 $g->execute([$t]);
 $grupo = $g->fetch(PDO::FETCH_ASSOC);
 if (!$grupo) respond(404, ['ok' => false]);
-$p = db()->prepare('SELECT id, nombre, tipo, asiste, menu FROM personas WHERE grupo_id = ? ORDER BY id');
+asegurarMenuTipo(db());
+$p = db()->prepare('SELECT id, nombre, tipo, asiste, menu, menu_tipo FROM personas WHERE grupo_id = ? ORDER BY id');
 $p->execute([$grupo['id']]);
 unset($grupo['id']);
 respond(200, ['ok' => true, 'grupo' => $grupo, 'personas' => $p->fetchAll(PDO::FETCH_ASSOC)]);

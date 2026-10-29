@@ -38,6 +38,12 @@ function db(): PDO {
     return $pdo;
 }
 
+// Columna menu_tipo (adulto / infantil): se agrega sola si la base es anterior.
+function asegurarMenuTipo(PDO $pdo): void {
+    try { $pdo->query('SELECT menu_tipo FROM personas LIMIT 1'); }
+    catch (PDOException $e) { $pdo->exec("ALTER TABLE personas ADD COLUMN menu_tipo VARCHAR(10) NULL"); }
+}
+
 // Solo POST, y el campo trampa vacío (los bots lo completan).
 function guard(): void {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') respond(405, ['ok' => false, 'error' => 'Método no permitido.']);
