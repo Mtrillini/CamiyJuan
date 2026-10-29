@@ -3,7 +3,7 @@ declare(strict_types=1);
 require __DIR__ . '/db.php';
 guard();
 
-const MENUS = ['Menú infantil', 'Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];  // vacío = menú adulto
+const MENUS = ['Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];  // vacío = menú común
 
 $nombre = ($_POST['tipo'] ?? '') === 'rsvp_grupo' ? '' : text('nombre', 100, true);
 

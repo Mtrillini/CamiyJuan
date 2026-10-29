@@ -133,7 +133,7 @@ if ($ok) {
         fwrite($out, "\xEF\xBB\xBF");
         fputcsv($out, ['Invitado principal', 'Asiste', 'Nombre', 'Tipo', 'Restricción', 'Teléfono', 'Comentarios', 'Fecha'], ';');
         foreach ($grupos as $g) foreach ($pers[$g['id']] ?? [] as $p)
-            fputcsv($out, [$g['nombre'], $p['asiste'] ?? 'sin responder', $p['nombre'], $p['tipo'] === 'nino' ? 'menor' : 'adulto', $p['asiste'] === 'si' ? ($p['menu'] ?: 'Menú adulto') : '', $g['telefono'], $g['comentarios'], $g['respondido']], ';');
+            fputcsv($out, [$g['nombre'], $p['asiste'] ?? 'sin responder', $p['nombre'], $p['tipo'] === 'nino' ? 'menor' : 'adulto', $p['asiste'] === 'si' ? ($p['menu'] ?: 'común') : '', $g['telefono'], $g['comentarios'], $g['respondido']], ';');
         foreach ($conf as $c) {
             fputcsv($out, [$c['nombre'], $c['asistencia'], $c['nombre'], 'adulto', $c['menu'], $c['telefono'], $c['comentarios'], $c['creado']], ';');
             foreach ($acomp[$c['id']] ?? [] as $a) fputcsv($out, [$c['nombre'], $c['asistencia'], $a['nombre'], $a['tipo'] === 'nino' ? 'menor' : 'adulto', $a['restriccion'] ?? '', '', '', $c['creado']], ';');
@@ -269,7 +269,7 @@ $fecha = fn($d) => date('d/m H:i', strtotime((string)$d));
           <span class="muted"><?= $g['respondido'] ? $fecha($g['respondido']) : '' ?></span></div>
         <ul><?php foreach ($pers[$g['id']] ?? [] as $p): ?>
           <li><?= e($p['nombre']) ?><?= $p['tipo'] === 'nino' ? ' <span class="tag nino">Menor</span>' : '' ?>
-            <?php if ($p['asiste'] === 'si'): ?><span class="tag">Asiste</span><span class="tag"><?= e($p['menu'] ?: 'Menú adulto') ?></span>
+            <?php if ($p['asiste'] === 'si'): ?><span class="tag">Asiste</span><span class="tag"><?= e($p['menu'] ?: 'Menú común') ?></span>
             <?php elseif ($p['asiste'] === 'no'): ?><span class="tag no">No asiste</span><?php endif; ?></li>
         <?php endforeach; ?></ul>
         <?php if ($g['telefono'] || $g['comentarios']): ?><div class="muted"><?= $g['telefono'] ? 'Tel: ' . e($g['telefono']) . ' ' : '' ?><?= $g['comentarios'] ? '· “' . e($g['comentarios']) . '”' : '' ?></div><?php endif; ?>
