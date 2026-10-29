@@ -96,7 +96,7 @@ if (TOKEN) fetch(API + 'grupo.php?t=' + encodeURIComponent(TOKEN))
     invitacion = d;
   }).catch(() => {});
 
-const MENU_OPC = ['Común', 'Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];
+const MENU_OPC = ['Menú adulto', 'Menú infantil', 'Vegetariano', 'Vegano', 'Sin TACC', 'Otra'];
 const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 function camposGrupo() {
   const filas = invitacion.personas.map(p => `
@@ -107,7 +107,7 @@ function camposGrupo() {
         <label><input type="radio" name="asiste_${p.id}" value="no" ${p.asiste === 'no' ? 'checked' : ''}> No asiste</label>
       </div>
       <label class="menu-row">Menú
-        <select name="menu_${p.id}">${MENU_OPC.map(m => `<option value="${m === 'Común' ? '' : m}" ${(p.menu || '') === (m === 'Común' ? '' : m) ? 'selected' : ''}>${m}</option>`).join('')}</select>
+        <select name="menu_${p.id}">${MENU_OPC.map(m => { const v = m === 'Menú adulto' ? '' : m; const sel = (p.menu || (p.tipo === 'nino' && p.asiste == null ? 'Menú infantil' : '')) === v; return `<option value="${v}" ${sel ? 'selected' : ''}>${m}</option>`; }).join('')}</select>
       </label>
     </fieldset>`).join('');
   return filas + `
@@ -139,8 +139,8 @@ const forms = {
         <div id="companions"></div>
       </div>
       <label>Teléfono (opcional)<input name="telefono" type="tel" autocomplete="tel" maxlength="30"></label>
-      <label>Menú especial
-        <select name="menu"><option value="">Ninguno</option><option>Vegetariano</option><option>Vegano</option><option>Sin TACC</option><option>Otro (lo aclaro abajo)</option></select></label>
+      <label>Menú
+        <select name="menu"><option value="">Menú adulto</option><option>Menú infantil</option><option>Vegetariano</option><option>Vegano</option><option>Sin TACC</option><option>Otro (lo aclaro abajo)</option></select></label>
       <label>Alergias o comentarios<textarea name="comentarios" maxlength="1000"></textarea></label>`
   },
   song: {
@@ -200,8 +200,8 @@ function setupCompanions() {
           <label><input type="radio" name="acompanante_tipo_${i}" value="adulto" checked> Adulto</label>
           <label><input type="radio" name="acompanante_tipo_${i}" value="nino"> Menor</label>
         </div>
-        <label>Restricción alimentaria
-          <select name="acompanante_menu[]"><option value="">Ninguna</option><option>Vegetariano</option><option>Vegano</option><option>Sin TACC</option><option>Otra</option></select></label>`;
+        <label>Menú
+          <select name="acompanante_menu[]"><option value="">Menú adulto</option><option>Menú infantil</option><option>Vegetariano</option><option>Vegano</option><option>Sin TACC</option><option>Otra</option></select></label>`;
       list.append(row);
     }
   };
