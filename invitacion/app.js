@@ -230,7 +230,7 @@ document.querySelectorAll('[data-action]').forEach(button => button.addEventList
   $('#form-submit').textContent = form.submit;
   $('#form-submit').disabled = false;
   showError('');
-  try { const nombre = localStorage.getItem('boda-cj-nombre'); if (nombre) $('#guest-form').elements.nombre.value = nombre; } catch {}
+  try { const nombre = localStorage.getItem('boda-cj-nombre'); if (nombre && nombre !== 'null') $('#guest-form').elements.nombre.value = nombre; } catch {}
   if (currentAction === 'photos') {
     selectedPhotos = [];
     $('#camera-input').addEventListener('change', addPhotos);
@@ -302,7 +302,7 @@ $('#guest-form').addEventListener('submit', async event => {
     } else {
       await post('guardar.php', data);
     }
-    try { localStorage.setItem('boda-cj-nombre', data.get('nombre')); } catch {}
+    try { if (data.get('nombre')) localStorage.setItem('boda-cj-nombre', data.get('nombre')); } catch {}
     dialog.close(); toast(forms[currentAction].done);
   } catch (error) {
     showError(error.message === 'Failed to fetch' ? 'Sin conexión. Probá de nuevo.' : error.message);
