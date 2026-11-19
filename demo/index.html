@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#efe6d8">
+<title>Sofía &amp; Martín · Demo</title>
+<meta name="description" content="Demo de invitación interactiva.">
+<link rel="preload" as="image" href="../entrada/sello.webp?v=1792099509">
+<link rel="preload" as="image" href="../entrada/carta-abierta.webp?v=1791943797">
+<link rel="preload" as="image" href="../entrada/solapa-izquierda.webp?v=1791943797">
+<link rel="preload" as="image" href="../entrada/solapa-derecha.webp?v=1791943797">
+<link rel="prefetch" href="invitacion/">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap">
+<style>
+  :root{--ivory:#efe6d8;--brown:#644732;--petroleum:#527987}
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+  body{background:#efe0cc url('../entrada/fondo.jpg?v=1791943797') center top/auto 100% repeat-x;font-family:Georgia,serif;color:var(--brown)}
+  .stage{position:fixed;inset:0;display:grid;place-items:center;overflow:hidden;padding:3vh 16px}
+
+  /* Sobre: proporción de la carta (3/5), lo más grande que entre en pantalla */
+  .sobre{position:relative;width:min(92vw,500px,calc(92svh * 3 / 5));aspect-ratio:3/5;perspective:900px;perspective-origin:50% 50%;isolation:isolate;
+    filter:drop-shadow(0 18px 28px #5b402a2e);transform-origin:50% 45%;animation:llega 1.2s cubic-bezier(.22,.61,.36,1) both;
+    transition:transform 1s cubic-bezier(.55,0,.25,1)}
+  .invitacion{position:absolute;inset:0;background:url('../entrada/carta-abierta.webp?v=1791943797') center/100% 100%;
+    container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .invitacion>*{opacity:0;transition:opacity .9s ease}
+  .invitacion .eyebrow{font-size:3.4cqw;letter-spacing:1.5cqw;text-transform:uppercase}
+  .invitacion .names{width:80%;margin:3cqh 0 1.5cqh}
+  .invitacion .line{width:56%;margin:1cqh 0 3cqh}
+  .invitacion .date{font-size:7.6cqw;letter-spacing:1.6cqw}
+  .invitacion .place{font-size:4.2cqw;margin-top:2.5cqh;font-style:italic}
+
+  .solapa{position:absolute;top:0;width:50%;height:100%;z-index:2;will-change:transform;
+    transition:transform 3.4s cubic-bezier(.6,0,.35,1) .1s,filter 3.4s ease .1s,opacity 1.8s ease 1.9s}
+  .izquierda{left:0;transform-origin:left center}
+  .derecha{right:0;transform-origin:right center}
+
+  /* Cinta: video sin fondo (moño con lacre). Cuadro 720x406; el lacre está en (50%, 42%) */
+  /* La hoja derecha lleva el sello: al abrirse, el sello la acompaña en el giro */
+  .derecha{transform-style:preserve-3d}
+  .derecha .hoja{position:absolute;inset:0;width:100%;height:100%}
+  .sello{position:absolute;left:0;top:50%;width:72%;aspect-ratio:589/600;transform:translate(-50%,-50%);z-index:3;padding:0;border:0;background:none;cursor:pointer;
+    border-radius:50%;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 4px 6px #4a30202e);transition:opacity 1.8s ease 1.9s}
+  .sello img{display:block;width:100%;height:100%;pointer-events:none}
+  .sello:focus-visible{outline:2px solid var(--petroleum);outline-offset:4px}
+  .sello:not(:disabled){animation:invitaSello 2.6s ease-in-out 1.6s infinite}
+  @keyframes invitaSello{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-50%) scale(1.04)}}
+  .sobre.abierto .sello{animation:none;opacity:0}
+  .sobre.abierto .izquierda{transform:rotateY(-118deg);filter:brightness(.92);opacity:0}
+  .sobre.abierto .derecha{transform:rotateY(118deg);filter:brightness(.92);opacity:0}
+  .sobre.abierto .invitacion>*{opacity:1;transition-delay:1.8s}
+  .sobre.zoom{transform:scale(1.5)}
+  .veil{position:fixed;inset:0;background:var(--ivory);opacity:0;pointer-events:none;transition:opacity .45s ease .45s;z-index:5}
+  .zoom~.veil,body.zoom .veil{opacity:1}
+
+  @keyframes invita{0%,100%{transform:none}50%{transform:translateY(-3px)}}
+  @keyframes llega{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .inv-frame{position:fixed;inset:0;width:100%;height:100%;border:0;background:var(--ivory);opacity:0;transition:opacity .3s;z-index:6}
+  .inside .inv-frame{opacity:1}
+  .inside .stage{visibility:hidden}
+  @media (prefers-reduced-motion:reduce){.solapa{transition:none!important}.sobre.abierto .sello{animation:none;opacity:0}.sobre,.sello{animation:none!important}}
+  body.inside>.demo-bar{display:none}
+</style>
+</head>
+<body>
+<a class="demo-bar" href="admin/" target="_top" style="position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:50;background:#644732e6;color:#fbf5ec;font:13px/1 Georgia,serif;letter-spacing:1px;padding:9px 16px;border-radius:20px;text-decoration:none;white-space:nowrap;box-shadow:0 3px 10px #0003">DEMO · Ver el panel de los novios →</a>
+<main class="stage">
+  <div class="sobre" id="sobre">
+    <div class="invitacion">
+      <span class="eyebrow">Nos casamos</span>
+      <img class="names" src="invitacion/nombres.png" alt="Sofía &amp; Martín">
+      <img class="line" src="../invitacion/assets/linea.png" alt="">
+      <span class="date">13.03.2027</span>
+      <span class="place">Estancia Los Aromos</span>
+    </div>
+    <img class="solapa izquierda" src="../entrada/solapa-izquierda.webp?v=1791943797" alt="">
+    <div class="solapa derecha">
+      <img class="hoja" src="../entrada/solapa-derecha.webp?v=1791943797" alt="">
+      <button class="sello" id="abrir" aria-label="Abrir invitación"><img src="../entrada/sello.webp?v=1792099509" alt="Sello"></button>
+    </div>
+  </div>
+</main>
+<div class="veil" aria-hidden="true"></div>
+<script>
+  const DESTINO = 'invitacion/';
+  const sobre = document.getElementById('sobre');
+  const abrir = document.getElementById('abrir');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const imgs = ['carta-abierta','solapa-izquierda','solapa-derecha'].map(n => '../entrada/' + n + '.webp?v=1791943797');
+  const listos = Promise.all(imgs.map(src => { const i = new Image(); i.src = src; return i.decode().catch(() => {}); }));
+  // El video del moño (animación con transparencia) se descarga antes y se arranca al tocar.
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+
+
+  
+  abrir.addEventListener('click', async () => {
+    if (abrir.disabled) return;
+    abrir.disabled = true;
+    musica.play().catch(() => {});        // arranca con el toque (los navegadores exigen un gesto)
+    await listos;
+    sobre.classList.add('abierto');       // corre el moño; después las solapas abren por CSS
+    await wait(reduce ? 500 : 4000);      // ~3 s con el zoom: solapas abiertas, se ven los nombres
+    sobre.classList.add('zoom'); document.body.classList.add('zoom');
+    await wait(reduce ? 400 : 700);
+    abrirInvitacion();
+  });
+
+  // La invitación se abre en esta misma página (sin navegar) para que la música no se corte.
+  function abrirInvitacion() {
+    const frame = document.createElement('iframe');
+    frame.src = DESTINO + location.search;   // conserva el link personalizado (?i=...)
+    frame.title = 'Invitación de Sofía y Martín';
+    frame.className = 'inv-frame';
+    frame.addEventListener('load', () => {
+      document.body.classList.add('inside');
+      try { frame.contentWindow.document.title && (document.title = frame.contentWindow.document.title); } catch (e) {}
+    }, { once: true });
+    document.body.append(frame);
+    // Si el navegador no carga el iframe, vamos a la página igual.
+    setTimeout(() => { if (!document.body.classList.contains('inside')) location.href = DESTINO + location.search; }, 6000);
+  }
+  // Música: suena desde que se abre la carta y se corta al salir de la página.
+  const musica = new Audio('../invitacion/assets/musica.mp3?v=1'); musica.loop = true; musica.preload = 'auto';
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) musica.pause(); else if (abrir.disabled) musica.play().catch(() => {});
+  });
+  addEventListener('pagehide', () => musica.pause());
+  // Si vuelven con "atrás", la tarjeta aparece cerrada de nuevo.
+  addEventListener('pageshow', e => {
+    if (!e.persisted) return;
+    sobre.classList.remove('abierto', 'zoom'); document.body.classList.remove('zoom', 'inside');
+    abrir.disabled = false; document.querySelector('.inv-frame')?.remove(); musica.pause(); musica.currentTime = 0;
+  });
+</script>
+</body>
+</html>

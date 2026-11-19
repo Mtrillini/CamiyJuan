@@ -1,0 +1,260 @@
+/* PALETA: azul y marfil. */
+@font-face{font-family:InvitationScript;src:url('../../invitacion/assets/caligrafia.woff2') format('woff2');font-display:swap}
+:root{--ivory:#f3ebe0;--beige:#e9dece;--brown:#644732;--petroleum:#527987;--paper:rgba(248,242,233,.76);--border:rgba(129,99,71,.22);--serif:Georgia,'Times New Roman',serif;--script:InvitationScript,'URW Chancery L','Apple Chancery','Brush Script MT',cursive}
+*{box-sizing:border-box}body{margin:0;color:var(--brown);font-family:var(--serif);background:#ded2c3;line-height:1.3}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.svg-definitions{position:absolute;width:0;height:0;overflow:hidden}.invitation{max-width:540px;margin:auto;padding:22px 30px 20px;overflow:hidden;background:transparent;position:relative;text-align:center}h1,h2,p{margin:0}h2{font-weight:400;font-size:30px;line-height:1.1}.edition{display:inline-block;font-size:9px;text-transform:uppercase;letter-spacing:1.8px;border:1px solid var(--border);padding:4px 12px;border-radius:20px}.eyebrow{text-transform:uppercase;letter-spacing:5px;font-size:13px}.hero>.eyebrow{margin:25px 0 5px}.names,.script{font-family:var(--script);font-weight:400}.names{font-size:clamp(40px,11vw,67px);font-style:italic;letter-spacing:-3px;line-height:1.3;white-space:nowrap}.names span{color:var(--petroleum)}.subtitle{font-size:23px}.couple-photo{height:120px;margin:24px 0 12px;border:1px solid #a38d78;border-radius:18px;box-shadow:inset 0 0 0 3px #fff5}.image-slot{display:grid;place-items:center;background-color:#d8cec4;background-size:cover;background-position:center}.couple-photo span{text-transform:uppercase;letter-spacing:4px;font-size:13px}.image-slot.has-image span{display:none}.date{font-size:38px;letter-spacing:5px}.ornament{display:flex;align-items:center;justify-content:center;gap:7px;color:#a48b72;font-size:13px;max-width:240px;margin:4px auto 9px}.ornament:before,.ornament:after{content:'';width:100%;height:1px;background:linear-gradient(90deg,transparent,#ad9680)}.ornament:after{transform:rotate(180deg)}.countdown{display:flex;justify-content:center;margin:8px auto 18px;max-width:290px}.countdown>div{width:33.333%;border-right:1px solid #b49d88}.countdown>div:last-child{border:0}.countdown strong{display:block;font-weight:400;font-size:29px;letter-spacing:3px}.countdown span{text-transform:uppercase;letter-spacing:2px;font-size:11px}.palace{height:230px;margin:0 -30px;background:linear-gradient(#dce5e780,#ddd5c6);background-size:cover;background-position:center;mask-image:linear-gradient(transparent,black 15%,black 85%,transparent);-webkit-mask-image:linear-gradient(transparent,black 15%,black 85%,transparent)}.palace.has-image{background-color:transparent;background-size:contain;background-repeat:no-repeat}.palace span{font-size:18px;font-style:italic}.paper{background:var(--paper);border:1px solid #fff9;border-radius:35px;box-shadow:inset 1px 2px 3px #fff9,inset -1px -2px 4px #9c7d5812,0 3px 5px #70533320}.venue-card{padding:16px 12px 22px;margin-top:-15px;position:relative}.venue-card>p{margin:4px 0}.button{display:inline-flex;justify-content:center;align-items:center;gap:12px;border:1px solid #ffffff30;color:#fff9ef;background:var(--petroleum);border-radius:30px;min-height:42px;padding:9px 22px;text-transform:uppercase;text-decoration:none;letter-spacing:2px;font-size:12px;box-shadow:inset 0 1px 2px #fff4,0 2px 3px #503a2725;transition:background .2s,transform .2s}.button:hover{background:#406672;transform:translateY(-1px)}.button:active{transform:translateY(1px)}.button-brown{background:var(--brown)}.button-brown:hover{background:#513725}.venue-card .button{margin:9px 0 3px;min-width:245px}.small{font-size:14px}.dress-code{position:relative;margin:12px 5px 17px;padding:13px 18px 17px}.pill{position:relative;display:table;margin:-27px auto 0;padding:7px 24px;border-radius:30px;background:var(--petroleum);color:#fff8ee;text-transform:uppercase;font-size:12px;letter-spacing:2px;box-shadow:0 2px 4px #64473222}.gala{font-size:59px;font-style:italic;line-height:1.05;margin:4px 0 7px}.attendance{border-radius:50% 50% 30px 30px / 42px 42px 30px 30px;padding:22px 12px 12px}.attendance h2{font-size:27px}.attendance>.button{margin:12px 0 7px}.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:17px}.mini-card{display:flex;align-items:center;justify-content:center;gap:10px;text-align:left;padding:12px 9px;border:1px solid #fff9;border-radius:18px;box-shadow:inset 0 1px 1px #fff8,0 2px 4px #70533322;background:#f4eadf55}.mini-card p{font-size:13px}.large-icon{width:33px;height:33px}.compact{min-height:32px;padding:7px 18px;font-size:10px;letter-spacing:1px;margin-top:7px}.action-grid .compact{width:100%}.photos-card{margin-top:10px;flex-wrap:wrap;justify-content:space-between}.photos-card .compact{margin:0}.gifts{display:flex;align-items:center;gap:20px;text-align:left;margin:15px 8px 10px;padding:18px 21px}.gifts h2{font-size:24px}.gift-circle{display:grid;place-items:center;width:68px;height:68px;border-radius:50%;background:#d8c6b744;flex-shrink:0}.gifts>div:last-child{border-left:1px solid var(--border);padding-left:18px}.alias-label{font-size:9px;letter-spacing:2px;margin-top:6px}.alias{border:0;background:none;color:var(--brown);padding:4px 0;font-size:12px;letter-spacing:2px;text-align:left;overflow-wrap:anywhere}.gifts .small{font-size:12px}footer .names{font-size:45px}footer{padding-top:5px}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}:focus-visible{outline:3px solid #527987;outline-offset:4px}dialog{color:var(--brown);width:min(440px,calc(100% - 32px));border:1px solid #fff;border-radius:24px;padding:30px;background:var(--ivory);box-shadow:0 20px 70px #0004}dialog::backdrop{background:#35281d80;backdrop-filter:blur(4px)}dialog h2{font-size:27px;padding-right:15px}.close-dialog{position:absolute;right:12px;top:8px;border:0;background:none;color:var(--brown);font-size:30px;width:35px;height:35px}.demo-note{font-size:13px;margin:12px 0 18px}label{display:block;margin-bottom:14px;font-size:14px}input,textarea,select{display:block;width:100%;margin-top:6px;background:#fffbf5;border:1px solid #bba58f;border-radius:8px;padding:10px;color:var(--brown)}textarea{min-height:100px;resize:vertical}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);max-width:calc(100% - 32px);width:max-content;padding:12px 18px;color:white;background:#406672;border-radius:12px;box-shadow:0 4px 20px #0003;z-index:10}.file-label{margin-top:14px}#photo-preview{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}#photo-preview img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}
+@media(max-width:390px){.invitation{padding-inline:18px}.palace{margin-inline:-18px}.names{letter-spacing:-2px}.subtitle{font-size:20px}.date{font-size:32px}.action-grid{gap:7px}.mini-card{gap:6px;padding:10px 6px}.mini-card p{font-size:12px}.large-icon{width:27px;height:27px}.compact{padding:7px 12px}.gifts{padding:16px 12px;gap:12px;margin-inline:0}.gifts>div:last-child{padding-left:12px}.gift-circle{width:52px;height:52px}.button-brown{letter-spacing:1px;padding-inline:14px;font-size:11px}.desktop-break{display:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
+
+body{background:#f3e9dc}body:before{content:'';position:fixed;inset:0;z-index:-1;background:url('../../invitacion/assets/fondo-mobile.jpg') center/cover no-repeat}@media (min-width:768px) and (min-aspect-ratio:1/1){body:before{background-image:url('../../invitacion/assets/fondo-web.jpg')}}
+.names{font-family:'Pinyon Script',var(--script);font-style:normal;letter-spacing:0;font-size:clamp(52px,15vw,78px);line-height:1.15}.names span{font-size:.9em;padding:0 .05em}
+.names{line-height:1.3}.names span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1em;padding:0 .08em}
+.names img{display:block;width:100%;max-width:440px;height:auto;margin:6px auto 4px}
+footer .names img{max-width:260px}
+.names img{width:min(72vw,320px);max-width:none;margin:4px auto 2px}@media (min-width:768px){.names img{width:300px}}footer .names img{width:min(48vw,200px)}
+.subtitle{font-size:17px}
+.divider{max-width:260px;margin:6px auto 10px}.divider img{display:block;width:100%;height:auto}
+.palace-img{display:block;width:calc(100% + 20px);max-width:520px;height:auto;margin:10px auto -6px;position:relative;left:50%;transform:translateX(-50%)}
+.palace-img{opacity:.8;margin-top:32px}
+
+/* Azul y marfil */
+:root{--blue:#b9cde2;--blue-deep:#5d7f9f;--ivory:#f7f1e6;--paper:rgba(250,245,236,.74)}
+.button{background:var(--blue);color:var(--brown);border-color:#ffffff80;box-shadow:inset 0 1px 2px #fff8,0 2px 4px #5d7f9f30}
+.button:hover{background:#a9c0d9}
+.button-brown{background:var(--brown);color:#fbf5ec}
+.button-brown:hover{background:#513725}
+.pill{background:var(--blue);color:var(--brown)}
+.mini-card svg,.gift-circle svg{color:var(--brown)}
+.gala-row{display:flex;align-items:center;gap:14px;justify-content:center}
+.gala-row span{flex:1;max-width:90px;height:1px;background:linear-gradient(90deg,transparent,#ad9680)}
+.gala-row span:last-child{transform:rotate(180deg)}
+.qr-box{display:grid;place-items:center;width:58px;height:58px;border:1px solid #bba58f;border-radius:6px;font-size:11px;letter-spacing:1px;color:#a48b72;background:#fffbf555}
+.qr-box img{width:100%;height:100%}
+.photos-card{gap:10px}
+/* Modales */
+dialog{background:var(--ivory);border:1px solid #fff;text-align:left;max-height:calc(100dvh - 40px);overflow:auto}
+.dialog-intro{font-size:14px;margin:8px 0 18px;color:#7b6250}
+.choice{border:0;padding:0;margin:0 0 14px}
+.choice legend{font-size:14px;margin-bottom:6px}
+.choice label{display:flex;align-items:center;gap:8px;margin:0 0 6px;padding:10px 12px;border:1px solid #d5c4b2;border-radius:10px;background:#fffbf5}
+.choice input{width:auto;margin:0;accent-color:var(--blue-deep)}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--blue);border-color:var(--blue-deep)}
+#guest-form .button{width:100%;margin-top:4px}
+.button:disabled{opacity:.6;cursor:wait}
+.form-error{color:#9b3b2e;font-size:14px;margin:0 0 12px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.file-label{border:1px dashed #bba58f;border-radius:12px;padding:14px;text-align:center;background:#fffbf5}
+.file-label input{margin-top:10px}
+#photo-preview{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+#photo-preview img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}
+.toast{background:var(--blue-deep)}
+.gala{font-family:'Pinyon Script',var(--script);font-style:normal;font-size:56px;line-height:1.2;margin:2px 0 4px}
+.photos-card{flex-wrap:nowrap;justify-content:flex-start;text-align:left}
+.photos-card>div:not(.qr-box){flex:1;min-width:0;overflow-wrap:anywhere}
+.photos-card .qr-box{flex-shrink:0;width:52px;height:52px;margin-left:4px}
+@media(max-width:390px){.photos-card .compact{padding:7px 10px}}
+.photos-card>.qr-box{flex:0 0 52px}
+/* Azul petróleo y marfil */
+:root{--blue:#527987;--blue-deep:#406672}
+.button,.pill{background:var(--blue);color:#fbf5ec}
+.button:hover{background:var(--blue-deep)}
+.button-brown{background:var(--brown)}
+.button-brown:hover{background:#513725}
+.companion{border:1px solid #d5c4b2;border-radius:14px;padding:12px 12px 4px;margin:0 0 12px;background:#fffbf5aa}
+.companion legend{font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:0 6px;color:var(--blue-deep)}
+.companion label{margin-bottom:10px}
+.segmented{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.segmented label{display:flex;align-items:center;justify-content:center;gap:6px;margin:0;padding:9px;border:1px solid #d5c4b2;border-radius:10px;background:#fffbf5;font-size:14px;cursor:pointer}
+.segmented label:has(input:checked){background:var(--blue);border-color:var(--blue);color:#fbf5ec}
+.segmented input{width:auto;margin:0;accent-color:#fbf5ec}
+.photo-pickers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.photo-pick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin:0;padding:18px 8px;border:1px dashed #bba58f;border-radius:14px;background:#fffbf5;text-align:center;font-size:14px;cursor:pointer}
+.photo-pick:active{background:#f1e8dc}
+.photo-pick svg{width:30px;height:30px;color:var(--blue-deep)}
+.photo-pick input{position:absolute;width:1px;height:1px;opacity:0}
+.photo-pick:focus-within{outline:3px solid var(--blue);outline-offset:2px}
+.photo-pick{position:relative}
+.qr-box{padding:3px;background:#fffbf5;object-fit:contain}
+/* Compu: dos columnas */
+@media (min-width:1024px){
+  .invitation{max-width:1120px;padding:40px 48px 30px;display:grid;grid-template-columns:1fr 1fr;column-gap:56px;row-gap:26px;align-items:start;
+    grid-template-areas:"hero venue" "dress attendance" "gifts attendance" "foot foot"}
+  .hero{grid-area:hero;align-self:center}
+  .venue{grid-area:venue;align-self:center}
+  .dress-code{grid-area:dress;margin:14px 0 0}
+  .attendance{grid-area:attendance}
+  .gifts{grid-area:gifts;margin:0}
+  .invitation>footer{grid-area:foot}
+  .palace-img{width:115%;max-width:640px;margin-top:0;opacity:.85}
+  .couple-photo{height:190px}
+  .names img{width:360px}
+  .subtitle{font-size:19px}
+  .date{font-size:42px}
+}
+/* Entrada: la invitación aparece acercándose (continúa el zoom de la carta) */
+.invitation{animation:acercarse 1.1s cubic-bezier(.2,.7,.2,1) both}
+body:after{content:'';position:fixed;inset:0;background:#efe6d8;pointer-events:none;z-index:20;animation:desvelar .8s ease .1s both}
+@keyframes acercarse{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:none}}
+@keyframes desvelar{from{opacity:1}to{opacity:0}}
+@media(prefers-reduced-motion:reduce){.invitation,body:after{animation:none}body:after{display:none}}
+/* Foto de los novios: bordes en degradé que se funden con el papel */
+.couple-photo{display:block;width:100%;height:auto;aspect-ratio:1/0.92;object-fit:cover;object-position:50% 40%;border:0;border-radius:0;box-shadow:none;background:none;margin:18px 0 8px;opacity:.95;
+  -webkit-mask-image:radial-gradient(ellipse 58% 56% at 50% 47%,#000 52%,transparent 100%);mask-image:radial-gradient(ellipse 58% 56% at 50% 47%,#000 52%,transparent 100%)}
+@media (min-width:1024px){.couple-photo{height:auto;max-width:440px;margin-inline:auto}}
+.couple-photo{-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 48%,#000 50%,rgba(0,0,0,.6) 72%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 48%,#000 50%,rgba(0,0,0,.6) 72%,transparent 100%)}
+.couple-photo{opacity:1;-webkit-mask-image:radial-gradient(ellipse 52% 52% at 50% 48%,#000 62%,rgba(0,0,0,.75) 80%,transparent 100%);mask-image:radial-gradient(ellipse 52% 52% at 50% 48%,#000 62%,rgba(0,0,0,.75) 80%,transparent 100%)}
+/* Foto recortada (fondo transparente): apenas transparente y la base se esfuma */
+.couple-photo{aspect-ratio:auto;object-fit:contain;opacity:.88;width:88%;margin:14px auto 4px;
+  -webkit-mask-image:linear-gradient(#000 70%,transparent 98%);mask-image:linear-gradient(#000 70%,transparent 98%)}
+@media (min-width:1024px){.couple-photo{max-width:400px}}
+/* Foto de los novios: regla final (pisa los estilos del recuadro viejo) */
+.hero .couple-photo{display:block;width:88%;max-width:400px;height:auto!important;aspect-ratio:auto;object-fit:contain;margin:14px auto 4px;
+  border:0;border-radius:0;box-shadow:none;background:none;opacity:.88;
+  -webkit-mask-image:linear-gradient(#000 70%,transparent 98%);mask-image:linear-gradient(#000 70%,transparent 98%)}
+/* Ajustes UX */
+.hashtag{white-space:nowrap;color:var(--blue-deep);font-size:12px!important}
+/* En el celular el QR no sirve (no te podés escanear a vos mismo): se ve solo en compu */
+.photos-card .qr-box{display:none}
+@media (min-width:1024px){.photos-card .qr-box{display:block}}
+.photos-card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;text-align:left}
+.photos-card .compact{white-space:nowrap}
+@media (min-width:1024px){.photos-card{grid-template-columns:auto 1fr auto auto}}
+.dress-code p{text-wrap:balance}
+.copy-hint{display:block;font-size:10px;letter-spacing:1px;text-transform:none;color:var(--blue-deep);margin-top:2px}
+.mini-card p{text-wrap:balance}
+.deadline{font-size:15px;margin:2px 0 4px;color:var(--blue-deep)}
+.deadline strong{font-weight:700}
+.button-ghost{background:transparent;color:var(--brown);border:1px solid #b9a28b;box-shadow:none}
+.button-ghost:hover{background:#fffaf3;color:var(--brown)}
+.venue-card .button-ghost{min-width:245px;margin:2px 0 6px}
+.photos-soon{font-size:11px!important;font-style:italic;color:#9a8270}
+.photos-card .compact:disabled{background:#cdbfb1;color:#fbf5ec;cursor:default;opacity:1;transform:none}
+@media (min-width:1024px){
+  .invitation{grid-template-areas:"hero venue" "dress attendance" "gifts attendance" "foot foot"}
+  .photos-card{grid-template-columns:auto 1fr auto}
+}
+@media (min-width:1024px){
+  .invitation{grid-template-areas:"hero venue" "dress attendance" ". attendance" "gifts gifts" "foot foot"}
+  .gifts{justify-self:center;width:min(100%,520px);margin-top:10px}
+}
+/* Compu: una sola columna, mismo orden que en el celular */
+@media (min-width:1024px){
+  .invitation{display:block;max-width:620px;padding:40px 30px 30px}
+  .invitation>*{margin-left:auto;margin-right:auto}
+  .venue{margin-top:20px}
+  .dress-code{margin:26px 5px 22px}
+  .gifts{width:auto;margin:22px 8px 10px}
+  .palace-img{width:108%;max-width:none}
+}
+@media (min-width:1024px){.invitation>.gifts{width:calc(100% - 16px);justify-self:auto}}
+/* ===== Animaciones de carga ===== */
+.invitation{animation:none}
+/* Encabezado: cada elemento entra en cascada */
+.anim .hero>*{opacity:0;animation:subir .9s cubic-bezier(.2,.7,.2,1) forwards}
+.anim .hero>*:nth-child(1){animation-delay:.25s}
+.anim .hero>*:nth-child(2){animation:nombres 1.2s cubic-bezier(.2,.7,.2,1) .4s forwards}
+.anim .hero>*:nth-child(3){animation-delay:.7s}
+.anim .hero>*:nth-child(4){animation:foto 1.3s cubic-bezier(.2,.7,.2,1) .85s forwards}
+.anim .hero>*:nth-child(5){animation-delay:1.15s}
+.anim .hero>*:nth-child(6){animation:linea 1s ease 1.3s forwards}
+.anim .hero>*:nth-child(7){animation-delay:1.45s}
+/* Resto: aparece al llegar con el scroll */
+.anim .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.anim .reveal.visible{opacity:1;transform:none}
+.anim .palace-img.reveal{transform:translateX(-50%) translateY(30px) scale(.96)}
+.anim .palace-img.reveal.visible{transform:translateX(-50%)}
+.anim .action-grid>.reveal:nth-child(2),.anim .photos-card.reveal{transition-delay:.12s}
+@keyframes subir{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes nombres{from{opacity:0;transform:scale(.92);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes foto{from{opacity:0;transform:scale(.94) translateY(14px)}to{opacity:var(--foto-op,.6);transform:none}}
+@keyframes linea{from{opacity:0;clip-path:inset(0 50%)}to{opacity:1;clip-path:inset(0)}}
+@media (prefers-reduced-motion:reduce){.anim .hero>*,.anim .reveal{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}}
+.close-dialog:focus,.close-dialog:focus-visible{outline:none;box-shadow:none}
+.hero .couple-photo{opacity:.85}
+.music-btn{position:fixed;right:16px;bottom:16px;z-index:15;width:46px;height:46px;border-radius:50%;border:1px solid #ffffff80;background:var(--blue);color:#fbf5ec;display:grid;place-items:center;box-shadow:0 4px 14px #40302033}
+.music-btn[hidden]{display:none}
+.music-btn svg{width:20px;height:20px}
+.music-btn.playing svg{animation:latido 1.6s ease-in-out infinite}
+@keyframes latido{50%{transform:scale(1.15)}}
+.hero .couple-photo{filter:none;opacity:.72}
+.hero .couple-photo{opacity:.6}
+.hero .couple-photo{--foto-op:.72;opacity:.72}
+.photos-soon{white-space:nowrap;font-size:10px!important;letter-spacing:0}
+/* Palacio: entra con el scroll como el resto (sube, se agranda y se enfoca) */
+.anim .palace-img.reveal{opacity:0;transform:translateX(-50%) translateY(34px) scale(.94);filter:blur(3px);transition:opacity 1.1s ease,transform 1.2s cubic-bezier(.2,.7,.2,1),filter 1.1s ease}
+.anim .palace-img.reveal.visible{opacity:.85;transform:translateX(-50%);filter:none}
+.music-btn{display:none!important}
+/* Entrada: la invitación se va descubriendo de arriba hacia abajo */
+body:after{display:none}
+.invitation{animation:none}
+@property --reveal{syntax:'<percentage>';inherits:false;initial-value:0%}
+.anim .invitation{-webkit-mask-image:linear-gradient(#000 calc(var(--reveal) - 18%),transparent var(--reveal));mask-image:linear-gradient(#000 calc(var(--reveal) - 18%),transparent var(--reveal));animation:descubrir 2.4s cubic-bezier(.45,0,.25,1) .15s both}
+@keyframes descubrir{from{--reveal:0%}to{--reveal:118%}}
+.anim .invitation.revealed{-webkit-mask-image:none;mask-image:none;animation:none}
+@media (prefers-reduced-motion:reduce){.anim .invitation{-webkit-mask-image:none;mask-image:none;animation:none}}
+/* Desde la carta: sin telón, la foto aparece primero y los textos bajan en cascada */
+.from-card .invitation{-webkit-mask-image:none!important;mask-image:none!important;animation:none!important}
+.from-card .hero .couple-photo{animation:quedarse 1s cubic-bezier(.2,.7,.2,1) 0s both!important}
+@keyframes quedarse{from{opacity:0;transform:scale(1.12)}to{opacity:var(--foto-op,.72);transform:none}}
+.from-card .hero>*:nth-child(1){animation-delay:.55s!important}
+.from-card .hero>*:nth-child(2){animation-delay:.75s!important}
+.from-card .hero>*:nth-child(3){animation-delay:.95s!important}
+.from-card .hero>*:nth-child(5){animation-delay:1.15s!important}
+.from-card .hero>*:nth-child(6){animation-delay:1.3s!important}
+.from-card .hero>*:nth-child(7){animation-delay:1.45s!important}
+/* Encabezado sin foto: el título queda centrado en la primera pantalla */
+.hero{min-height:calc(100svh - 40px);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hero>.eyebrow{margin:0 0 6px}
+.hero .names img{width:min(80vw,380px)}
+.hero .subtitle{margin-bottom:22px}
+@media (min-width:1024px){.hero{min-height:calc(100vh - 80px)}.hero .names img{width:420px}}
+/* sin foto, la cascada desde la carta empieza por los nombres */
+.from-card .hero>*:nth-child(1){animation-delay:.2s!important}
+.from-card .hero>*:nth-child(2){animation-delay:.35s!important}
+.from-card .hero>*:nth-child(3){animation-delay:.6s!important}
+.from-card .hero>*:nth-child(4){animation-delay:.8s!important}
+.from-card .hero>*:nth-child(5){animation-delay:.95s!important}
+.from-card .hero>*:nth-child(6){animation-delay:1.1s!important}
+
+.anim .hero>*:nth-child(4){animation:subir .9s cubic-bezier(.2,.7,.2,1) .95s forwards}
+.anim .hero>*:nth-child(5){animation:linea 1s ease 1.1s forwards}
+.anim .hero>*:nth-child(6){animation:subir .9s cubic-bezier(.2,.7,.2,1) 1.25s forwards}
+.hero .countdown{width:min(100%,300px);margin:10px auto 0}.hero .countdown>div{flex:1}
+/* Espaciado: el encabezado ocupa casi toda la pantalla y el palacio asoma abajo,
+   así se entiende que hay más para ver al hacer scroll */
+.hero{min-height:calc(100svh - 150px);padding-top:4vh}
+.palace-img{margin-top:-6px!important;width:116%!important;max-width:620px!important}
+.anim .palace-img.reveal.visible{opacity:.9}
+.venue-card{margin-top:-28px}
+@media (min-width:1024px){.hero{min-height:calc(100vh - 230px)}.palace-img{max-width:700px!important}}
+.hero{min-height:0;padding-top:max(12vh,60px);padding-bottom:6px}
+.hero .countdown{margin-bottom:0}
+@media (min-width:1024px){.hero{min-height:0;padding-top:10vh}}
+.palace-img{margin-top:18px!important}
+/* Confirmación por persona (link personalizado) */
+.saludo{font-family:'Pinyon Script',var(--script);font-size:30px;margin-bottom:4px;color:var(--brown)}
+.persona{border:1px solid #d5c4b2;border-radius:14px;padding:12px 12px 6px;margin:0 0 12px;background:#fffbf5aa}
+.persona legend{font-size:16px;padding:0 6px}
+.persona legend small{font-size:12px;color:#8a7060}
+.persona .segmented{margin-bottom:10px}
+.persona.no-asiste{opacity:.7}
+.menu-row{margin-bottom:8px}
+.menu-row[hidden]{display:none}
+/* Celulares chicos: la tarjeta de fotos apila el botón abajo y el hashtag entra completo */
+@media (max-width:400px){
+  .photos-card{grid-template-columns:auto 1fr}
+  .photos-card .compact{grid-column:1/-1;width:100%;margin-top:4px}
+  .photos-soon{white-space:normal}
+  .saludo{font-size:26px}
+}
+@media (max-width:340px){.hashtag{font-size:11px!important}.action-grid{grid-template-columns:1fr}}
+/* Prueba de tipografía redondeada (solo con ?fuente=...) */
+.fuente-prueba body,.fuente-prueba button,.fuente-prueba input,.fuente-prueba select,.fuente-prueba textarea{font-family:var(--fuente)}
+.fuente-prueba .gala,.fuente-prueba .script{font-family:var(--fuente)!important;font-style:normal;text-transform:lowercase;font-weight:300;letter-spacing:2px}
+.fuente-prueba h2,.fuente-prueba .date,.fuente-prueba .countdown strong{font-weight:400}
+.fuente-prueba .names img{height:auto}
+.pareja{display:flex;justify-content:center;margin:30px auto -10px;padding:0 16px}
+.pareja img{width:min(78vw,380px);height:auto;opacity:1;-webkit-mask-image:linear-gradient(#000 88%,transparent);mask-image:linear-gradient(#000 88%,transparent)}
+/* Botón Confirmar asistencia: sombra marcada y un latido suave para que se note que es un botón */
+.attendance>.button[data-action=rsvp]{box-shadow:inset 0 1px 2px #fff4,0 6px 14px #3e2a1a55;animation:latido 2.2s ease-in-out infinite}
+@keyframes latido{0%,100%{transform:scale(1);box-shadow:inset 0 1px 2px #fff4,0 6px 14px #3e2a1a55,0 0 0 0 #64473266}50%{transform:scale(1.06);box-shadow:inset 0 1px 2px #fff4,0 8px 18px #3e2a1a66,0 0 0 12px #64473200}}
+@media (prefers-reduced-motion:reduce){.attendance>.button[data-action=rsvp]{animation:none}}

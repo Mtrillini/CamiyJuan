@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Panel · Sofía & Martín (demo)</title>
+<style>
+  ul.lista{margin:0;padding-left:18px;line-height:1.7} h2 .btn{font-size:13px;margin-left:8px;vertical-align:middle}
+  :root{--ivory:#f7f1e6;--paper:#fffaf3;--brown:#644732;--soft:#8a7060;--pet:#527987;--line:#e2d5c4}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ivory);color:var(--brown);font-family:Georgia,'Times New Roman',serif;line-height:1.4}
+  main{max-width:960px;margin:auto;padding:24px 16px 60px}
+  header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+  h1{font-weight:400;font-size:28px;margin:0} h2{font-weight:400;font-size:22px;margin:30px 0 10px}
+  a{color:var(--pet)}
+  .btn{display:inline-block;background:var(--pet);color:#fff;border:0;border-radius:20px;padding:8px 16px;font:inherit;font-size:13px;text-decoration:none;cursor:pointer}
+  .btn.ghost{background:none;color:var(--brown);border:1px solid var(--line)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+  .stat b{display:block;font-size:30px;font-weight:400;color:var(--pet)} .stat span{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--soft)}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+  .row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .tag{display:inline-block;font-size:12px;border-radius:10px;padding:2px 8px;background:#e7eef1;color:var(--pet);margin-left:4px}
+  .tag.no{background:#f3e3df;color:#9b3b2e} .tag.nino{background:#f2e9da;color:#8a6a3a}
+  .muted{color:var(--soft);font-size:13px}
+  ul{margin:6px 0 0;padding-left:18px}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 0}
+  .tabs a{padding:7px 14px;border-radius:20px;border:1px solid var(--line);text-decoration:none;color:var(--brown);font-size:14px}
+  .tabs a.on{background:var(--brown);color:#fff;border-color:var(--brown)}
+  input[type=search],input[type=password]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;margin:6px 0 12px}
+  .login{max-width:340px;margin:12vh auto;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:26px}
+  .err{color:#9b3b2e;font-size:14px}
+  .label{font-size:14px;margin:4px 0 6px}
+  .fila{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .fila input[name^=p_nombre]{flex:1;margin:0}
+  .fila .menor{display:flex;align-items:center;gap:4px;margin:0;font-size:13px;white-space:nowrap}
+  .fila .menor input{width:auto;margin:0}
+  .quitar{border:0;background:none;font-size:22px;color:var(--soft);cursor:pointer;padding:0 4px}
+  form.card>.btn.ghost{margin:2px 0 12px}
+  @media (max-width:480px){.stats{grid-template-columns:repeat(3,1fr);gap:6px}.stat{padding:10px 4px}.stat b{font-size:22px}.stat span{font-size:9px;letter-spacing:.5px}header h1{font-size:22px}}
+  .fila .menor{display:inline-flex!important;align-items:center;gap:6px;flex:0 0 auto;margin:0!important;font-size:14px;white-space:nowrap}
+  .fila .menor input[type=checkbox]{width:18px!important;height:18px;margin:0!important;padding:0;flex:0 0 auto;accent-color:#527987}
+  .fila .quitar{flex:0 0 auto}
+  .acciones{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+  .acciones .link{flex:1 1 100%;margin:0;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff}
+  label{display:block;font-size:14px;margin-bottom:10px}
+  input:not([type=search]):not([type=password]):not(.link),textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;margin-top:4px}
+  blockquote{margin:6px 0 0;white-space:pre-wrap}
+</style>
+<style>
+  .demo-aviso{background:#527987;color:#fff;border-radius:14px;padding:12px 16px;font-size:14px;margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+  .demo-aviso a{color:#fff}
+  .demo-aviso .btn{background:#fff;color:#527987}
+  .fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+  .fotos figure{margin:0}.fotos img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;display:block;background:#e9dfd2}
+  .fotos figcaption{font-size:12px;color:var(--soft);margin-top:3px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<form class="login" id="login">
+  <h1 style="font-size:24px">Panel de los novios</h1>
+  <p class="muted">Demo con datos ficticios. Entrá con cualquier contraseña (por ejemplo <b>demo</b>).</p>
+  <input type="password" placeholder="Contraseña" autocomplete="off" required autofocus>
+  <button class="btn" type="submit">Entrar</button>
+</form>
+<main id="app" hidden></main>
+<script src="../datos.js"></script>
+<script src="panel.js"></script>
+</body>
+</html>
